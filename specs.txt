@@ -1,0 +1,61 @@
+
++--------------+
+|    SPECS     |
++--------------+
+
+Overview:
+---------
+
+    -five classes:
+
+           | instances     | class name
+        -- +---------------+--------------------------
+        1- | [1 total]     | RoCon (Robot Controller)
+        2- | [1 each]      | Robot
+        3- | [1 total]     | BZFSCommunicator
+        4- | [1 per robot] | PersonalData
+        5- | [1 total]     | EnvironmentData
+
+    -RoCon manages the Robots
+    -RoCon contains an instance of a BZFSCommunicator
+    -RoCon and Robots communicate with bzfs through the single communicator
+    -Robots are in charge of their own potential field calculations
+    -PersonalData is a container class for a Robot's personal data -- location,
+        angle, speed, reloading bullets, etc., does its own parsing
+    -EnvironmentData is a container class for a Robot's environment data --
+        location of other tanks, bullets, obstacles, goals, etc
+
+
+Slightly More Detailed:
+-----------------------
+
+  In general, the main controller is the RoCon.  This will communicate with
+the bzfs.  The RoCon will maintain a list/array of Robots.  The RoCon manages
+what each of the Robots will do from a high-level perspective.  The RoCon
+fetches information from the bzfs about bullets, other tanks, his tanks,
+and the environment and passes that information on to each of his Robots.
+The RoCon class can contain an EnvironmentData object.  Each Robot will
+have a pointer to this object and will also contain a PersonalData object.
+Each Robot will update his/her :) PersonalData object when the RoCon
+passes him updated data. Each robot in turn does the processing he needs
+and replies back to the bzfs through a reference to a BZFSCommunicator object.
+
+  The RoCon is in charge of general strategies, and can tell each robot
+to do specific tasks, such as getFlag(), guardBase(), attackOthers(), etc.
+The RoCon can also tell it how aggressive to be (not-aggressive == avoid
+enemies absolutely, aggressive == shoot at all enemies along the way
+but keep charging [reckless]).
+
+  Each Robot is in charge of it's own potential field calculations.  This
+lets the RoCon tell each Robot to have different potential fields (aggression?).
+
+  The BZFSCommunicator class is a class that is used to communicate with the
+bzfs.  The RoCon instantiates an instance of it and initializes it.  Each
+Robot has a reference to the communicator.
+
+  This is going to be single-threaded.
+
+**See the .h files in the google svn for more information on each of the classes.
+
+
+

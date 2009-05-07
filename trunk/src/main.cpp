@@ -6,11 +6,11 @@
 #include <stdlib.h>
 #include <string>
 #include <string.h>
-#include <vector.h>
+#include <iostream>
 
 using namespace std;
 
-public int main(int argc, char** argv) {
+int main(int argc, char** argv) {
     cout << "testing..." << endl;
 }   
 

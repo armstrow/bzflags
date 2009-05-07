@@ -14,6 +14,7 @@ using namespace std;
 void DisplayUsage();
 void DisplayBanner();
 bool ParseArgs(int argc, char** argv);
+bool IsNum(string str);
 
 char* arg0;
 bool DEBUG = false;
@@ -28,12 +29,13 @@ int main(int argc, char** argv) {
 
     arg0 = argv[0];
 
-    if(!ParseArgs(argc, argv)) {
+    if(argc < 3)
         DisplayUsage();
+    else if(!ParseArgs(argc, argv)) {
         exit(0);
     }
 
-    RobotController controller("localhost", 3333);
+    RobotController controller(SERVER, PORT);
 }   
 //------------------------------------------------------
 bool ParseArgs(int argc, char** argv) {
@@ -50,15 +52,15 @@ bool ParseArgs(int argc, char** argv) {
         else if(currArg == "-d")
             DEBUG = true;
     }
-
-    //this isn't throwing an exception...
-    try {
-        PORT = atoi(STR_PORT.c_str());
-    } catch (...) {
-        cout << "The given port ("+STR_PORT+") is not a number." << endl
-             << "Go away and try again when you know what a number is." << endl;
+    
+    if(!IsNum(STR_PORT)) {
+        cout << "ERROR:" << endl
+             << "    The given port ("+STR_PORT+") is not a number." << endl
+             << "    Go away and try again when you know what a number is." << endl;
         return false;
     }
+
+    PORT = atoi(STR_PORT.c_str());
 
     if(DEBUG) {
         cout << "DEBUG MODE:" << endl
@@ -66,6 +68,14 @@ bool ParseArgs(int argc, char** argv) {
              << "    Port:   " << PORT << endl;
     }
     
+    return true;
+}
+//------------------------------------------------------
+bool IsNum(string str) {
+    for(int i = 0; i < static_cast<int>(str.length()); i++) {
+        if(!isdigit(str.at(i)))
+            return false;
+    }
     return true;
 }
 //------------------------------------------------------

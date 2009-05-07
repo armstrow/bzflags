@@ -4,8 +4,8 @@
 
 
 //------------------------------------------------------
-RobotController::RobotController() {
-
+RobotController::RobotController(string server, int port) {
+    bzfsComm.Connect(server, port);
 }
 //------------------------------------------------------
 

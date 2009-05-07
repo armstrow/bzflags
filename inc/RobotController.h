@@ -7,10 +7,24 @@
 
 class RobotController {
 
-    BZFSCommunicator bzfs_comm;
+    /*  +--------------+
+     *  |  VARIABLES   |
+     *  +--------------+ */
+
+
+    private:
+        vector<Robot> robotList; 
+        BZFSCommunicator bzfsComm;
+
+
+
+    /*  +--------------+
+     *  |  FUNCTIONS   |
+     *  +--------------+ */
+
 
     public:
-        RobotController();
+        RobotController(string server, int port);
 
     private:
 

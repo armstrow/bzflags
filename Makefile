@@ -14,10 +14,19 @@ realclean: clean
 
 
 
-build: bin/$(EXENAME)
+bin: bin/$(EXENAME)
 
-run:
+run: bin
 	bin/$(EXENAME)
+
+run-nodebug: bin
+	bin/$(EXENAME) localhost 12345
+
+run-debug: bin
+	bin/$(EXENAME) -d localhost 2343
+
+
+
 
 
 

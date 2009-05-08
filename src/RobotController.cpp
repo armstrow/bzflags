@@ -23,24 +23,22 @@ RobotController::RobotController(string server, int port) {
 void RobotController::LoopAction() {
     while(1 == 1) {
         cout << "------------------------------------------" << endl;
-        cout << "------------------------------------------" << endl;
         UpdateEnvironment();
-        vector<Team> teams;
-        bzfsComm.get_teams(&teams);
-        cout << "num teams: " << teams.size() << endl;
-        for(int i = 0; i < teams.size(); i++) {
-            cout << teams.at(i).ToString() << endl;
-        }
+
         sleep(2);
     }
 }
 //------------------------------------------------------
 void RobotController::InitEnvironment() {
     bzfsComm.get_teams(&env.teams);
+    bzfsComm.get_constants(&env.constants);
 }
 //------------------------------------------------------
 void RobotController::UpdateEnvironment() {
-    
+    bzfsComm.get_shots(&env.shots);
+    bzfsComm.get_othertanks(&env.otherTanks);
+    bzfsComm.get_obstacles(&env.obstacles);
+    bzfsComm.get_flags(&env.flags);
 }
 //------------------------------------------------------
 

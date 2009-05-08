@@ -39,17 +39,29 @@ class BZFSCommunicator {
 
     public:
         BZFSCommunicator();
-        void Connect(string server, int port);
-        string SendMessage(string message);
+        int Connect(string server, int port);
+	/* Returns 0 for success, 1 for failure */
+        vector <string> SendMessage(string message);
 
 
     private:
+	vector <string> ReadArr();
+	void ReadAck();
+	vector <string> SplitString(string str);
+	int SendLine(const char* LineText);
+	int ReadReply(char *Reply);
+	void ReadLine(char *LineText);
+	void ResetReplyBuffer();
+	int HandShake();
         void Disconnect();
         void ConnectToBZFS();
         string GetIPFromDomain(string server);
         bool IsIPAddress(string server);
         void ResolveDomain(string server);
+	
 };
+
+
 
 
 

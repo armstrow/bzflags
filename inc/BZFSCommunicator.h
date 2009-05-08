@@ -1,16 +1,23 @@
 #ifndef BZFSCommunicator_CLASS
 #define BZFSCommunicator_CLASS
 
-#include "Robot.h"
 #include <vector>
-#include <string.h>
+#include <netdb.h>
+#include <netinet/in.h>
 #include <string>
+#include <arpa/inet.h>
+#include <errno.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <fstream>
 #include <iostream>
+#include <unistd.h>
 
 using namespace std;
 
 class BZFSCommunicator {
-
  
     /*  +--------------+
      *  |  VARIABLES   |
@@ -18,13 +25,12 @@ class BZFSCommunicator {
 
     private:
         string host;
-        string ipaddress;
+        string ipAddress;
         int port;
-        //ipaddress struct
+        struct sockaddr_in connection;
+        int s;
 
     public:
-
-
 
 
     /*  +--------------+
@@ -38,7 +44,11 @@ class BZFSCommunicator {
 
 
     private:
+        void Disconnect();
         void ConnectToBZFS();
+        string GetIPFromDomain(string server);
+        bool IsIPAddress(string server);
+        void ResolveDomain(string server);
 };
 
 

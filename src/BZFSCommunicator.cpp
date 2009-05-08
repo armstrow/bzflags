@@ -23,6 +23,7 @@
 #include <iostream>
 #include <unistd.h>
 
+
 #define BUFFER_SIZE 1024
 
 using namespace std;
@@ -47,7 +48,9 @@ int BZFSCommunicator::Connect(string server, int port) {
     this->port = port;
 
     ResolveDomain(server);
-    ConnectToBZFS(); 
+    if (ConnectToBZFS() < 0)
+    	return 1; 
+    cout << "shaking hands..." << endl;
     int shook = HandShake();
     if (shook == 1)
 	cout << "Unable to shake hands with bzrobots.\n";
@@ -192,41 +195,44 @@ bool BZFSCommunicator::get_shots(vector<Shot> *AllShots) {
 }
 
 bool BZFSCommunicator::get_mytanks(vector<MyTank> *AllMyTanks) {
-    /*
     // Request a list of our robots.
     SendLine("mytanks");
     ReadAck();
     vector <string> v=ReadArr();
     if(v.at(0)!="begin") {
-    return false;
+    	return false;
     }
     v.clear();
     v=ReadArr();
     int i=0;
     while(v.at(0)=="mytank") {
-    tank_t MyTank;
-    MyTank.index=atoi(v.at(1).c_str());
-    MyTank.callsign=v.at(2);
-    MyTank.status=v.at(3);
-    MyTank.shots_avail=atoi(v.at(4).c_str());
-    MyTank.time_to_reload=atof(v.at(5).c_str());
-    MyTank.flag=v.at(6);
-    MyTank.pos[0]=atof(v.at(7).c_str());
-    MyTank.pos[1]=atof(v.at(8).c_str());
-    MyTank.angle=atof(v.at(9).c_str());
-    MyTank.velocity[0]=atof(v.at(10).c_str());
-    MyTank.velocity[1]=atof(v.at(11).c_str());
-    MyTank.angvel=atof(v.at(12).c_str());
-    AllMyTanks->push_back(MyTank);
-    v.clear();
-    v=ReadArr();
-    i++;
+	if (AllMyTanks->size() <= i) {
+		//MyTank* ptr = new MyTank();
+		AllMyTanks->push_back(MyTank());
+	}
+	    MyTank t = AllMyTanks->at(i);
+	    t.index=atoi(v.at(1).c_str());
+	    t.callsign=v.at(2);
+	    t.status=v.at(3);
+	    t.shots_avail=atoi(v.at(4).c_str());
+	    t.time_to_reload=atof(v.at(5).c_str());
+	    t.flag=v.at(6);
+	    t.pos[0]=atof(v.at(7).c_str());
+	    t.pos[1]=atof(v.at(8).c_str());
+	    t.angle=atof(v.at(9).c_str());
+	    t.velocity[0]=atof(v.at(10).c_str());
+	    t.velocity[1]=atof(v.at(11).c_str());
+	    t.angvel=atof(v.at(12).c_str());
+	    //AllMyTanks->push_back(MyTank);
+	    v.clear();
+	    v=ReadArr();
+	    i++;
     }
     if(v.at(0)!="end") {
-    if(debug) cout << v.at(0) << endl;
-    return false;
+    	//if(debug) 
+	cout << v.at(0) << endl;
+    	return false;
     }
-    */
     return true;
 }
 
@@ -470,7 +476,7 @@ void BZFSCommunicator::ResolveDomain(string server) {
     ipAddress = server;
 }
 //------------------------------------------------------
-void BZFSCommunicator::ConnectToBZFS() {
+int BZFSCommunicator::ConnectToBZFS() {
     cout << "    connecting to bzrobots at " << this->host << "[" << this->ipAddress << "]:" << this->port << "..." << endl;
     
     memset(&connection, 0, sizeof(connection));
@@ -486,11 +492,13 @@ void BZFSCommunicator::ConnectToBZFS() {
         cout << "socket creation error" << endl;
     }
 
-    if(connect(s, (const struct sockaddr *)&connection, sizeof(connection)) < 0) {
+    if(int e = connect(s, (const struct sockaddr *)&connection, sizeof(connection)) < 0) {
         cout << "socket connection error" << endl;
+        return e;
     }
-
+	 
     cout << "    connected!" << endl;
+    return 0;
 }
 //------------------------------------------------------
 bool BZFSCommunicator::IsIPAddress(string server) {

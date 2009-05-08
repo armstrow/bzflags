@@ -8,23 +8,25 @@
 
 //------------------------------------------------------
 RobotController::RobotController(string server, int port) {
-    bzfsComm.Connect(server, port);
+ 
+	if (bzfsComm.Connect(server, port) == 0) {
+		pthread_mutex_lock(&socket_lock);	    
+		InitEnvironment();
+		pthread_mutex_unlock(&socket_lock);	
+	}
+	pthread_mutex_init(&socket_lock, NULL);
 
-    InitEnvironment();
-    LoopAction();
-
-    //Start Dummy
-    if (speed(0, 1))
-	    cout << "Moving tank Success!!" << endl;
-    else
-	    cout << "Moving tank Failure =(" << endl;
 }
+
+
+
 //------------------------------------------------------
 void RobotController::LoopAction() {
     while(1 == 1) {
         cout << "------------------------------------------" << endl;
+	pthread_mutex_lock(&socket_lock);
         UpdateEnvironment();
-
+	pthread_mutex_unlock(&socket_lock);
         sleep(2);
     }
 }
@@ -37,17 +39,22 @@ void RobotController::InitEnvironment() {
 void RobotController::UpdateEnvironment() {
     bzfsComm.get_shots(&env.shots);
     bzfsComm.get_othertanks(&env.otherTanks);
+    bzfsComm.get_mytanks(&env.myTanks);
     bzfsComm.get_obstacles(&env.obstacles);
     bzfsComm.get_flags(&env.flags);
 }
 //------------------------------------------------------
 
 
+
 /****************************
 *   Commands:
 ****************************/
+
 bool RobotController::SendBoolMessage(string msg) {
+	pthread_mutex_lock(&socket_lock);
 	vector <string> reply = bzfsComm.SendMessage(msg);
+	pthread_mutex_unlock(&socket_lock);
 	if(reply.at(0) == "ok") {
 		return true;
 	}

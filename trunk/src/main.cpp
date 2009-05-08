@@ -3,10 +3,13 @@
 
 
 #include "RobotController.h"
+#include "MyTank.h"
 #include <stdlib.h>
 #include <string>
 #include <string.h>
 #include <iostream>
+#include <pthread.h>
+
 
 using namespace std;
 
@@ -21,6 +24,9 @@ bool DEBUG = false;
 string SERVER;
 string STR_PORT;
 int PORT;
+RobotController* controller;
+
+void *DummyRobot(void *ptr);
 
 //------------------------------------------------------
 int main(int argc, char** argv) {
@@ -35,8 +41,51 @@ int main(int argc, char** argv) {
         exit(0);
     }
 
-    RobotController controller(SERVER, PORT);
-}   
+
+    controller = new RobotController(SERVER, PORT);
+    pthread_t threadRob;
+    int threadResultRob;
+    int robNum = 0;
+    cout << "Begin Robot Thread" << endl;
+    pthread_create(&threadRob, NULL, DummyRobot, (void*)&robNum);
+
+    controller->LoopAction();
+    //pthread_join(threadRob, NULL);
+//    cout << "End Thread Rob with " << threadResultEnv << endl;*/
+
+} 
+  
+void *DummyRobot(void *ptr )
+{
+	while (1) {
+		int *index;
+		index = (int *) ptr;
+	      	if (controller->speed(*index, 0.5))
+			cout << "tank moving!!!" << endl;
+		else
+			cout << "This sucks!" << endl;
+
+		MyTank curTank = controller->env.myTanks.at(*index);
+		//Wait for collision
+		sleep(5);
+		while (curTank.velocity[0] != 0 && curTank.velocity[1] != 0)
+			sleep(2);
+	
+		//Rotate 60
+		float targetAngle = curTank.angle + 1.05;
+		if (targetAngle > 3.14)	targetAngle -= 6.28;
+		if(controller->angvel(*index, .5))
+			cout << "tank turning!!!" << endl;
+		else
+			cout << "Error, could not turn!  Save me!" << endl;
+		while (curTank.angle <= targetAngle || (targetAngle < 0 && curTank.angle > 0))
+			sleep(1);
+		controller->angvel(*index, 0);
+		cout << "Tank turned successfully!" << endl;
+	}
+	
+}
+
 //------------------------------------------------------
 bool ParseArgs(int argc, char** argv) {
     if(argc < 3 || argc > 4)

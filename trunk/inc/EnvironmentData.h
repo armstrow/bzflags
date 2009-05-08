@@ -15,6 +15,7 @@
 #include "Flag.h"
 #include "Constant.h"
 #include "Team.h"
+#include "MyTank.h"
 
 
 class EnvironmentData {
@@ -27,6 +28,7 @@ class EnvironmentData {
     
     public:
         vector<OtherTank> otherTanks;
+        vector<MyTank> myTanks;
         vector<Obstacle> obstacles;
         vector<Shot> shots;
         vector<Flag> flags;

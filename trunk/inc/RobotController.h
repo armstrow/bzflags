@@ -7,6 +7,7 @@
 
 #include <vector>
 #include <string>
+#include <pthread.h>
 
 class RobotController {
 
@@ -18,6 +19,8 @@ class RobotController {
     private:
         vector<Robot> robotList; 
         BZFSCommunicator bzfsComm;
+	pthread_mutex_t socket_lock;
+    public:
         EnvironmentData env;
 
 
@@ -29,20 +32,20 @@ class RobotController {
 
     public:
         RobotController(string server, int port);
-
+	void DummyRobot(int index);
 	    //Commands
     	bool shoot(int index);
     	bool speed(int index, double value);
     	bool angvel(int index, double value);
     	bool accelx(int index, double value);
     	bool accely(int index, double value);
+        void LoopAction();
 
 	    //Information Requests
         //  +---> these are now found in the BZFSCommunicator
 
     private:
-	    bool SendBoolMessage(string msg);
-        void LoopAction();
+	bool SendBoolMessage(string msg);
         void UpdateEnvironment();
         void InitEnvironment();
 };

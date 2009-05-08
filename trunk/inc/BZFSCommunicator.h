@@ -70,7 +70,7 @@ class BZFSCommunicator {
     	void ResetReplyBuffer();
     	int HandShake();
         void Disconnect();
-        void ConnectToBZFS();
+        int ConnectToBZFS();
         string GetIPFromDomain(string server);
         bool IsIPAddress(string server);
         void ResolveDomain(string server);

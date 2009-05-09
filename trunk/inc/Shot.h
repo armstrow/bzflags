@@ -5,8 +5,10 @@
 
 #include <string>
 #include <string.h>
-#incldue <vector>
+#include <vector>
 #include <iostream>
+
+using namespace std;
 
 class Shot {
   

@@ -24,9 +24,9 @@ RobotController::RobotController(string server, int port) {
 void RobotController::LoopAction() {
     while(1 == 1) {
         cout << "------------------------------------------" << endl;
-	pthread_mutex_lock(&socket_lock);
+        pthread_mutex_lock(&socket_lock);
         UpdateEnvironment();
-	pthread_mutex_unlock(&socket_lock);
+        pthread_mutex_unlock(&socket_lock);
         sleep(2);
     }
 }

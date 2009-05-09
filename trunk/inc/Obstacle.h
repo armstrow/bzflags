@@ -3,7 +3,16 @@
 #ifndef OBSTACLE 
 #define OBSTACLE
 
+#include <vector>
+#include <string.h>
+#include <string>
 
+using namespace std;
+
+struct Point {
+    float x;
+    float y;
+};
 
 class Obstacle {
   
@@ -12,9 +21,10 @@ class Obstacle {
      *  +--------------+ */
 
     private:
+        vector<Point> corners;
 
     public:
-        Obstacle();
+        Obstacle(vector<string> data);
    
     /*  +--------------+
      *  |  FUNCTIONS   |

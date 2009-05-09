@@ -4,6 +4,8 @@
 #include <iostream>
 #include <string>
 #include <string.h>
+#include <stdlib.h>
+#include <sstream>
 
 #include "Shot.h"
 
@@ -18,7 +20,7 @@ using namespace std;
 
 
 
-Shot::Shot() {
+Shot::Shot(vector<string> data) {
   if (data.at(0) != "shot")
     throw "Invalid data for Shot";
   this->pos[0] = atof(data.at(1).c_str());
@@ -27,8 +29,10 @@ Shot::Shot() {
   this->velocity[1] = atof(data.at(4).c_str());
 }
 
-string Shot::toString() {
-  string result = "shot at (" + pos[0] + "," + pos[1] + ") vel:(" + velocity[0] + "," + velocity[1] + ")";
+string Shot::ToString() {
+  stringstream sout;
+  sout << "shot at (" << pos[0] << "," << pos[1] << ") vel:(" << velocity[0] << "," << velocity[1] << ")";
+  string result = sout.str();
   return result;
 }
 

@@ -1,7 +1,3 @@
-
-
-
-
 #include "RobotController.h"
 #include "MyTank.h"
 #include <stdlib.h>
@@ -44,51 +40,46 @@ int main(int argc, char** argv) {
 
 
     controller = new RobotController(SERVER, PORT);
-    pthread_t threadRob;
+    pthread_t threadRob1, threadRob2;
     int threadResultRob;
     int robNum = 0;
     cout << "Begin Robot Thread" << endl;
-    pthread_create(&threadRob, NULL, DummyRobot, (void*)&robNum);
+    pthread_create(&threadRob1, NULL, DummyRobot, (void*)&robNum);
+    robNum = 1;
+    pthread_create(&threadRob2, NULL, DummyRobot, (void*)&robNum);
 
     controller->LoopAction();
-    //pthread_join(threadRob, NULL);
-//    cout << "End Thread Rob with " << threadResultEnv << endl;*/
-
 } 
   
 void *DummyRobot(void *ptr )
 {
-	sleep(10);
+	sleep(5); //Let the MyTanks command run first thing to establish number of tanks
+	int *index;
+	index = (int *) ptr;
 	while (1) {
-		int *index;
-		index = (int *) ptr;
-	      	if (controller->speed(*index, 0.5))
+	   if (controller->speed(*index, 0.5))
 			cout << "tank moving!!!" << endl;
 		else
-			cout << "This sucks!" << endl;
+			cout << "Couldn't Move Tank!" << endl;
 
 		MyTank curTank = controller->env.myTanks.at(*index);
 		//Wait for collision
-		//sleep(5);
-//					cout << "**********************************************" << endl;
-	//		cout << curTank.velocity[0] << " " << curTank.velocity[1] << endl;
-		//	cout << "**********************************************" << endl;
 		while (sqrt(curTank.velocity[0]*curTank.velocity[0] +
 			         curTank.velocity[1]*curTank.velocity[1]) >= 1) {
 
 			    
 			sleep(1);
-			}
-		//controller->speed(*index, 0);
-		//Rotate 60
+		}
+
+		//Rotate 60 degrees
 		float targetAngle = curTank.angle + 1.05;
 		if (targetAngle > 3.14)	targetAngle -= 6.28;
 		if(controller->angvel(*index, .5))
 			cout << "tank turning!!!" << endl;
 		else
 			cout << "Error, could not turn!  Save me!" << endl;
-		//while (curTank.angle <= targetAngle || (targetAngle < 0 && curTank.angle > 0))
-		sleep(5);
+		while (curTank.angle <= targetAngle || (targetAngle < 0 && curTank.angle > 0))
+			sleep(1);
 		controller->angvel(*index, 0);
 		cout << "Tank turned successfully!" << endl;
 	}

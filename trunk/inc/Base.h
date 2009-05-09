@@ -1,11 +1,18 @@
 
 
-#ifndef BASE
+#ifndef BASE 
 #define BASE
 
-#include <string>
-#include <string.h>
 #include <vector>
+#include <string.h>
+#include <string>
+
+using namespace std;
+
+struct Point {
+    float x;
+    float y;
+};
 
 class Base {
   
@@ -14,11 +21,11 @@ class Base {
      *  +--------------+ */
 
     private:
+        vector<Point> corners;
 
     public:
-    	string color;
-    	float pos[2];
-        
+        Base(vector<string> data);
+        string color;
    
     /*  +--------------+
      *  |  FUNCTIONS   |
@@ -27,7 +34,6 @@ class Base {
     private:
 
     public:
-    	Base(vector<string> data);
  
 };
 

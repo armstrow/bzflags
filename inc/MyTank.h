@@ -17,6 +17,7 @@ class MyTank {
     private:
 
     public:
+    string color;
 	int index;
 	string callsign;
 	string status;

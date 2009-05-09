@@ -120,10 +120,13 @@ bool BZFSCommunicator::get_obstacles(vector<Obstacle> *AllObstacles) {
 	    v.clear();
 	    v=ReadArr();
 	    i++;
+        //cout << "        obst#: " << i << endl;
 	}
 	if(v.at(0)!="end") {
+        //cout << "    --> get_obst: NO END" << endl;
     	return false;
 	}
+   //cout << "    --> get_obst: DONE!" << endl;
    return true;
 }
 bool BZFSCommunicator::get_flags(vector<Flag> *AllFlags) {
@@ -186,22 +189,27 @@ bool BZFSCommunicator::get_mytanks(vector<MyTank> *AllMyTanks) {
     v=ReadArr();
     int i=0;
     while(v.at(0)=="mytank") {
-	    MyTank t(v);
-	    AllMyTanks->push_back(t);
-	    v.clear();
-	    v=ReadArr();
+        int tIndex = atoi(v.at(1).c_str());
+        if(AllMyTanks->size() < tIndex + 1) {
+	        MyTank t(v);
+    	    AllMyTanks->push_back(t);
+        } else {
+            AllMyTanks->at(tIndex).SetData(v);
+        }
+    	v.clear();
+    	v = ReadArr();
 	    i++;
     }
     if(v.at(0)!="end") {
     	//if(debug) 
-	cout << v.at(0) << endl;
+	//cout << v.at(0) << endl;
     	return false;
     }
     return true;
 }
 
 bool BZFSCommunicator::get_othertanks(vector <OtherTank> *AllOtherTanks) {
-// Request a list of tanks that aren't our robots.
+    // Request a list of tanks that aren't our robots.
     SendLine("othertanks");
     ReadAck();
     vector <string> v=ReadArr();
@@ -263,12 +271,12 @@ vector <string> BZFSCommunicator::ReadArr() {
 	ReadLine(LineText);
 	if(strlen(LineText)!=0) {
 //		if(debug) 
-		cout << LineText << endl;
+		//cout << LineText << endl;
 	}
 	while(strlen(LineText)==0) {
 		ReadLine(LineText);
 //		if(debug) 
-		cout << LineText << endl;
+		//cout << LineText << endl;
 	}
 	return SplitString(LineText);
 }
@@ -276,7 +284,7 @@ vector <string> BZFSCommunicator::ReadArr() {
 void BZFSCommunicator::ReadAck() {
 	vector <string> v=ReadArr();
 	if(v.at(0)!="ack") {
-		cout << "Did not receive ack! Exit!" << endl;
+		//cout << "Did not receive ack! Exit!" << endl;
 		exit(1);
 	}
 }
@@ -311,7 +319,7 @@ int BZFSCommunicator::SendLine(const char *LineText) {
 	Command[Length]='\n';
 	Command[Length+1]='\0';
 	//if(debug) 
-	cout << Command;
+	//cout << Command;
 	if (send(s, Command, Length+1, 0) >= 0) {
 		return 0;
 	}
@@ -379,7 +387,7 @@ void BZFSCommunicator::ReadLine(char *LineText) {
 			}
 		}
 	}
-	cout << "Line Read: " << LineText;
+	//cout << "Line Read: " << LineText;
 }
 
 // Reset the ReplyBuffer
@@ -395,7 +403,7 @@ int BZFSCommunicator::HandShake() {
 	LineText=str;
 	ReadLine(LineText);
 	//if(debug) 
-	cout << LineText << endl;
+	//cout << LineText << endl;
 	if (!strcmp(LineText, "bzrobots 1")) {
 		const char * Command="agent 1";
 		int temp=SendLine(Command);

@@ -17,7 +17,6 @@ class MyTank {
     private:
 
     public:
-        MyTank(vector<string> data);
 	int index;
 	string callsign;
 	string status;
@@ -36,6 +35,9 @@ class MyTank {
     private:
 
     public:
+        MyTank(vector<string> data);
+        void SetData(vector<string> data);
+        string ToString();
  
 };
 

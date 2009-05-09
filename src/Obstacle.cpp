@@ -24,17 +24,16 @@ Obstacle::Obstacle(vector<string> data) {
     if(data.at(0) != "obstacle")
         throw "Invalid data for Obstacle";
 
-    int i = 1;
+    int index = 1;
     while(1 == 1) {
-    	  if(i == static_cast<int>(data.size()))
+    	if(index = data.size())
             break;
 
         Point corner;
-        corner.x = atof(data.at(i).c_str());
-        i++;
-        corner.y = atof(data.at(i).c_str());
+        corner.x = atof(data.at(index).c_str());
+        corner.y = atof(data.at(index + 1).c_str());
         this->corners.push_back(corner);
-        i++;
+        index += 2;
     }
 }
 

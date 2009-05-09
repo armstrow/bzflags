@@ -5,6 +5,7 @@
 #include <string>
 #include <string.h>
 #include <cstdlib>
+#include <sstream>
 
 #include "MyTank.h"
 
@@ -20,6 +21,9 @@ using namespace std;
 
 
 MyTank::MyTank(vector<string> data) {
+    SetData(data);
+}
+void MyTank::SetData(vector<string> data) {
 	  if (data.at(0) != "mytank")
     		throw "Invalid data for MyTanks";
     		
@@ -36,7 +40,12 @@ MyTank::MyTank(vector<string> data) {
 	    this->velocity[1]=atof(data.at(11).c_str());
 	    this->angvel=atof(data.at(12).c_str());
 }
-
+string MyTank::ToString() {
+    stringstream sout;
+    sout << "tank #" << this->index << " status: " << this->status << " angvel: " << this->angvel << " vx: " << this->velocity[0] << " vy: " << this->velocity[1];
+    string result = sout.str();
+    return result;
+}
 
 
 

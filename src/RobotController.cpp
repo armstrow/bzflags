@@ -23,18 +23,18 @@ RobotController::RobotController(string server, int port) {
 //------------------------------------------------------
 void RobotController::LoopAction() {
     while(1 == 1) {
-        cout << "------------------------------------------" << endl;
+        //cout << "------------------------------------------" << endl;
         pthread_mutex_lock(&socket_lock);
         UpdateEnvironment();
         pthread_mutex_unlock(&socket_lock);
-        sleep(0.2);
+        usleep(100);
     }
 }
 //------------------------------------------------------
 void RobotController::InitEnvironment() {
+    bzfsComm.get_obstacles(&env.obstacles);
     bzfsComm.get_teams(&env.teams);
     bzfsComm.get_constants(&env.constants);
-    bzfsComm.get_obstacles(&env.obstacles);
 }
 //------------------------------------------------------
 void RobotController::UpdateEnvironment() {

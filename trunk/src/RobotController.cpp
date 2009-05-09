@@ -27,7 +27,7 @@ void RobotController::LoopAction() {
         pthread_mutex_lock(&socket_lock);
         UpdateEnvironment();
         pthread_mutex_unlock(&socket_lock);
-        sleep(2);
+        sleep(0.2);
     }
 }
 //------------------------------------------------------

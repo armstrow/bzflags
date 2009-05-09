@@ -22,8 +22,12 @@ string SERVER;
 string STR_PORT;
 int PORT;
 RobotController* controller;
+float PI = 4.0*atan(1.0);
 
 void *DummyRobot(void *ptr);
+void Rotate60Degrees(MyTank *tank, int index, float originalAngle);
+bool HitObstacle(MyTank *tank);
+float Wrap(float original, float max);
 
 //------------------------------------------------------
 int main(int argc, char** argv) {
@@ -50,10 +54,11 @@ int main(int argc, char** argv) {
 
     controller->LoopAction();
 } 
+//------------------------------------------------------
   
 void *DummyRobot(void *ptr )
 {
-	sleep(5); //Let the MyTanks command run first thing to establish number of tanks
+	sleep(10); //Let the MyTanks command run first thing to establish number of tanks
 	int *index;
 	index = (int *) ptr;
 	while (1) {
@@ -63,16 +68,52 @@ void *DummyRobot(void *ptr )
 			cout << "Couldn't Move Tank!" << endl;
 
 		MyTank curTank = controller->env.myTanks.at(*index);
+        vector<Obstacle> *obstacles = &controller->env.obstacles;
 		//Wait for collision
+
+        
+        while(1 == 1) {
+            if(curTank.status == "dead") { }
+            else if(HitObstacle(&curTank)) {
+                Rotate60Degrees(&controller->env.myTanks.at(*index), *index, curTank.angle);
+            }
+            sleep(1);
+        }
+
+
+
+
+        /*
 		while (sqrt(curTank.velocity[0]*curTank.velocity[0] +
 			         curTank.velocity[1]*curTank.velocity[1]) >= 1) {
-
-			    
+            //check obstacles
+            
 			sleep(1);
 		}
-
+        */
 		//Rotate 60 degrees
-		float targetAngle = curTank.angle + 1.05;
+
+	}
+	
+}
+//------------------------------------------------------
+bool HitObstacle(MyTank *tank) {
+    return true;
+}
+//------------------------------------------------------
+void Rotate60Degrees(MyTank *tank, int index, float originalAngle) {
+    float goalAngle = Wrap((PI/3 + originalAngle), PI);
+
+    controller->angvel(index, 0.2);
+    while (abs(goalAngle - tank->angle) > (0.1)) {
+        sleep(0.2);
+    }
+    controller->angvel(index, 0);
+    cout << "Tank turned successfully!" << endl;
+    sleep(4);
+
+/*
+ 		float targetAngle = curTank.angle + 1.05;
 		if (targetAngle > 3.14)	targetAngle -= 6.28;
 		if(controller->angvel(*index, .5))
 			cout << "tank turning!!!" << endl;
@@ -82,10 +123,18 @@ void *DummyRobot(void *ptr )
 			sleep(1);
 		controller->angvel(*index, 0);
 		cout << "Tank turned successfully!" << endl;
-	}
-	
+*/
 }
-
+//------------------------------------------------------
+float Wrap(float original, float max) {
+    while(original > max) {
+        original -= max;
+    }
+    while(original < -1*max) {
+        original += max;
+    }
+    return original;
+}
 //------------------------------------------------------
 bool ParseArgs(int argc, char** argv) {
     if(argc < 3 || argc > 4)

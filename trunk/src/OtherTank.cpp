@@ -20,6 +20,9 @@ using namespace std;
 
 
 OtherTank::OtherTank(vector<string> data) {
+    SetData(data);
+}
+void OtherTank::SetData(vector<string> data) {
     if(data.at(0) != "othertank")
         throw "Invalid data for OtherTank";
     

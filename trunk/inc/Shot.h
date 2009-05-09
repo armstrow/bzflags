@@ -30,6 +30,7 @@ class Shot {
 
     public:
 	Shot(vector<string> data);
+	void SetData(vector<string> data);
 	string ToString();
  
 };

@@ -21,6 +21,9 @@ using namespace std;
 
 
 Shot::Shot(vector<string> data) {
+    SetData(data);
+}
+void Shot::SetData(vector<string> data) {
   if (data.at(0) != "shot")
     throw "Invalid data for Shot";
   this->pos[0] = atof(data.at(1).c_str());

@@ -34,6 +34,7 @@ class Flag {
 
     public:
         Flag(vector<string> data);
+void SetData(vector<string> data);
 	    string ToString();
  
 };

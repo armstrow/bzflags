@@ -141,11 +141,16 @@ bool BZFSCommunicator::get_flags(vector<Flag> *AllFlags) {
     v=ReadArr();
     int i=0;
     while(v.at(0)=="flag") {
-        Flag MyFlag(v);
-        AllFlags->push_back(MyFlag);
-        v.clear();
-        v=ReadArr();
-        i++;
+        int tIndex = atoi(v.at(1).c_str());
+        if(AllFlags->size() < tIndex + 1) {
+	        Flag MyFlag(v);
+    	    AllFlags->push_back(MyFlag);
+        } else {
+            AllFlags->at(tIndex).SetData(v);
+        }
+    	v.clear();
+    	v = ReadArr();
+	    i++;
     }
     if(v.at(0)!="end") {
         return false;
@@ -165,11 +170,16 @@ bool BZFSCommunicator::get_shots(vector<Shot> *AllShots) {
     v=ReadArr();
     int i=0;
     while(v.at(0)=="shot") {
-    	Shot MyShot(v);
-	   AllShots->push_back(MyShot);
+        int tIndex = atoi(v.at(1).c_str());
+        if(AllShots->size() < tIndex + 1) {
+	        Shot MyShot(v);
+    	    AllShots->push_back(MyShot);
+        } else {
+            AllShots->at(tIndex).SetData(v);
+        }
     	v.clear();
-    	v=ReadArr();
-    	i++;
+    	v = ReadArr();
+	    i++;
     }
     if(v.at(0)!="end") {
     return false;
@@ -220,11 +230,16 @@ bool BZFSCommunicator::get_othertanks(vector <OtherTank> *AllOtherTanks) {
     v=ReadArr();
     int i=0;
     while(v.at(0)=="othertank") {
-        OtherTank TheOtherTank(v);
-        AllOtherTanks->push_back(TheOtherTank);
-        v.clear();
-        v=ReadArr();
-        i++;
+        int tIndex = atoi(v.at(1).c_str());
+        if(AllOtherTanks->size() < tIndex + 1) {
+	        OtherTank TheOtherTank(v);
+    	    AllOtherTanks->push_back(t);
+        } else {
+            AllOtherTanks->at(tIndex).SetData(v);
+        }
+    	v.clear();
+    	v = ReadArr();
+	    i++;
     }
     if(v.at(0)!="end") {
         return false;

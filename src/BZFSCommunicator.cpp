@@ -127,7 +127,6 @@ bool BZFSCommunicator::get_obstacles(vector<Obstacle> *AllObstacles) {
    return true;
 }
 bool BZFSCommunicator::get_flags(vector<Flag> *AllFlags) {
-    /*
     // Request a list of flags.
     SendLine("flags");
     ReadAck();
@@ -139,11 +138,7 @@ bool BZFSCommunicator::get_flags(vector<Flag> *AllFlags) {
     v=ReadArr();
     int i=0;
     while(v.at(0)=="flag") {
-        flag_t MyFlag;
-        MyFlag.color=v.at(1);
-        MyFlag.poss_color=v.at(2);
-        MyFlag.pos[0]=atof(v.at(3).c_str());
-        MyFlag.pos[1]=atof(v.at(4).c_str());
+        Flag MyFlag(v);
         AllFlags->push_back(MyFlag);
         v.clear();
         v=ReadArr();
@@ -152,12 +147,10 @@ bool BZFSCommunicator::get_flags(vector<Flag> *AllFlags) {
     if(v.at(0)!="end") {
         return false;
     }
-    */
     return true;
 }
 
 bool BZFSCommunicator::get_shots(vector<Shot> *AllShots) {
-    /*
     // Request a list of shots.
     SendLine("shots");
     ReadAck();
@@ -169,20 +162,15 @@ bool BZFSCommunicator::get_shots(vector<Shot> *AllShots) {
     v=ReadArr();
     int i=0;
     while(v.at(0)=="shot") {
-    shot_t MyShot;
-    MyShot.pos[0]=atof(v.at(1).c_str());
-    MyShot.pos[1]=atof(v.at(2).c_str());
-    MyShot.velocity[0]=atof(v.at(3).c_str());
-    MyShot.velocity[1]=atof(v.at(4).c_str());
-    AllShots->push_back(MyShot);
-    v.clear();
-    v=ReadArr();
-    i++;
+    	Shot MyShot(v);
+	   AllShots->push_back(MyShot);
+    	v.clear();
+    	v=ReadArr();
+    	i++;
     }
     if(v.at(0)!="end") {
     return false;
     }
-    */
     return true;
 }
 
@@ -229,9 +217,8 @@ bool BZFSCommunicator::get_mytanks(vector<MyTank> *AllMyTanks) {
 }
 
 bool BZFSCommunicator::get_othertanks(vector <OtherTank> *AllOtherTanks) {
-    /*
-        // Request a list of tanks that aren't our robots.
-        SendLine("othertanks");
+// Request a list of tanks that aren't our robots.
+    SendLine("othertanks");
     ReadAck();
     vector <string> v=ReadArr();
     if(v.at(0)!="begin") {
@@ -241,15 +228,8 @@ bool BZFSCommunicator::get_othertanks(vector <OtherTank> *AllOtherTanks) {
     v=ReadArr();
     int i=0;
     while(v.at(0)=="othertank") {
-        otank_t OtherTank;
-        OtherTank.callsign=v.at(1);
-        OtherTank.color=v.at(2);
-        OtherTank.status=v.at(3);
-        OtherTank.flag=v.at(4);
-        OtherTank.pos[0]=atof(v.at(5).c_str());
-        OtherTank.pos[1]=atof(v.at(6).c_str());
-        OtherTank.angle=atof(v.at(7).c_str());
-        AllOtherTanks->push_back(OtherTank);
+        OtherTank TheOtherTank(v);
+        AllOtherTanks->push_back(TheOtherTank);
         v.clear();
         v=ReadArr();
         i++;
@@ -257,12 +237,10 @@ bool BZFSCommunicator::get_othertanks(vector <OtherTank> *AllOtherTanks) {
     if(v.at(0)!="end") {
         return false;
     }
-    */
-        return true;
+     return true;
 }
 
 bool BZFSCommunicator::get_constants(vector <Constant> *AllConstants) {
-    /*
     // Request a dictionary of game constants.
     SendLine("constants");
     ReadAck();
@@ -274,18 +252,15 @@ bool BZFSCommunicator::get_constants(vector <Constant> *AllConstants) {
     v=ReadArr();
     int i=0;
     while(v.at(0)=="constant") {
-    constant_t MyConstant;
-    MyConstant.name=v.at(1);
-    MyConstant.value=v.at(2);
-    AllConstants->push_back(MyConstant);
-    v.clear();
-    v=ReadArr();
-    i++;
+    	Constant MyConstant(v);
+	   AllConstants->push_back(MyConstant);
+    	v.clear();
+    	v=ReadArr();
+    	i++;
     }
     if(v.at(0)!="end") {
-    return false;
+    	return false;
     }
-    */
     return true;
 }
 

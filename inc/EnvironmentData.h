@@ -16,6 +16,7 @@
 #include "Constant.h"
 #include "Team.h"
 #include "MyTank.h"
+#include "Base.h"
 
 
 class EnvironmentData {
@@ -30,6 +31,7 @@ class EnvironmentData {
         vector<OtherTank> otherTanks;
         vector<MyTank> myTanks;
         vector<Obstacle> obstacles;
+        vector<Base> bases;
         vector<Shot> shots;
         vector<Flag> flags;
         vector<Constant> constants;

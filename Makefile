@@ -5,7 +5,7 @@
 CC= g++
 FLAGS= -Wall -ggdb -Iinc -lpthread
 EXENAME= robotter
-OBJECTS= obj/RobotController.o obj/BZFSCommunicator.o obj/Robot.o obj/EnvironmentData.o obj/PersonalData.o obj/MyTank.o obj/OtherTank.o obj/Shot.o obj/Obstacle.o obj/Flag.o obj/Team.o obj/Constant.o 
+OBJECTS= obj/RobotController.o obj/BZFSCommunicator.o obj/Robot.o obj/EnvironmentData.o obj/PersonalData.o obj/MyTank.o obj/OtherTank.o obj/Shot.o obj/Obstacle.o obj/Flag.o obj/Team.o obj/Constant.o obj/Base.o
 
 
 
@@ -73,5 +73,8 @@ obj/Obstacle.o: inc/Obstacle.h src/Obstacle.cpp
 
 obj/Constant.o: inc/Constant.h src/Constant.cpp
 	$(CC) $(FLAGS) -c src/Constant.cpp -o obj/Constant.o
+
+obj/Base.o: inc/Base.h src/Base.cpp
+	$(CC) $(FLAGS) -c src/Base.cpp -o obj/Base.o
 
 

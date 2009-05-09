@@ -35,6 +35,7 @@ void RobotController::InitEnvironment() {
     bzfsComm.get_obstacles(&env.obstacles);
     bzfsComm.get_teams(&env.teams);
     bzfsComm.get_constants(&env.constants);
+    bzfsComm.get_bases(&env.bases);
 }
 //------------------------------------------------------
 void RobotController::UpdateEnvironment() {

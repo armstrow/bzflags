@@ -129,6 +129,32 @@ bool BZFSCommunicator::get_obstacles(vector<Obstacle> *AllObstacles) {
    //cout << "    --> get_obst: DONE!" << endl;
    return true;
 }
+bool BZFSCommunicator::get_bases(vector<Base> *AllBases) {
+	// Request a list of bases.
+	SendLine("bases");
+	ReadAck();
+	vector <string> v=ReadArr();
+	if(v.at(0)!="begin") {
+    	return false;
+	}
+	v.clear();
+	v=ReadArr();
+	int i=0;
+	while(v.at(0)=="base") {
+    	Base MyBase(v);
+    	AllBases->push_back(MyBase);
+	    v.clear();
+	    v=ReadArr();
+	    i++;
+        //cout << "        obst#: " << i << endl;
+	}
+	if(v.at(0)!="end") {
+        //cout << "    --> get_obst: NO END" << endl;
+    	return false;
+	}
+   //cout << "    --> get_obst: DONE!" << endl;
+   return true;
+}
 bool BZFSCommunicator::get_flags(vector<Flag> *AllFlags) {
     // Request a list of flags.
     SendLine("flags");
@@ -233,7 +259,7 @@ bool BZFSCommunicator::get_othertanks(vector <OtherTank> *AllOtherTanks) {
         int tIndex = atoi(v.at(1).c_str());
         if(AllOtherTanks->size() < tIndex + 1) {
 	        OtherTank TheOtherTank(v);
-    	    AllOtherTanks->push_back(t);
+    	    AllOtherTanks->push_back(TheOtherTank);
         } else {
             AllOtherTanks->at(tIndex).SetData(v);
         }

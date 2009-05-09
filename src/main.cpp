@@ -32,6 +32,7 @@ void SetPotentialFieldVals(float *xField, float *yfield, float meX, float meY, f
 void RotateDegrees(MyTank *tank, int index, float originalAngle, float amount, bool right);
 bool HitObstacle(MyTank *tank);
 float Wrap(float original, float max);
+float GenerateField(float x, float y);
 
 //------------------------------------------------------
 int main(int argc, char** argv) {
@@ -98,6 +99,32 @@ void *SmartRobot(void *ptr ) {
   
     controller->speed(tankIndex, 0.5);
     bool turnedOnce = false;
+
+
+    cout << "OBSTACLES" << endl << endl;
+    cout << "(";
+    for(int i = 0; i < obstacles.size(); i++) {
+        Obstacle currObst = obstacles.at(i);
+        cout << endl << "(";
+        for(int j = 0; j < currObst.corners.size(); j++) {
+            Point corner = currObst.corners.at(j);
+            if(j != 0)
+                cout << ", ";
+            cout << "(" << corner.x << ", " << corner.y << ")";
+        }
+        cout << ")";
+        if(i != obstacles.size() -1)
+            cout << ", ";
+    }
+    cout << ")" << endl;
+
+    for(int x = -400; x <= 400; x += 25) {
+        for(int y = -400; y <= 400; y+= 25) {
+            float force = GenerateField(x,y);
+        }
+    }
+
+    /*
     while(1 == 1) {
         //calculate x and y potential field forces
         float xForce = 0;
@@ -117,7 +144,7 @@ void *SmartRobot(void *ptr ) {
 
         if(!HAVE_FLAG) {
             //iterate enemyflags
-            /*
+            /
             for(int i = 0; i < enemyFlags.size(); i++) {
                 Flag *currFlag = enemyFlags.at(i);
     
@@ -132,7 +159,7 @@ void *SmartRobot(void *ptr ) {
                 xForce += tempXForce;
                 yForce += tempYForce;
             }
-            */
+            /
 
             //iterate enemyBases
             float BASE_RADIUS = 20;
@@ -197,13 +224,17 @@ void *SmartRobot(void *ptr ) {
                 yForce += tempYForce;
             }
         }
-        /*
-        */
+        /
+        /
 
 
         float finalAngle = Wrap(atan2(yForce,xForce), PI*2);//good
         float angleDiff = GetAngleDist(me->angle, finalAngle);//not good
-        float angVel = (angleDiff/(2*PI))*0.8 + 0.2;
+        float angVel = (angleDiff/(2*PI))*0.8;
+        if(angVel < 0)
+            angVel -= 0.2;
+        else
+            angVel += 0.2;
 
         cout << "goal angle: " << finalAngle << "  currangle: " << me->angle << "  angleDiff: " << angleDiff << "  angVel: " << angVel << endl;
         //cout << " HAVE FLAG? " << (HAVE_FLAG ? "YES!!!" : "NO :(") << endl;
@@ -219,6 +250,11 @@ void *SmartRobot(void *ptr ) {
 
         usleep(400);
     }
+    */
+}
+//------------------------------------------------------
+float GenerateField(float x, float y, float *outX, float *outY) {
+    
 }
 //------------------------------------------------------
 float GetAngleDist(float me, float goal) {
@@ -256,7 +292,7 @@ void SetPotentialFieldVals(float *xField, float *yField, float meX, float meY, f
     float angle = atan2((goalY - meY),(goalX - meX));
     //cout << "  ANGLE: " << angle;
 
-    cout << endl;
+    //cout << endl;
 
     float deltaX;
     float deltaY;

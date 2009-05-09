@@ -116,42 +116,44 @@ void *SmartRobot(void *ptr ) {
         float meY = me->pos[1];
 
         if(!HAVE_FLAG) {
-        //iterate enemyflags
-        for(int i = 0; i < enemyFlags.size(); i++) {
-            Flag *currFlag = enemyFlags.at(i);
-
-            float tempXForce = 0;
-            float tempYForce = 0;
-
-            float flagX = currFlag->pos[0];
-            float flagY = currFlag->pos[1];
-        
-            SetPotentialFieldVals(&tempXForce, &tempYForce, meX, meY, flagX, flagY, true, FLAG_RADIUS, 200, 50);
-
-            xForce += tempXForce;
-            yForce += tempYForce;
-        }
-
-        //iterate enemyBases
-        float BASE_RADIUS = 20;
-        float BASE_SPREAD = 500;
-        float BASE_ALPHA = 100;
-        for(int i = 0; i < enemyBases.size(); i++) {
-            Base *currBase = enemyBases.at(i);
-            //cout << "ENEMY BASE COLOR: " << currBase->color << endl;
-
-            float tempXForce;
-            float tempYForce;
-
-            float baseX = currBase->corners.at(0).x;
-            float baseY = currBase->corners.at(0).y;
+            //iterate enemyflags
+            /*
+            for(int i = 0; i < enemyFlags.size(); i++) {
+                Flag *currFlag = enemyFlags.at(i);
+    
+                float tempXForce = 0;
+                float tempYForce = 0;
+    
+                float flagX = currFlag->pos[0];`    
+                float flagY = currFlag->pos[1];
             
-            SetPotentialFieldVals(&tempXForce, &tempYForce, meX, meY, baseX, baseY, true, BASE_RADIUS, BASE_SPREAD, BASE_ALPHA);
-            
-            xForce += tempXForce;
-            yForce += tempYForce;
-            break;
-        }
+                SetPotentialFieldVals(&tempXForce, &tempYForce, meX, meY, flagX, flagY, true, FLAG_RADIUS, 200, 50);
+
+                xForce += tempXForce;
+                yForce += tempYForce;
+            }
+            */
+
+            //iterate enemyBases
+            float BASE_RADIUS = 20;
+            float BASE_SPREAD = 500;
+            float BASE_ALPHA = 100;
+            for(int i = 0; i < enemyBases.size(); i++) {
+                Base *currBase = enemyBases.at(i);
+                //cout << "ENEMY BASE COLOR: " << currBase->color << endl;  
+    
+                float tempXForce;
+                float tempYForce;
+    
+                float baseX = currBase->corners.at(0).x;    
+                float baseY = currBase->corners.at(0).y;
+                
+                SetPotentialFieldVals(&tempXForce, &tempYForce, meX, meY, baseX, baseY, true, BASE_RADIUS, BASE_SPREAD, BASE_ALPHA);    
+                
+                xForce += tempXForce;
+                yForce += tempYForce;
+                break;
+            }
         } else {
             //iterate enemyBases
             float BASE_RADIUS = 20;
@@ -161,17 +163,26 @@ void *SmartRobot(void *ptr ) {
             float tempXForce;
             float tempYForce;
 
+            float myBaseX = myBase->corners.at(0).x;
+            float myBaseY = myBase->corners.at(0).y;
+
+            //cout << "MYBASE CORNER X: " << myBaseX << "  MyBASE CORNER Y: " << myBaseY << endl;
+
             SetPotentialFieldVals(&tempXForce, &tempYForce, meX, meY, myBase->corners.at(0).x, myBase->corners.at(0).y, true, BASE_RADIUS, BASE_SPREAD, BASE_ALPHA);
+
             xForce += tempXForce;
             yForce += tempYForce;
+
+            //cout << xForce << ", " << yForce << endl;
         }
 
         //iterate obstacles
-        float OBST_RADIUS = 10;
-        float OBST_SPREAD = 50;
-        float OBST_ALPHA = -100;
+        float OBST_RADIUS = 5;
+        float OBST_SPREAD = 5;
+        float OBST_ALPHA = -10;
         for(int i = 0; i < obstacles.size(); i++) {
             Obstacle currObst = obstacles.at(i);
+            //cout << "obstacle # corners: " << currObst.corners.size() << endl;
 
             for(int j = 0; j < currObst.corners.size(); j++) {
                 Point corner = currObst.corners.at(j);
@@ -181,21 +192,23 @@ void *SmartRobot(void *ptr ) {
 
                 SetPotentialFieldVals(&tempXForce, &tempYForce, meX, meY, corner.x, corner.y, false, OBST_RADIUS, OBST_SPREAD, OBST_ALPHA);
 
-                cout << " OBST X FORCE: " << tempXForce << "  OBST Y FORCE: " << tempYForce << endl;
+                //cout << " OBST X FORCE: " << tempXForce << "  OBST Y FORCE: " << tempYForce << endl;
                 xForce += tempXForce;
                 yForce += tempYForce;
             }
         }
+        /*
+        */
 
 
-        float finalAngle = Wrap(atan2(yForce,xForce), PI*2);
-        float angleDiff = GetAngleDist(me->angle, finalAngle);
-        float angVel = (angleDiff);
+        float finalAngle = Wrap(atan2(yForce,xForce), PI*2);//good
+        float angleDiff = GetAngleDist(me->angle, finalAngle);//not good
+        float angVel = (angleDiff/(2*PI))*0.8 + 0.2;
 
         cout << "goal angle: " << finalAngle << "  currangle: " << me->angle << "  angleDiff: " << angleDiff << "  angVel: " << angVel << endl;
-        cout << " HAVE FLAG? " << (HAVE_FLAG ? "YES!!!" : "NO :(") << endl;
+        //cout << " HAVE FLAG? " << (HAVE_FLAG ? "YES!!!" : "NO :(") << endl;
 
-        if(angleDiff <= 0.05)
+        if(abs(angleDiff) <= 0.05)
             controller->angvel(tankIndex, 0);
         else
             controller->angvel(tankIndex, angVel);
@@ -215,17 +228,22 @@ float GetAngleDist(float me, float goal) {
     float result = 0;
 
     if(me < goal) {
-        clockwise = me - goal;
-        counterClockwise = (2*PI - me) + goal;
+        clockwise = me + (2*PI - goal);
+        counterClockwise = me - goal;
     } else if (me > goal) {
         clockwise = goal - me;
-        counterClockwise = me + (2*PI - goal);
+        counterClockwise = goal + (2*PI - me);
     }
 
-    if(clockwise < counterClockwise)
-        result = -1 * clockwise;
-    else
-        result = counterClockwise;
+    if(abs(clockwise) < abs(counterClockwise)) {
+        result = clockwise;
+        if(result > 0)
+            result *= -1;
+        cout << "clockwise!" << endl;;
+    } else {
+        result = abs(counterClockwise);
+        cout << "             counterclockwise!" << endl;
+    }
 
     return result;
 }

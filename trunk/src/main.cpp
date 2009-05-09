@@ -9,6 +9,7 @@
 #include <string.h>
 #include <iostream>
 #include <pthread.h>
+#include <cmath>
 
 
 using namespace std;
@@ -57,6 +58,7 @@ int main(int argc, char** argv) {
   
 void *DummyRobot(void *ptr )
 {
+	sleep(10);
 	while (1) {
 		int *index;
 		index = (int *) ptr;
@@ -67,10 +69,17 @@ void *DummyRobot(void *ptr )
 
 		MyTank curTank = controller->env.myTanks.at(*index);
 		//Wait for collision
-		sleep(5);
-		while (curTank.velocity[0] != 0 && curTank.velocity[1] != 0)
-			sleep(2);
-	
+		//sleep(5);
+//					cout << "**********************************************" << endl;
+	//		cout << curTank.velocity[0] << " " << curTank.velocity[1] << endl;
+		//	cout << "**********************************************" << endl;
+		while (sqrt(curTank.velocity[0]*curTank.velocity[0] +
+			         curTank.velocity[1]*curTank.velocity[1]) >= 1) {
+
+			    
+			sleep(1);
+			}
+		//controller->speed(*index, 0);
 		//Rotate 60
 		float targetAngle = curTank.angle + 1.05;
 		if (targetAngle > 3.14)	targetAngle -= 6.28;
@@ -78,8 +87,8 @@ void *DummyRobot(void *ptr )
 			cout << "tank turning!!!" << endl;
 		else
 			cout << "Error, could not turn!  Save me!" << endl;
-		while (curTank.angle <= targetAngle || (targetAngle < 0 && curTank.angle > 0))
-			sleep(1);
+		//while (curTank.angle <= targetAngle || (targetAngle < 0 && curTank.angle > 0))
+		sleep(5);
 		controller->angvel(*index, 0);
 		cout << "Tank turned successfully!" << endl;
 	}

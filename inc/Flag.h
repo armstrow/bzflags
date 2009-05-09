@@ -9,6 +9,8 @@
 #include <string.h>
 #include <vector>
 
+using namespace std;
+
 class Flag {
   
     /*  +--------------+
@@ -32,7 +34,7 @@ class Flag {
 
     public:
         Flag(vector<string> data);
-	string toString();
+	    string ToString();
  
 };
 

@@ -24,7 +24,7 @@ Constant::Constant(vector<string> data) {
 	this->name = data.at(1);
 	this->value = data.at(2);
 }
-string Constant::toString() {
+string Constant::ToString() {
 	return "Constant " + this->name + " = " + this->value;
 }
 

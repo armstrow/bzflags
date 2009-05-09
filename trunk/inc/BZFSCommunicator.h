@@ -9,6 +9,7 @@
 #include "OtherTank.h"
 #include "Constant.h"
 #include "Flag.h"
+#include "Base.h"
 
 
 #include <vector>
@@ -60,6 +61,7 @@ class BZFSCommunicator {
         bool get_flags(vector<Flag> *allFlags);
         bool get_shots(vector<Shot> *allShot);
         bool get_constants(vector<Constant> *allConstants);
+        bool get_bases(vector<Base> *allBases);
 
     private:
 	    void ReadAck();

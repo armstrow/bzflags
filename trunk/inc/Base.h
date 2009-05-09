@@ -9,7 +9,7 @@
 
 using namespace std;
 
-struct Point {
+struct BasePoint {
     float x;
     float y;
 };
@@ -21,7 +21,7 @@ class Base {
      *  +--------------+ */
 
     private:
-        vector<Point> corners;
+        vector<BasePoint> corners;
 
     public:
         Base(vector<string> data);

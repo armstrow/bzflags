@@ -29,7 +29,7 @@ Base::Base(vector<string> data) {
         if(i == static_cast<int>(data.size()))
             break;
 
-        Point corner;
+        BasePoint corner;
         corner.x = atof(data.at(i).c_str());
         i++;
         corner.y = atof(data.at(i).c_str());

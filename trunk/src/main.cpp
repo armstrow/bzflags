@@ -48,8 +48,8 @@ int main(int argc, char** argv) {
     int robNum = 0;
     cout << "Begin Robot Thread" << endl;
     pthread_create(&threadRob1, NULL, DummyRobot, (void*)&robNum);
-    //robNum = 1;
-    //pthread_create(&threadRob2, NULL, DummyRobot, (void*)&robNum);
+    robNum = 1;
+    pthread_create(&threadRob2, NULL, DummyRobot, (void*)&robNum);
 
     controller->LoopAction();
 } 
@@ -57,7 +57,8 @@ int main(int argc, char** argv) {
   
 void *DummyRobot(void *ptr )
 {
-	sleep(5); //Let the MyTanks command run first thing to establish number of tanks
+	usleep(500); //Let the MyTanks command run first thing to establish number of tanks
+
 	int *index;
 	index = (int *) ptr;
 	while (1) {
@@ -66,63 +67,40 @@ void *DummyRobot(void *ptr )
 		else
 			cout << "Couldn't Move Tank!" << endl;
 
-		MyTank curTank = controller->env.myTanks.at(*index);
+		MyTank *curTank = &controller->env.myTanks.at(*index);
         vector<Obstacle> *obstacles = &controller->env.obstacles;
-		//Wait for collision
-
-        
+       
+        int sleepAmount = 200;
         while(1 == 1) {
-            if(curTank.status == "dead") { }
-            else if(HitObstacle(&curTank)) {
-                Rotate60Degrees(&controller->env.myTanks.at(*index), *index, curTank.angle);
+            if(curTank->status == "dead") { }
+            else if(HitObstacle(curTank)) {
+                cout << "hit obstacle" << endl;
+                Rotate60Degrees(curTank, *index, curTank->angle);
             }
-            sleep(1);
+            if(curTank->angle != 0)
+                controller->angvel(*index, 0);
+
+            usleep(sleepAmount);
+            controller->shoot(*index);
         }
-
-
-
-
-        /*
-		while (sqrt(curTank.velocity[0]*curTank.velocity[0] +
-			         curTank.velocity[1]*curTank.velocity[1]) >= 1) {
-            //check obstacles
-            
-			sleep(1);
-		}
-        */
-		//Rotate 60 degrees
-
 	}
 	
 }
 //------------------------------------------------------
 bool HitObstacle(MyTank *tank) {
-    return true;
+    cout << tank->ToString() << endl;
+    if(abs(tank->velocity[0]) < 0.09 || abs(tank->velocity[1]) < 0.09)
+        return true;
+    return false;
 }
 //------------------------------------------------------
 void Rotate60Degrees(MyTank *tank, int index, float originalAngle) {
     float goalAngle = Wrap((PI/3 + originalAngle), PI);
 
-    controller->angvel(index, 0.2);
-    while (abs(goalAngle - tank->angle) > (0.1)) {
-        sleep(0.2);
-    }
+    controller->angvel(index, 1);
+    sleep(2);
     controller->angvel(index, 0);
-    cout << "Tank turned successfully!" << endl;
-    sleep(4);
-
-/*
- 		float targetAngle = curTank.angle + 1.05;
-		if (targetAngle > 3.14)	targetAngle -= 6.28;
-		if(controller->angvel(*index, .5))
-			cout << "tank turning!!!" << endl;
-		else
-			cout << "Error, could not turn!  Save me!" << endl;
-		while (curTank.angle <= targetAngle || (targetAngle < 0 && curTank.angle > 0))
-			sleep(1);
-		controller->angvel(*index, 0);
-		cout << "Tank turned successfully!" << endl;
-*/
+    controller->shoot(index);
 }
 //------------------------------------------------------
 float Wrap(float original, float max) {

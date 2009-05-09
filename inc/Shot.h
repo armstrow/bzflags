@@ -3,7 +3,10 @@
 #ifndef SHOT 
 #define SHOT
 
-
+#include <string>
+#include <string.h>
+#incldue <vector>
+#include <iostream>
 
 class Shot {
   
@@ -14,7 +17,8 @@ class Shot {
     private:
 
     public:
-        Shot();
+	float pos[2];
+	float velocity[2];
    
     /*  +--------------+
      *  |  FUNCTIONS   |
@@ -23,6 +27,8 @@ class Shot {
     private:
 
     public:
+	Shot(vector<string> data);
+	string ToString();
  
 };
 

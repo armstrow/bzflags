@@ -19,9 +19,18 @@ using namespace std;
 
 
 Shot::Shot() {
-
+  if (data.at(0) != "shot")
+    throw "Invalid data for Shot";
+  this->pos[0] = atof(data.at(1).c_str());
+  this->pos[1] = atof(data.at(2).c_str());
+  this->velocity[0] = atof(data.at(3).c_str());
+  this->velocity[1] = atof(data.at(4).c_str());
 }
 
+string Shot::toString() {
+  string result = "shot at (" + pos[0] + "," + pos[1] + ") vel:(" + velocity[0] + "," + velocity[1] + ")";
+  return result;
+}
 
 
 

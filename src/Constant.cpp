@@ -18,8 +18,14 @@ using namespace std;
 
 
 
-Constant::Constant() {
-
+Constant::Constant(vector<string> data) {
+	if (data.at(0) != "constant")
+		throw "Invalid data for Constant";
+	this->name = data.at(1);
+	this->value = data.at(2);
+}
+string Constant::toString() {
+	return "Constant " + this->name + " = " + this->value;
 }
 
 

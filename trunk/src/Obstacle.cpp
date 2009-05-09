@@ -25,13 +25,14 @@ Obstacle::Obstacle(vector<string> data) {
         throw "Invalid data for Obstacle";
 
     int index = 1;
-    while(1 == 1) {
-    	if(index = data.size())
-            break;
-
+    while(index < data.size()) {
         Point corner;
-        corner.x = atof(data.at(index).c_str());
-        corner.y = atof(data.at(index + 1).c_str());
+        float x = atof(data.at(index).c_str());
+        float y = atof(data.at(index + 1).c_str());
+        cout << "X: " << x << endl;
+        cout << "Y: " << y << endl;
+        corner.x = x;
+        corner.y = y;
         this->corners.push_back(corner);
         index += 2;
     }

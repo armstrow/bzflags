@@ -14,7 +14,7 @@ RobotController::RobotController(string server, int port) {
 		InitEnvironment();
 		pthread_mutex_unlock(&socket_lock);	
 	}
-	pthread_mutex_init(&socket_lock, NULL);
+	//pthread_mutex_init(&socket_lock, NULL);
 
 }
 
@@ -34,13 +34,13 @@ void RobotController::LoopAction() {
 void RobotController::InitEnvironment() {
     bzfsComm.get_teams(&env.teams);
     bzfsComm.get_constants(&env.constants);
+    bzfsComm.get_obstacles(&env.obstacles);
 }
 //------------------------------------------------------
 void RobotController::UpdateEnvironment() {
     bzfsComm.get_shots(&env.shots);
     bzfsComm.get_othertanks(&env.otherTanks);
-    bzfsComm.get_mytanks(&env.myTanks);
-    bzfsComm.get_obstacles(&env.obstacles);
+    bzfsComm.get_mytanks(&env.myTanks);    
     bzfsComm.get_flags(&env.flags);
 }
 //------------------------------------------------------

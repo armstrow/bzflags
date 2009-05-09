@@ -17,6 +17,9 @@ using namespace std;
 
 
 Flag::Flag(vector<string> data) {
+    SetData(data);
+}
+void Flag::SetData(vector<string> data) {
   if (data.at(0) != "flag")
     throw "Invalid data for flag";
 

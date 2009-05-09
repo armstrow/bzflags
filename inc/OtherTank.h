@@ -39,6 +39,7 @@ class OtherTank {
 
     public:
         OtherTank(vector<string> data);
+        void SetData(vector<string> data);
         string ToString();
  
 };

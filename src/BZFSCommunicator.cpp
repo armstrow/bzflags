@@ -104,7 +104,6 @@ bool BZFSCommunicator::get_teams(vector<Team> *AllTeams) {
 	return true;
 }
 bool BZFSCommunicator::get_obstacles(vector<Obstacle> *AllObstacles) {
-    /*
 	// Request a list of obstacles.
 	SendLine("obstacles");
 	ReadAck();
@@ -116,14 +115,8 @@ bool BZFSCommunicator::get_obstacles(vector<Obstacle> *AllObstacles) {
 	v=ReadArr();
 	int i=0;
 	while(v.at(0)=="obstacle") {
-    	obstacle_t MyObstacle;
-	    int j=0;
-	    while(j+2<(int)v.size()) {
-	        MyObstacle.o_corner[j/2][0]=atof(v.at(j+1).c_str());
-            MyObstacle.o_corner[j/2][1]=atof(v.at(j+2).c_str());
-		    j=j+2;
-	    }
-	    AllObstacles->push_back(MyObstacle);
+    	Obstacle MyObstacle(v);
+    	AllObstacles->push_back(MyObstacle);
 	    v.clear();
 	    v=ReadArr();
 	    i++;
@@ -131,8 +124,7 @@ bool BZFSCommunicator::get_obstacles(vector<Obstacle> *AllObstacles) {
 	if(v.at(0)!="end") {
     	return false;
 	}
-    */
-    return true;
+   return true;
 }
 bool BZFSCommunicator::get_flags(vector<Flag> *AllFlags) {
     /*

@@ -27,8 +27,9 @@ float PI = 4.0*atan(1.0);
 
 void *DummyRobot(void *ptr);
 void *SmartRobot(void *ptr);
-void SetPotentialFieldVals(float *xField, float *yfield, float meX, float meY, float goalX, float goalY, float radius, float spread, float alpha);
-void Rotate60Degrees(MyTank *tank, int index, float originalAngle);
+float GetAngleDist(float me, float goal);
+void SetPotentialFieldVals(float *xField, float *yfield, float meX, float meY, float goalX, float goalY, bool attract, float radius, float spread, float alpha);
+void RotateDegrees(MyTank *tank, int index, float originalAngle, float amount, bool right);
 bool HitObstacle(MyTank *tank);
 float Wrap(float original, float max);
 
@@ -52,42 +53,59 @@ int main(int argc, char** argv) {
     cout << "Begin Robot Thread" << endl;
     pthread_create(&threadRob1, NULL, DummyRobot, (void*)&robNum);
     int robNum2 = 1;
-    pthread_create(&threadRob2, NULL, DummyRobot, (void*)&robNum2);
+    pthread_create(&threadRob2, NULL, SmartRobot, (void*)&robNum2);
 
     controller->LoopAction();
 } 
 //------------------------------------------------------
-void *SmartRobot(int *ptr ) {
-    usleep(500);//let it get set up
+void *SmartRobot(void *ptr ) {
+    sleep(2);//let it get set up
 
-    int tankIndex = *ptr;
+	int *index = (int *) ptr;
+    int tankIndex = *index;
+    cout << "TANK INDEX: " << tankIndex << endl;
 
     string myColor = "green";
 
+    MyTank *curTank = &controller->env.myTanks.at(tankIndex);
+    //vector<Obstacle> *obstacles = &controller->env.obstacles;
+    
     EnvironmentData *env = &controller->env;
+    cout << "MY TANKS SIZE: " << env->myTanks.size() << endl;
+    for(int i =0; i < env->myTanks.size(); i++) {
+        cout << env->myTanks.at(i).ToString() << endl;
+    }
     MyTank *me = &env->myTanks.at(tankIndex);
     me->color = myColor;
     vector<Flag *> enemyFlags;
     for(int i = 0; i < env->flags.size(); i++) {
         Flag *currFlag = &env->flags.at(i);
+        cout << "flag color: " << currFlag->color << endl;
         if(currFlag->color != me->color)
             enemyFlags.push_back(currFlag);
     }
     Base *myBase;
+    vector<Base *> enemyBases;
     for(int i = 0; i < env->bases.size(); i++) {
         Base *currBase = &env->bases.at(i);
         if(currBase->color == me->color){
             myBase = currBase;
+        } else {
+            enemyBases.push_back(currBase);
         }
     }
     vector<Obstacle> obstacles = env->obstacles;
-   
+  
+    controller->speed(tankIndex, 0.5);
+    bool turnedOnce = false;
     while(1 == 1) {
         //calculate x and y potential field forces
         float xForce = 0;
         float yForce = 0;
 
-        float FLAG_RADIUS = 100;
+        bool HAVE_FLAG = me->flag != "none";
+
+        float FLAG_RADIUS = 5;
         float OBSTACLE_FACTOR = 5;
         float RAND_FACTOR = 2;
 
@@ -97,6 +115,7 @@ void *SmartRobot(int *ptr ) {
         float meX = me->pos[0];
         float meY = me->pos[1];
 
+        if(!HAVE_FLAG) {
         //iterate enemyflags
         for(int i = 0; i < enemyFlags.size(); i++) {
             Flag *currFlag = enemyFlags.at(i);
@@ -107,48 +126,153 @@ void *SmartRobot(int *ptr ) {
             float flagX = currFlag->pos[0];
             float flagY = currFlag->pos[1];
         
-            SetPotentialFieldVals(&tempXForce, &tempYForce, meX, meY, flagX, flagY, FLAG_RADIUS, 10, 50);
+            SetPotentialFieldVals(&tempXForce, &tempYForce, meX, meY, flagX, flagY, true, FLAG_RADIUS, 200, 50);
 
             xForce += tempXForce;
             yForce += tempYForce;
         }
 
+        //iterate enemyBases
+        float BASE_RADIUS = 20;
+        float BASE_SPREAD = 500;
+        float BASE_ALPHA = 100;
+        for(int i = 0; i < enemyBases.size(); i++) {
+            Base *currBase = enemyBases.at(i);
+            //cout << "ENEMY BASE COLOR: " << currBase->color << endl;
+
+            float tempXForce;
+            float tempYForce;
+
+            float baseX = currBase->corners.at(0).x;
+            float baseY = currBase->corners.at(0).y;
+            
+            SetPotentialFieldVals(&tempXForce, &tempYForce, meX, meY, baseX, baseY, true, BASE_RADIUS, BASE_SPREAD, BASE_ALPHA);
+            
+            xForce += tempXForce;
+            yForce += tempYForce;
+            break;
+        }
+        } else {
+            //iterate enemyBases
+            float BASE_RADIUS = 20;
+            float BASE_SPREAD = 500;
+            float BASE_ALPHA = 100;
+
+            float tempXForce;
+            float tempYForce;
+
+            SetPotentialFieldVals(&tempXForce, &tempYForce, meX, meY, myBase->corners.at(0).x, myBase->corners.at(0).y, true, BASE_RADIUS, BASE_SPREAD, BASE_ALPHA);
+            xForce += tempXForce;
+            yForce += tempYForce;
+        }
+
         //iterate obstacles
+        float OBST_RADIUS = 10;
+        float OBST_SPREAD = 50;
+        float OBST_ALPHA = -100;
+        for(int i = 0; i < obstacles.size(); i++) {
+            Obstacle currObst = obstacles.at(i);
+
+            for(int j = 0; j < currObst.corners.size(); j++) {
+                Point corner = currObst.corners.at(j);
+
+                float tempXForce;
+                float tempYForce;
+
+                SetPotentialFieldVals(&tempXForce, &tempYForce, meX, meY, corner.x, corner.y, false, OBST_RADIUS, OBST_SPREAD, OBST_ALPHA);
+
+                cout << " OBST X FORCE: " << tempXForce << "  OBST Y FORCE: " << tempYForce << endl;
+                xForce += tempXForce;
+                yForce += tempYForce;
+            }
+        }
 
 
-        float finalAngle = atan2(yForce,xForce);
+        float finalAngle = Wrap(atan2(yForce,xForce), PI*2);
+        float angleDiff = GetAngleDist(me->angle, finalAngle);
+        float angVel = (angleDiff);
 
-        //move to the angle
+        cout << "goal angle: " << finalAngle << "  currangle: " << me->angle << "  angleDiff: " << angleDiff << "  angVel: " << angVel << endl;
+        cout << " HAVE FLAG? " << (HAVE_FLAG ? "YES!!!" : "NO :(") << endl;
+
+        if(angleDiff <= 0.05)
+            controller->angvel(tankIndex, 0);
+        else
+            controller->angvel(tankIndex, angVel);
+
+        //cout << "goal angle: " << me->angle << "   final angle: " << finalAngle << endl;
+        //RotateDegrees(me, tankIndex, me->angle, angleDiff, angleDiff <= 0);
+        turnedOnce = true;
 
         usleep(400);
     }
 }
 //------------------------------------------------------
-void SetPotentialFieldVals(float *xField, float *yField, float meX, float meY, float goalX, float goalY, float radius, float spread, float alpha) {
+float GetAngleDist(float me, float goal) {
+
+    float clockwise;
+    float counterClockwise;
+    float result = 0;
+
+    if(me < goal) {
+        clockwise = me - goal;
+        counterClockwise = (2*PI - me) + goal;
+    } else if (me > goal) {
+        clockwise = goal - me;
+        counterClockwise = me + (2*PI - goal);
+    }
+
+    if(clockwise < counterClockwise)
+        result = -1 * clockwise;
+    else
+        result = counterClockwise;
+
+    return result;
+}
+//------------------------------------------------------
+void SetPotentialFieldVals(float *xField, float *yField, float meX, float meY, float goalX, float goalY, bool attract, float radius, float spread, float alpha) {
 
     float dist = sqrt( (meX - goalX)*(meX - goalX) +
                        (meY - goalY)*(meY - goalY) );
+    //cout << "  DIST: " << dist;
     float angle = atan2((goalY - meY),(goalX - meX));
+    //cout << "  ANGLE: " << angle;
+
+    cout << endl;
 
     float deltaX;
     float deltaY;
 
-    if(dist < radius) {
-        deltaX = deltaY = 0;
-    } else if (radius <= dist <= radius + spread) {
-        deltaX = alpha*(dist - radius)*cos(angle);
-        deltaY = alpha*(dist - radius)*sin(angle);
-    } else if (dist > spread + radius) {
-        deltaX = alpha*spread*cos(angle);
-        deltaY = alpha*spread*sin(angle);
+    if(attract) {
+        if(dist < radius) {
+            deltaX = deltaY = 0;
+        } else if (radius <= dist <= radius + spread) {
+            deltaX = alpha*(dist - radius)*cos(angle);
+            deltaY = alpha*(dist - radius)*sin(angle);
+        } else if (dist > spread + radius) {
+            deltaX = alpha*spread*cos(angle);
+            deltaY = alpha*spread*sin(angle);
+        }
+    } else {
+        if(dist < radius) {
+            deltaX = deltaY = -100;
+        } else if(radius <= dist <= spread + radius) {
+            deltaX = alpha*(spread + radius - dist)*cos(angle);
+            deltaY = alpha*(spread + radius - dist)*sin(angle);
+        } else if(dist > spread + radius) {
+            deltaX = deltaY = 0;
+        }
     }
     *xField = deltaX;
     *yField = deltaY;
+
+    //cout << "       xfield: " << *xField << "   yfield: " << *yField << endl;
 }
 //------------------------------------------------------
 void *DummyRobot(void *ptr )
 {
-	usleep(500); //Let the MyTanks command run first thing to establish number of tanks
+	sleep(3); //Let the MyTanks command run first thing to establish number of tanks
+
 
 	int *index;
 	index = (int *) ptr;
@@ -158,6 +282,7 @@ void *DummyRobot(void *ptr )
 		else
 			cout << "Couldn't Move Tank!" << endl;
 
+        cout << "DUMMY MY TANKS SIZE: " << controller->env.myTanks.size() << endl;
 		MyTank *curTank = &controller->env.myTanks.at(*index);
         vector<Obstacle> *obstacles = &controller->env.obstacles;
        
@@ -166,7 +291,7 @@ void *DummyRobot(void *ptr )
             if(curTank->status == "dead") { }
             else if(HitObstacle(curTank)) {
                 cout << "hit obstacle" << endl;
-                Rotate60Degrees(curTank, *index, curTank->angle);
+                RotateDegrees(curTank, *index, curTank->angle, PI/3, true);
             }
             if(curTank->angle != 0)
                 controller->angvel(*index, 0);
@@ -178,37 +303,41 @@ void *DummyRobot(void *ptr )
 }
 //------------------------------------------------------
 bool HitObstacle(MyTank *tank) {
-    cout << tank->ToString() << endl;
+    //cout << tank->ToString() << endl;
     if(abs(tank->velocity[0]) < 0.09 || abs(tank->velocity[1]) < 0.09)
         return true;
     return false;
 }
 //------------------------------------------------------
-void Rotate60Degrees(MyTank *tank, int index, float originalAngle) {
-    float goalAngle = Wrap((originalAngle + PI/3 ), 2*PI);
+void RotateDegrees(MyTank *tank, int index, float originalAngle, float amount, bool right) {
+    float goalAngle = Wrap((originalAngle + amount ), 2*PI);
 
     float error = abs(goalAngle - tank->angle);
 
-    controller->angvel(index, 0.5);
-    while(error > 0.1) {
+    if(right)
+        controller->angvel(index, -0.5);
+    else
+        controller->angvel(index, 0.5);
+    while(error > 0.05) {
         usleep(200);
-        cout << "    --> " << tank->ToString() << endl;
+        //cout << "    --> " << tank->ToString() << endl;
+        if(index == 1)
+            cout << "goal angle: " << goalAngle << "   currAngle: " << tank->angle << endl;
         error = abs(goalAngle - tank->angle);
     }
     controller->angvel(index, 0);
-
-    /*controller->angvel(index, 1);
-    sleep(2);
-    controller->angvel(index, 0);
-    */
-    //controller->shoot(index);
 }
 //------------------------------------------------------
 float Wrap(float original, float max) {
     while(original > max) {
         original -= max;
     }
+    /*
     while(original < -1*max) {
+        original += max;
+    }
+    */
+    while(original < 0) {
         original += max;
     }
     return original;

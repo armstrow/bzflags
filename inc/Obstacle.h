@@ -21,10 +21,9 @@ class Obstacle {
      *  +--------------+ */
 
     private:
-        vector<Point> corners;
 
     public:
-        Obstacle(vector<string> data);
+        vector<Point> corners;
    
     /*  +--------------+
      *  |  FUNCTIONS   |
@@ -33,6 +32,7 @@ class Obstacle {
     private:
 
     public:
+        Obstacle(vector<string> data);
  
 };
 

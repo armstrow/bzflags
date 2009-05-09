@@ -18,10 +18,10 @@ run: bin
 	bin/$(EXENAME)
 
 run-nodebug: bin
-	bin/$(EXENAME) spear 3000
+	bin/$(EXENAME) localhost 12345
 
 run-debug: bin
-	bin/$(EXENAME) -d spear 3000
+	bin/$(EXENAME) -d localhost 12345
 
 clean:
 	rm -f obj/*.o

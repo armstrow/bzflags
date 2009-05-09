@@ -4,6 +4,10 @@
 #define FLAG
 
 
+#include <iostream>
+#include <string>
+#include <string.h>
+#include <vector>
 
 class Flag {
   
@@ -14,8 +18,12 @@ class Flag {
     private:
 
     public:
-        Flag();
-   
+
+	string color;
+	string poss_color;
+	float pos[2];
+	
+	
     /*  +--------------+
      *  |  FUNCTIONS   |
      *  +--------------+ */
@@ -23,6 +31,8 @@ class Flag {
     private:
 
     public:
+        Flag(vector<string> data);
+	string toString();
  
 };
 

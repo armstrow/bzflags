@@ -3,7 +3,9 @@
 #ifndef CONSTANT
 #define CONSTANT
 
-
+#include <string>
+#include <string.h>
+#include <vector>
 
 class Constant {
   
@@ -14,7 +16,9 @@ class Constant {
     private:
 
     public:
-        Constant();
+    	string name;
+    	string value;
+        
    
     /*  +--------------+
      *  |  FUNCTIONS   |
@@ -23,6 +27,7 @@ class Constant {
     private:
 
     public:
+    	Constant(vector<string> data);
  
 };
 

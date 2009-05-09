@@ -4,6 +4,7 @@
 #define MY_TANK
 
 #include <string>
+#include <vector>
 
 using namespace std;
 
@@ -16,7 +17,7 @@ class MyTank {
     private:
 
     public:
-        MyTank();
+        MyTank(vector<string> data);
 	int index;
 	string callsign;
 	string status;

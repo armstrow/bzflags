@@ -186,24 +186,8 @@ bool BZFSCommunicator::get_mytanks(vector<MyTank> *AllMyTanks) {
     v=ReadArr();
     int i=0;
     while(v.at(0)=="mytank") {
-	if (AllMyTanks->size() <= i) {
-		//MyTank* ptr = new MyTank();
-		AllMyTanks->push_back(MyTank());
-	}
-	    MyTank* t = &AllMyTanks->at(i);
-	    t->index=atoi(v.at(1).c_str());
-	    t->callsign=v.at(2);
-	    t->status=v.at(3);
-	    t->shots_avail=atoi(v.at(4).c_str());
-	    t->time_to_reload=atof(v.at(5).c_str());
-	    t->flag=v.at(6);
-	    t->pos[0]=atof(v.at(7).c_str());
-	    t->pos[1]=atof(v.at(8).c_str());
-	    t->angle=atof(v.at(9).c_str());
-	    t->velocity[0]=atof(v.at(10).c_str());
-	    t->velocity[1]=atof(v.at(11).c_str());
-	    t->angvel=atof(v.at(12).c_str());
-	    //AllMyTanks->push_back(MyTank);
+	    MyTank t(v);
+	    AllMyTanks->push_back(t);
 	    v.clear();
 	    v=ReadArr();
 	    i++;

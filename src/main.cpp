@@ -50,7 +50,7 @@ int main(int argc, char** argv) {
     cout << "Begin Robot Thread" << endl;
     pthread_create(&threadRob1, NULL, DummyRobot, (void*)&robNum);
     robNum = 1;
-    pthread_create(&threadRob2, NULL, DummyRobot, (void*)&robNum);
+    //pthread_create(&threadRob2, NULL, DummyRobot, (void*)&robNum);
 
     controller->LoopAction();
 } 

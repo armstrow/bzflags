@@ -21,9 +21,9 @@ class Base {
      *  +--------------+ */
 
     private:
-        vector<BasePoint> corners;
 
     public:
+        vector<BasePoint> corners;
         Base(vector<string> data);
         string color;
    

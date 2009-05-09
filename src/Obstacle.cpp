@@ -26,7 +26,7 @@ Obstacle::Obstacle(vector<string> data) {
 
     int i = 1;
     while(1 == 1) {
-        if(i == static_cast<int>(data.size()))
+    	  if(i == static_cast<int>(data.size()))
             break;
 
         Point corner;

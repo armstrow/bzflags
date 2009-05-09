@@ -42,14 +42,13 @@ int main(int argc, char** argv) {
         exit(0);
     }
 
-
     controller = new RobotController(SERVER, PORT);
     pthread_t threadRob1, threadRob2;
     int threadResultRob;
     int robNum = 0;
     cout << "Begin Robot Thread" << endl;
     pthread_create(&threadRob1, NULL, DummyRobot, (void*)&robNum);
-    robNum = 1;
+    //robNum = 1;
     //pthread_create(&threadRob2, NULL, DummyRobot, (void*)&robNum);
 
     controller->LoopAction();
@@ -58,7 +57,7 @@ int main(int argc, char** argv) {
   
 void *DummyRobot(void *ptr )
 {
-	sleep(10); //Let the MyTanks command run first thing to establish number of tanks
+	sleep(5); //Let the MyTanks command run first thing to establish number of tanks
 	int *index;
 	index = (int *) ptr;
 	while (1) {

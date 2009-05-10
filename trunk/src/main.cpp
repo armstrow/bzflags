@@ -34,6 +34,8 @@ float GenerateField(float x, float y, float *outX, float *outY, string color, bo
 bool HitObstacle(MyTank *tank);
 float Wrap(float original, float max);
 float GenerateField(float x, float y);
+float GetCenterX(vector<Point> pts, int start);
+float GetCenterY(vector<Point> pts, int start);
 void PrintGnuplotInfo();
 
 //------------------------------------------------------
@@ -54,9 +56,10 @@ int main(int argc, char** argv) {
     int threadResultRob;
     int robNum = 0;
     cout << "Begin Robot Thread" << endl;
+    pthread_create(&threadRob1, NULL, SmartRobot, (void*)&robNum);
     //pthread_create(&threadRob1, NULL, DummyRobot, (void*)&robNum);
-    int robNum2 = 1;
-    pthread_create(&threadRob2, NULL, SmartRobot, (void*)&robNum2);
+    //int robNum2 = 1;
+    //pthread_create(&threadRob2, NULL, SmartRobot, (void*)&robNum2);
 
     controller->LoopAction();
 } 
@@ -187,7 +190,7 @@ float GenerateField(float x, float y, float *outX, float *outY, string color, bo
     float yForce;
 
  
-         if(!HAVE_FLAG) {
+     if(!HAVE_FLAG) {
             //iterate enemyflags
         float FLAG_RADIUS = 5;
         float OBSTACLE_FACTOR = 5;
@@ -211,7 +214,7 @@ float GenerateField(float x, float y, float *outX, float *outY, string color, bo
             //iterate enemyBases
             float BASE_RADIUS = 20;
             float BASE_SPREAD = 800;
-            float BASE_ALPHA = 1000;
+            float BASE_ALPHA = 100;
             for(int i = 0; i < enemyBases.size(); i++) {
                 Base *currBase = enemyBases.at(i);
                 //cout << "ENEMY BASE COLOR: " << currBase->color << endl;  
@@ -232,7 +235,7 @@ float GenerateField(float x, float y, float *outX, float *outY, string color, bo
             //go home to your own base
             float BASE_RADIUS = 20;
             float BASE_SPREAD = 800;
-            float BASE_ALPHA = 1000;
+            float BASE_ALPHA = 100;
 
             float tempXForce;
             float tempYForce;
@@ -250,32 +253,78 @@ float GenerateField(float x, float y, float *outX, float *outY, string color, bo
             //cout << xForce << ", " << yForce << endl;
         }
 
+
          //iterate obstacles
-         float OBST_RADIUS = 5;
-         float OBST_SPREAD = 5;
-         float OBST_ALPHA = -10;
+         float OBST_RADIUS = .7;
+         float OBST_SPREAD = 1;
+         float OBST_ALPHA = -1000;
          for(int i = 0; i < obstacles.size(); i++) {
              Obstacle currObst = obstacles.at(i);
              //cout << "obstacle # corners: " << currObst.corners.size() << endl;
+		float centerX = GetCenterX(currObst.corners, 0);
+		float centerY = GetCenterY(currObst.corners, 0);
+		Point corner = currObst.corners.at(0);
+		float radius = sqrt( (corner.x - centerX)*(corner.x - centerX) +
+                       (corner.y - centerY)*(corner.y - centerY) );
+		if (radius > 50) radius = 50;
+/*
+		cout << "(" << currObst.corners.at(0).x << "," << currObst.corners.at(0).y << "),("
+ 				<< currObst.corners.at(1).x << "," << currObst.corners.at(1).y << "),("
+				<< currObst.corners.at(2).x << "," << currObst.corners.at(2).y << "),("
+				<< currObst.corners.at(3).x << "," << currObst.corners.at(3).y << "),("
+				<< "center: (" << centerX << "," << centerY << ")" << " radius: " << radius << endl;*/
 
-             for(int j = 0; j < currObst.corners.size(); j++) {
-                 Point corner = currObst.corners.at(j);
+             //for(int j = 0; j < currObst.corners.size(); j++) {
+               //  Point corner = currObst.corners.at(j);
 
                  float tempXForce;
                  float tempYForce;
 
-                 SetPotentialFieldVals(&tempXForce, &tempYForce, x, y, corner.x, corner.y, false, OBST_RADIUS, OBST_SPREAD, OBST_ALPHA);
+                 SetPotentialFieldVals(&tempXForce, &tempYForce, x, y, centerX, centerY, false, radius*OBST_RADIUS, radius * OBST_SPREAD, OBST_ALPHA);
 
                  //cout << " OBST X FORCE: " << tempXForce << "  OBST Y FORCE: " << tempYForce << endl;
                  xForce += tempXForce;
                  yForce += tempYForce;
-             }
+             //}
          }
          /*
          */
     
     *outX = xForce;
     *outY = yForce;
+}
+
+float GetCenterX(vector<Point> pts, int start) {
+	if (start >= pts.size())
+		throw "Error finding center of obstacle";	
+	float x1 = pts.at(start).x;
+	float x2;
+	if (start == pts.size() - 1)
+		x2 = pts.at(0).x;
+	else
+		x2 = pts.at(start+1).x;
+	if (x1 < x2) 
+		return (x1 + abs((x2 - x1) / 2));
+	else if(x2 < x1)
+		return (x2 + abs((x1 - x2) / 2));
+	else
+		return GetCenterX(pts, start + 1);
+}
+float GetCenterY(vector<Point> pts, int start) {
+	if (start >= pts.size())
+		throw "Error finding center of obstacle";	
+	float y1 = pts.at(start).y;
+	float y2;
+	if (start == pts.size() - 1)
+		y2 = pts.at(0).y;
+	else
+		y2 = pts.at(start+1).y;
+	if (y1 < y2) 
+		return (y1 + abs((y2 - y1) / 2));
+	else if(y2 < y1)
+		return (y2 + abs((y1 - y2) / 2));
+	else
+		return GetCenterY(pts, start + 1);
 }
 //------------------------------------------------------
 float GetAngleDist(float me, float goal) {
@@ -321,7 +370,7 @@ void SetPotentialFieldVals(float *xField, float *yField, float meX, float meY, f
     if(attract) {
         if(dist < radius) {
             deltaX = deltaY = 0;
-        } else if (radius <= dist <= radius + spread) {
+        } else if (radius <= dist && dist <= radius + spread) {
             deltaX = alpha*(dist - radius)*cos(angle);
             deltaY = alpha*(dist - radius)*sin(angle);
         } else if (dist > spread + radius) {
@@ -330,8 +379,8 @@ void SetPotentialFieldVals(float *xField, float *yField, float meX, float meY, f
         }
     } else {
         if(dist < radius) {
-            deltaX = deltaY = -100;
-        } else if(radius <= dist <= spread + radius) {
+            deltaX = deltaY = -1000000000;
+        } else if(radius <= dist && dist <= spread + radius) {
             deltaX = alpha*(spread + radius - dist)*cos(angle);
             deltaY = alpha*(spread + radius - dist)*sin(angle);
         } else if(dist > spread + radius) {

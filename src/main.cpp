@@ -30,9 +30,11 @@ void *SmartRobot(void *ptr);
 float GetAngleDist(float me, float goal);
 void SetPotentialFieldVals(float *xField, float *yfield, float meX, float meY, float goalX, float goalY, bool attract, float radius, float spread, float alpha);
 void RotateDegrees(MyTank *tank, int index, float originalAngle, float amount, bool right);
+float GenerateField(float x, float y, float *outX, float *outY, string color, bool HAVE_FLAG);
 bool HitObstacle(MyTank *tank);
 float Wrap(float original, float max);
 float GenerateField(float x, float y);
+void PrintGnuplotInfo();
 
 //------------------------------------------------------
 int main(int argc, char** argv) {
@@ -52,7 +54,7 @@ int main(int argc, char** argv) {
     int threadResultRob;
     int robNum = 0;
     cout << "Begin Robot Thread" << endl;
-    pthread_create(&threadRob1, NULL, DummyRobot, (void*)&robNum);
+    //pthread_create(&threadRob1, NULL, DummyRobot, (void*)&robNum);
     int robNum2 = 1;
     pthread_create(&threadRob2, NULL, SmartRobot, (void*)&robNum2);
 
@@ -66,177 +68,36 @@ void *SmartRobot(void *ptr ) {
     int tankIndex = *index;
     cout << "TANK INDEX: " << tankIndex << endl;
 
-    string myColor = "green";
-
     MyTank *curTank = &controller->env.myTanks.at(tankIndex);
-    //vector<Obstacle> *obstacles = &controller->env.obstacles;
-    
-    EnvironmentData *env = &controller->env;
-    cout << "MY TANKS SIZE: " << env->myTanks.size() << endl;
-    for(int i =0; i < env->myTanks.size(); i++) {
-        cout << env->myTanks.at(i).ToString() << endl;
-    }
-    MyTank *me = &env->myTanks.at(tankIndex);
-    me->color = myColor;
-    vector<Flag *> enemyFlags;
-    for(int i = 0; i < env->flags.size(); i++) {
-        Flag *currFlag = &env->flags.at(i);
-        cout << "flag color: " << currFlag->color << endl;
-        if(currFlag->color != me->color)
-            enemyFlags.push_back(currFlag);
-    }
-    Base *myBase;
-    vector<Base *> enemyBases;
-    for(int i = 0; i < env->bases.size(); i++) {
-        Base *currBase = &env->bases.at(i);
-        if(currBase->color == me->color){
-            myBase = currBase;
-        } else {
-            enemyBases.push_back(currBase);
-        }
-    }
-    vector<Obstacle> obstacles = env->obstacles;
   
     controller->speed(tankIndex, 0.5);
     bool turnedOnce = false;
 
-
-    cout << "OBSTACLES" << endl << endl;
-    cout << "(";
-    for(int i = 0; i < obstacles.size(); i++) {
-        Obstacle currObst = obstacles.at(i);
-        cout << endl << "(";
-        for(int j = 0; j < currObst.corners.size(); j++) {
-            Point corner = currObst.corners.at(j);
-            if(j != 0)
-                cout << ", ";
-            cout << "(" << corner.x << ", " << corner.y << ")";
-        }
-        cout << ")";
-        if(i != obstacles.size() -1)
-            cout << ", ";
-    }
-    cout << ")" << endl;
-
-    for(int x = -400; x <= 400; x += 25) {
-        for(int y = -400; y <= 400; y+= 25) {
-            float force = GenerateField(x,y);
-        }
-    }
-
-    /*
-    while(1 == 1) {
+    PrintGnuplotInfo();
+    bool doYourWork = false;
+    while(doYourWork) {
         //calculate x and y potential field forces
         float xForce = 0;
         float yForce = 0;
 
-        bool HAVE_FLAG = me->flag != "none";
 
-        float FLAG_RADIUS = 5;
-        float OBSTACLE_FACTOR = 5;
-        float RAND_FACTOR = 2;
-
-        //set a random field value
+       //set a random field value
         float randFloat = (rand()/RAND_MAX);
 
-        float meX = me->pos[0];
-        float meY = me->pos[1];
+        float meX = curTank->pos[0];
+        float meY = curTank->pos[1];
 
-        if(!HAVE_FLAG) {
-            //iterate enemyflags
-            /
-            for(int i = 0; i < enemyFlags.size(); i++) {
-                Flag *currFlag = enemyFlags.at(i);
-    
-                float tempXForce = 0;
-                float tempYForce = 0;
-    
-                float flagX = currFlag->pos[0];`    
-                float flagY = currFlag->pos[1];
-            
-                SetPotentialFieldVals(&tempXForce, &tempYForce, meX, meY, flagX, flagY, true, FLAG_RADIUS, 200, 50);
-
-                xForce += tempXForce;
-                yForce += tempYForce;
-            }
-            /
-
-            //iterate enemyBases
-            float BASE_RADIUS = 20;
-            float BASE_SPREAD = 500;
-            float BASE_ALPHA = 100;
-            for(int i = 0; i < enemyBases.size(); i++) {
-                Base *currBase = enemyBases.at(i);
-                //cout << "ENEMY BASE COLOR: " << currBase->color << endl;  
-    
-                float tempXForce;
-                float tempYForce;
-    
-                float baseX = currBase->corners.at(0).x;    
-                float baseY = currBase->corners.at(0).y;
-                
-                SetPotentialFieldVals(&tempXForce, &tempYForce, meX, meY, baseX, baseY, true, BASE_RADIUS, BASE_SPREAD, BASE_ALPHA);    
-                
-                xForce += tempXForce;
-                yForce += tempYForce;
-                break;
-            }
-        } else {
-            //iterate enemyBases
-            float BASE_RADIUS = 20;
-            float BASE_SPREAD = 500;
-            float BASE_ALPHA = 100;
-
-            float tempXForce;
-            float tempYForce;
-
-            float myBaseX = myBase->corners.at(0).x;
-            float myBaseY = myBase->corners.at(0).y;
-
-            //cout << "MYBASE CORNER X: " << myBaseX << "  MyBASE CORNER Y: " << myBaseY << endl;
-
-            SetPotentialFieldVals(&tempXForce, &tempYForce, meX, meY, myBase->corners.at(0).x, myBase->corners.at(0).y, true, BASE_RADIUS, BASE_SPREAD, BASE_ALPHA);
-
-            xForce += tempXForce;
-            yForce += tempYForce;
-
-            //cout << xForce << ", " << yForce << endl;
-        }
-
-        //iterate obstacles
-        float OBST_RADIUS = 5;
-        float OBST_SPREAD = 5;
-        float OBST_ALPHA = -10;
-        for(int i = 0; i < obstacles.size(); i++) {
-            Obstacle currObst = obstacles.at(i);
-            //cout << "obstacle # corners: " << currObst.corners.size() << endl;
-
-            for(int j = 0; j < currObst.corners.size(); j++) {
-                Point corner = currObst.corners.at(j);
-
-                float tempXForce;
-                float tempYForce;
-
-                SetPotentialFieldVals(&tempXForce, &tempYForce, meX, meY, corner.x, corner.y, false, OBST_RADIUS, OBST_SPREAD, OBST_ALPHA);
-
-                //cout << " OBST X FORCE: " << tempXForce << "  OBST Y FORCE: " << tempYForce << endl;
-                xForce += tempXForce;
-                yForce += tempYForce;
-            }
-        }
-        /
-        /
-
+        GenerateField(meX, meY, &xForce, &yForce, "green", false);
 
         float finalAngle = Wrap(atan2(yForce,xForce), PI*2);//good
-        float angleDiff = GetAngleDist(me->angle, finalAngle);//not good
+        float angleDiff = GetAngleDist(curTank->angle, finalAngle);//not good
         float angVel = (angleDiff/(2*PI))*0.8;
         if(angVel < 0)
             angVel -= 0.2;
         else
             angVel += 0.2;
 
-        cout << "goal angle: " << finalAngle << "  currangle: " << me->angle << "  angleDiff: " << angleDiff << "  angVel: " << angVel << endl;
+        cout << "goal angle: " << finalAngle << "  currangle: " << curTank->angle << "  angleDiff: " << angleDiff << "  angVel: " << angVel << endl;
         //cout << " HAVE FLAG? " << (HAVE_FLAG ? "YES!!!" : "NO :(") << endl;
 
         if(abs(angleDiff) <= 0.05)
@@ -250,11 +111,171 @@ void *SmartRobot(void *ptr ) {
 
         usleep(400);
     }
+    /*
     */
 }
+void PrintGnuplotInfo() {
+    vector<Obstacle> obstacles = controller->env.obstacles;
+    EnvironmentData *env = &controller->env;
+
+    ofstream output;
+    output.open("output.txt");
+
+    output << "\n\nOBSTACLES" << endl << endl;
+    output << "(";
+    for(int i = 0; i < obstacles.size(); i++) {
+        Obstacle currObst = obstacles.at(i);
+        output << endl << "(";
+        for(int j = 0; j < currObst.corners.size(); j++) {
+            Point corner = currObst.corners.at(j);
+            if(j != 0)
+                output << ", ";
+            output << "(" << corner.x << ", " << corner.y << ")";
+        }
+        output << ")";
+        if(i != obstacles.size() -1)
+            output << ", ";
+    }
+    output << ")" << endl;
+
+    output << "\n\nFIELD VALUES" << endl << endl;
+
+    output << "(";
+    for(int x = -400; x <= 400; x += 25) {
+        for(int y = -400; y <= 400; y+= 25) {
+            float forceX;
+            float forceY;
+            GenerateField(x,y, &forceX, &forceY, "green", false);
+            output << "((" << x << ", " << y << "), (" << forceX << ", " << forceY << "))";
+            if(y != 400 || x != 400)
+                output << ",\n";
+        }
+    }
+    output << ")";
+
+    output.close();
+}
 //------------------------------------------------------
-float GenerateField(float x, float y, float *outX, float *outY) {
+float GenerateField(float x, float y, float *outX, float *outY, string color, bool HAVE_FLAG) {
+
+    string myColor = "green";
+
+    //vector<Obstacle> *obstacles = &controller->env.obstacles;
     
+    EnvironmentData *env = &controller->env;
+
+    vector<Flag *> enemyFlags;
+    for(int i = 0; i < env->flags.size(); i++) {
+        Flag *currFlag = &env->flags.at(i);
+        //cout << "flag color: " << currFlag->color << endl;
+        if(currFlag->color != color)
+            enemyFlags.push_back(currFlag);
+    }
+    Base *myBase;
+    vector<Base *> enemyBases;
+    for(int i = 0; i < env->bases.size(); i++) {
+        Base *currBase = &env->bases.at(i);
+        if(currBase->color == color){
+            myBase = currBase;
+        } else {
+            enemyBases.push_back(currBase);
+        }
+    }
+    vector<Obstacle> obstacles = env->obstacles;
+
+    float xForce;
+    float yForce;
+
+ 
+         if(!HAVE_FLAG) {
+            //iterate enemyflags
+        float FLAG_RADIUS = 5;
+        float OBSTACLE_FACTOR = 5;
+        float RAND_FACTOR = 2;
+
+           for(int i = 0; i < enemyFlags.size(); i++) {
+                Flag *currFlag = enemyFlags.at(i);
+    
+                float tempXForce = 0;
+                float tempYForce = 0;
+    
+                float flagX = currFlag->pos[0];
+                float flagY = currFlag->pos[1];
+            
+                SetPotentialFieldVals(&tempXForce, &tempYForce, x, x, flagX, flagY, true, FLAG_RADIUS, 200, 50);
+
+                xForce += tempXForce;
+                yForce += tempYForce;
+            }
+
+            //iterate enemyBases
+            float BASE_RADIUS = 20;
+            float BASE_SPREAD = 800;
+            float BASE_ALPHA = 1000;
+            for(int i = 0; i < enemyBases.size(); i++) {
+                Base *currBase = enemyBases.at(i);
+                //cout << "ENEMY BASE COLOR: " << currBase->color << endl;  
+    
+                float tempXForce;
+                float tempYForce;
+    
+                float baseX = currBase->corners.at(0).x;    
+                float baseY = currBase->corners.at(0).y;
+                
+                SetPotentialFieldVals(&tempXForce, &tempYForce, x, y, baseX, baseY, true, BASE_RADIUS, BASE_SPREAD, BASE_ALPHA);    
+                
+                xForce += tempXForce;
+                yForce += tempYForce;
+                break;
+            }
+        } else {
+            //go home to your own base
+            float BASE_RADIUS = 20;
+            float BASE_SPREAD = 800;
+            float BASE_ALPHA = 1000;
+
+            float tempXForce;
+            float tempYForce;
+
+            float myBaseX = myBase->corners.at(0).x;
+            float myBaseY = myBase->corners.at(0).y;
+
+            //cout << "MYBASE CORNER X: " << myBaseX << "  MyBASE CORNER Y: " << myBaseY << endl;
+
+            SetPotentialFieldVals(&tempXForce, &tempYForce, x, y, myBase->corners.at(0).x, myBase->corners.at(0).y, true, BASE_RADIUS, BASE_SPREAD, BASE_ALPHA);
+
+            xForce += tempXForce;
+            yForce += tempYForce;
+
+            //cout << xForce << ", " << yForce << endl;
+        }
+
+         //iterate obstacles
+         float OBST_RADIUS = 5;
+         float OBST_SPREAD = 5;
+         float OBST_ALPHA = -10;
+         for(int i = 0; i < obstacles.size(); i++) {
+             Obstacle currObst = obstacles.at(i);
+             //cout << "obstacle # corners: " << currObst.corners.size() << endl;
+
+             for(int j = 0; j < currObst.corners.size(); j++) {
+                 Point corner = currObst.corners.at(j);
+
+                 float tempXForce;
+                 float tempYForce;
+
+                 SetPotentialFieldVals(&tempXForce, &tempYForce, x, y, corner.x, corner.y, false, OBST_RADIUS, OBST_SPREAD, OBST_ALPHA);
+
+                 //cout << " OBST X FORCE: " << tempXForce << "  OBST Y FORCE: " << tempYForce << endl;
+                 xForce += tempXForce;
+                 yForce += tempYForce;
+             }
+         }
+         /*
+         */
+    
+    *outX = xForce;
+    *outY = yForce;
 }
 //------------------------------------------------------
 float GetAngleDist(float me, float goal) {

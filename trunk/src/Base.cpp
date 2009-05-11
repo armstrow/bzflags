@@ -8,6 +8,7 @@
 #include <stdlib.h>
 
 #include "Base.h"
+#include "Obstacle.h"
 
 using namespace std;
 
@@ -29,7 +30,7 @@ Base::Base(vector<string> data) {
         if(i == static_cast<int>(data.size()))
             break;
 
-        BasePoint corner;
+        Point corner;
         corner.x = atof(data.at(i).c_str());
         i++;
         corner.y = atof(data.at(i).c_str());

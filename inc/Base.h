@@ -6,6 +6,7 @@
 #include <vector>
 #include <string.h>
 #include <string>
+#include "Obstacle.h"
 
 using namespace std;
 
@@ -23,7 +24,7 @@ class Base {
     private:
 
     public:
-        vector<BasePoint> corners;
+        vector<Point> corners;
         Base(vector<string> data);
         string color;
    

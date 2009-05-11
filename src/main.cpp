@@ -77,7 +77,7 @@ void *SmartRobot(void *ptr ) {
     bool turnedOnce = false;
 
     PrintGnuplotInfo();
-    bool doYourWork = false;
+    bool doYourWork = true;
     while(doYourWork) {
         //calculate x and y potential field forces
         float xForce = 0;
@@ -90,23 +90,32 @@ void *SmartRobot(void *ptr ) {
         float meX = curTank->pos[0];
         float meY = curTank->pos[1];
 
-        GenerateField(meX, meY, &xForce, &yForce, "green", false);
+        bool hasFlag = curTank->flag != "none";
+
+        GenerateField(meX, meY, &xForce, &yForce, "green", hasFlag);
 
         float finalAngle = Wrap(atan2(yForce,xForce), PI*2);//good
         float angleDiff = GetAngleDist(curTank->angle, finalAngle);//not good
         float angVel = (angleDiff/(2*PI))*0.8;
+
         if(angVel < 0)
             angVel -= 0.2;
         else
             angVel += 0.2;
 
-        cout << "goal angle: " << finalAngle << "  currangle: " << curTank->angle << "  angleDiff: " << angleDiff << "  angVel: " << angVel << endl;
+        //cout << "goal angle: " << finalAngle << "  currangle: " << curTank->angle << "  angleDiff: " << angleDiff << "  angVel: " << angVel << endl;
         //cout << " HAVE FLAG? " << (HAVE_FLAG ? "YES!!!" : "NO :(") << endl;
 
-        if(abs(angleDiff) <= 0.05)
-            controller->angvel(tankIndex, 0);
+        float speed = 1 - abs(angleDiff/PI);
+        cout << "anglediff: " << (angleDiff/PI) << ", speed: " << speed << endl;
+        controller->speed(tankIndex, speed);
+
+        if(abs(angleDiff) <= 0.05) 
+            controller->speed(tankIndex, 1);
         else
-            controller->angvel(tankIndex, angVel);
+            controller->speed(tankIndex, 0.2);
+        controller->angvel(tankIndex, angVel);
+
 
         //cout << "goal angle: " << me->angle << "   final angle: " << finalAngle << endl;
         //RotateDegrees(me, tankIndex, me->angle, angleDiff, angleDiff <= 0);
@@ -144,8 +153,8 @@ void PrintGnuplotInfo() {
     output << "\n\nFIELD VALUES" << endl << endl;
 
     output << "(";
-    for(int x = -400; x <= 400; x += 25) {
-        for(int y = -400; y <= 400; y+= 25) {
+    for(int x = -400; x <= 400; x += 12.5) {
+        for(int y = -400; y <= 400; y+= 12.5) {
             float forceX;
             float forceY;
             GenerateField(x,y, &forceX, &forceY, "green", false);
@@ -224,12 +233,14 @@ float GenerateField(float x, float y, float *outX, float *outY, string color, bo
     
                 float baseX = currBase->corners.at(0).x;    
                 float baseY = currBase->corners.at(0).y;
-                
-                SetPotentialFieldVals(&tempXForce, &tempYForce, x, y, baseX, baseY, true, BASE_RADIUS, BASE_SPREAD, BASE_ALPHA);    
+    		    float centerX = GetCenterX(currBase->corners, 0);
+		        float centerY = GetCenterY(currBase->corners, 0);
+	            
+                SetPotentialFieldVals(&tempXForce, &tempYForce, x, y, centerX, centerY, true, BASE_RADIUS, BASE_SPREAD, BASE_ALPHA);    
                 
                 xForce += tempXForce;
                 yForce += tempYForce;
-                break;
+                break;  //only go to the first base found
             }
         } else {
             //go home to your own base
@@ -240,12 +251,12 @@ float GenerateField(float x, float y, float *outX, float *outY, string color, bo
             float tempXForce;
             float tempYForce;
 
-            float myBaseX = myBase->corners.at(0).x;
-            float myBaseY = myBase->corners.at(0).y;
-
+ 		    float centerX = GetCenterX(myBase->corners, 0);
+		    float centerY = GetCenterY(myBase->corners, 0);
+	
             //cout << "MYBASE CORNER X: " << myBaseX << "  MyBASE CORNER Y: " << myBaseY << endl;
 
-            SetPotentialFieldVals(&tempXForce, &tempYForce, x, y, myBase->corners.at(0).x, myBase->corners.at(0).y, true, BASE_RADIUS, BASE_SPREAD, BASE_ALPHA);
+            SetPotentialFieldVals(&tempXForce, &tempYForce, x, y, centerX, centerY, true, BASE_RADIUS, BASE_SPREAD, BASE_ALPHA);
 
             xForce += tempXForce;
             yForce += tempYForce;
@@ -255,7 +266,7 @@ float GenerateField(float x, float y, float *outX, float *outY, string color, bo
 
 
          //iterate obstacles
-         float OBST_RADIUS = .7;
+         float OBST_RADIUS = .5;
          float OBST_SPREAD = 1;
          float OBST_ALPHA = -1000;
          for(int i = 0; i < obstacles.size(); i++) {
@@ -280,7 +291,7 @@ float GenerateField(float x, float y, float *outX, float *outY, string color, bo
                  float tempXForce;
                  float tempYForce;
 
-                 SetPotentialFieldVals(&tempXForce, &tempYForce, x, y, centerX, centerY, false, radius*OBST_RADIUS, radius * OBST_SPREAD, OBST_ALPHA);
+                 SetPotentialFieldVals(&tempXForce, &tempYForce, x, y, centerX, centerY, false, radius/**OBST_RADIUS*/, radius/2 /** OBST_SPREAD*/, OBST_ALPHA);
 
                  //cout << " OBST X FORCE: " << tempXForce << "  OBST Y FORCE: " << tempYForce << endl;
                  xForce += tempXForce;

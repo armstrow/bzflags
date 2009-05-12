@@ -37,6 +37,7 @@ float GenerateField(float x, float y);
 float GetCenterX(vector<Point> pts, int start);
 float GetCenterY(vector<Point> pts, int start);
 void PrintGnuplotInfo();
+void SetCenterXY(vector<Point> pts, float *centerX, float *centerY);
 
 //------------------------------------------------------
 int main(int argc, char** argv) {
@@ -276,14 +277,18 @@ float GenerateField(float x, float y, float *outX, float *outY, string color, bo
          for(int i = 0; i < obstacles.size(); i++) {
              Obstacle currObst = obstacles.at(i);
              //cout << "obstacle # corners: " << currObst.corners.size() << endl;
-		float centerX = GetCenterX(currObst.corners, 0);
-		float centerY = GetCenterY(currObst.corners, 0);
+		float centerX;// = GetCenterX(currObst.corners, 0);
+		float centerY;// = GetCenterY(currObst.corners, 0);
+        SetCenterXY(currObst.corners, &centerX, &centerY);
 		Point corner = currObst.corners.at(0);
 		float radius = sqrt( (corner.x - centerX)*(corner.x - centerX) +
                        (corner.y - centerY)*(corner.y - centerY) );
 		if (radius > 50) radius = 50;
         if (radius < 25) radius = 25;
 
+
+
+/*
             for(int j = 0; j < currObst.corners.size(); j++) {
                 Point corner = currObst.corners.at(j);
                 float tempXForce;
@@ -300,7 +305,6 @@ float GenerateField(float x, float y, float *outX, float *outY, string color, bo
                     yForce -= tempXForce;
                 }
             }
-/*
 */
 
 /*
@@ -315,10 +319,10 @@ float GenerateField(float x, float y, float *outX, float *outY, string color, bo
 
  //ORIGINAL:::::::::::
 
-                 //float tempXForce;
-                 //float tempYForce;
+                 float tempXForce;
+                 float tempYForce;
 
-                 //SetPotentialFieldVals(&tempXForce, &tempYForce, x, y, centerX, centerY, false, radius/**OBST_RADIUS*/, radius/2 /** OBST_SPREAD*/, OBST_ALPHA);
+                 SetPotentialFieldVals(&tempXForce, &tempYForce, x, y, centerX, centerY, false, radius+10/**OBST_RADIUS*/, radius/2 /** OBST_SPREAD*/, OBST_ALPHA);
 
                  //cout << " OBST X FORCE: " << tempXForce << "  OBST Y FORCE: " << tempYForce << endl;
                  /* ORIGINAL: (non-tangential)
@@ -326,8 +330,8 @@ float GenerateField(float x, float y, float *outX, float *outY, string color, bo
                  yForce += tempYForce;
                  */
 
-                 //xForce -= tempYForce;
-                 //yForce += tempXForce;
+                 xForce -= tempYForce;
+                 yForce += tempXForce;
                  //
 //END ORIGINAL::::::::::::::::::::
              //}
@@ -338,7 +342,21 @@ float GenerateField(float x, float y, float *outX, float *outY, string color, bo
     *outX = xForce;
     *outY = yForce;
 }
-
+void SetCenterXY(vector<Point> pts, float *centerX, float *centerY) {
+    if(pts.size() < 1)
+        throw "Points must have more than one point!";
+    float tempX = 0;
+    float tempY = 0;
+    for(int i = 0; i < pts.size(); i++) {
+        Point currPoint = pts.at(i);
+        tempX += currPoint.x;
+        tempY += currPoint.y;
+    }
+    tempX /= pts.size();
+    tempY /= pts.size();
+    *centerX = tempX;
+    *centerY = tempY;
+}
 float GetCenterX(vector<Point> pts, int start) {
 	if (start >= pts.size())
 		throw "Error finding center of obstacle";	

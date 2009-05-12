@@ -18,10 +18,10 @@ run: bin
 	bin/$(EXENAME)
 
 run-nodebug: bin
-	bin/$(EXENAME) localhost 12345
+	bin/$(EXENAME) nunchucks 12347
 
 run-debug: bin
-	bin/$(EXENAME) -d localhost 12345
+	bin/$(EXENAME) -d nunchucks 12347
 
 clean:
 	rm -f obj/*.o

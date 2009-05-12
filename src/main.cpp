@@ -58,8 +58,8 @@ int main(int argc, char** argv) {
     cout << "Begin Robot Thread" << endl;
     pthread_create(&threadRob1, NULL, SmartRobot, (void*)&robNum);
     //pthread_create(&threadRob1, NULL, DummyRobot, (void*)&robNum);
-    //int robNum2 = 1;
-    //pthread_create(&threadRob2, NULL, SmartRobot, (void*)&robNum2);
+    int robNum2 = 1;
+    pthread_create(&threadRob2, NULL, SmartRobot, (void*)&robNum2);
 
     controller->LoopAction();
 } 
@@ -73,7 +73,7 @@ void *SmartRobot(void *ptr ) {
 
     MyTank *curTank = &controller->env.myTanks.at(tankIndex);
   
-    controller->speed(tankIndex, 0.5);
+    controller->speed(tankIndex, 0.7);
     bool turnedOnce = false;
 
     PrintGnuplotInfo();
@@ -93,6 +93,7 @@ void *SmartRobot(void *ptr ) {
         bool hasFlag = curTank->flag != "none";
 
         GenerateField(meX, meY, &xForce, &yForce, "green", hasFlag);
+        controller->shoot(tankIndex);
 
         float finalAngle = Wrap(atan2(yForce,xForce), PI*2);//good
         float angleDiff = GetAngleDist(curTank->angle, finalAngle);//not good
@@ -110,11 +111,14 @@ void *SmartRobot(void *ptr ) {
         cout << "anglediff: " << (angleDiff/PI) << ", speed: " << speed << endl;
         controller->speed(tankIndex, speed);
 
+        /*
         if(abs(angleDiff) <= 0.05) 
             controller->speed(tankIndex, 1);
         else
             controller->speed(tankIndex, 0.2);
-        controller->angvel(tankIndex, angVel);
+        */
+        
+            controller->angvel(tankIndex, angVel);
 
 
         //cout << "goal angle: " << me->angle << "   final angle: " << finalAngle << endl;
@@ -278,6 +282,27 @@ float GenerateField(float x, float y, float *outX, float *outY, string color, bo
 		float radius = sqrt( (corner.x - centerX)*(corner.x - centerX) +
                        (corner.y - centerY)*(corner.y - centerY) );
 		if (radius > 50) radius = 50;
+        if (radius < 25) radius = 25;
+
+            for(int j = 0; j < currObst.corners.size(); j++) {
+                Point corner = currObst.corners.at(j);
+                float tempXForce;
+                float tempYForce;
+                
+                SetPotentialFieldVals(&tempXForce, &tempYForce, x, y, corner.x, corner.y, false, radius, radius/2, OBST_ALPHA);
+
+                if((!HAVE_FLAG && (j == 2 || j == 3)) || 
+                    (HAVE_FLAG && (j == 0 || j == 1))) {
+                    xForce -= tempYForce;
+                    yForce += tempXForce;
+                } else {
+                    xForce += tempYForce;
+                    yForce -= tempXForce;
+                }
+            }
+/*
+*/
+
 /*
 		cout << "(" << currObst.corners.at(0).x << "," << currObst.corners.at(0).y << "),("
  				<< currObst.corners.at(1).x << "," << currObst.corners.at(1).y << "),("
@@ -288,14 +313,23 @@ float GenerateField(float x, float y, float *outX, float *outY, string color, bo
              //for(int j = 0; j < currObst.corners.size(); j++) {
                //  Point corner = currObst.corners.at(j);
 
-                 float tempXForce;
-                 float tempYForce;
+ //ORIGINAL:::::::::::
 
-                 SetPotentialFieldVals(&tempXForce, &tempYForce, x, y, centerX, centerY, false, radius/**OBST_RADIUS*/, radius/2 /** OBST_SPREAD*/, OBST_ALPHA);
+                 //float tempXForce;
+                 //float tempYForce;
+
+                 //SetPotentialFieldVals(&tempXForce, &tempYForce, x, y, centerX, centerY, false, radius/**OBST_RADIUS*/, radius/2 /** OBST_SPREAD*/, OBST_ALPHA);
 
                  //cout << " OBST X FORCE: " << tempXForce << "  OBST Y FORCE: " << tempYForce << endl;
+                 /* ORIGINAL: (non-tangential)
                  xForce += tempXForce;
                  yForce += tempYForce;
+                 */
+
+                 //xForce -= tempYForce;
+                 //yForce += tempXForce;
+                 //
+//END ORIGINAL::::::::::::::::::::
              //}
          }
          /*
@@ -390,7 +424,8 @@ void SetPotentialFieldVals(float *xField, float *yField, float meX, float meY, f
         }
     } else {
         if(dist < radius) {
-            deltaX = deltaY = -1000000000;
+            deltaX = -1*cos(angle)*1000000000;
+            deltaY = -1*sin(angle)*1000000000;
         } else if(radius <= dist && dist <= spread + radius) {
             deltaX = alpha*(spread + radius - dist)*cos(angle);
             deltaY = alpha*(spread + radius - dist)*sin(angle);

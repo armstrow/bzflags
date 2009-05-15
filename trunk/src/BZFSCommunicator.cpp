@@ -196,6 +196,7 @@ bool BZFSCommunicator::get_obstacles(vector<Obstacle> *AllObstacles) {
 	int i=0;
 	while(v.at(0)=="obstacle") {
     	Obstacle MyObstacle(v);
+	//cout << "reading obstacle: " << v.at(0);
     	AllObstacles->push_back(MyObstacle);
 	    v.clear();
 	    v=ReadArr();
@@ -429,6 +430,7 @@ vector <string> BZFSCommunicator::ReadArr() {
 //		if(debug) 
 		//cout << LineText << endl;
 	}
+	//cout << LineText << endl;
 	return SplitString(LineText);
 }
 // Read Acknowledgement

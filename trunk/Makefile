@@ -80,7 +80,7 @@ obj/Base.o: inc/Base.h src/Base.cpp
 obj/GnuplotWriter.o: inc/GnuplotWriter.h src/GnuplotWriter.cpp inc/Node.h
 	$(CC) $(FLAGS) -c src/GnuplotWriter.cpp -o obj/GnuplotWriter.o
 
-obj/BreadthFirstAlg.o: inc/BreadthFirstAlg.h src/BreadthFirstAlg.cpp
+obj/BreadthFirstAlg.o: inc/BreadthFirstAlg.h src/BreadthFirstAlg.cpp inc/SearchAlg.h
 	$(CC) $(FLAGS) -c src/BreadthFirstAlg.cpp -o obj/BreadthFirstAlg.o
 	
 obj/DepthFirstAlg.o: inc/DepthFirstAlg.h src/DepthFirstAlg.cpp
@@ -88,3 +88,4 @@ obj/DepthFirstAlg.o: inc/DepthFirstAlg.h src/DepthFirstAlg.cpp
 
 obj/IterativeDeepeningAlg.o: inc/IterativeDeepeningAlg.h src/IterativeDeepeningAlg.cpp
 	$(CC) $(FLAGS) -c src/IterativeDeepeningAlg.cpp -o obj/IterativeDeepeningAlg.o
+

@@ -3,22 +3,24 @@
 #define SEARCH_ALG
 
 
+#include <iostream>
 #include <vector>
 #include <string.h>
 #include <string>
 
 #include "Node.h"
 
+using namespace std;
+
 
 class SearchAlg {
-   
 
     /*  +--------------+
      *  |  VARIABLES   |
      *  +--------------+ */
     
     public:
-        Node[][] *map;
+        vector<vector<Node *> > *map;//need to either do this dynamically or hard-code the bounds in it...
 
     private:
    
@@ -29,26 +31,13 @@ class SearchAlg {
      *  +--------------+ */
  
     public:
-        explicit SearchAlg();
+        SearchAlg(vector< vector<Node *> > *map);
         virtual void DoSearch(Node *startNode) = 0;
-        virtual vector<Node> GetBestPath() = 0;
+        virtual vector<Node *> GetBestPath() = 0;
 
-    private
+    private:
 
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
+};
 
 
 

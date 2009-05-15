@@ -1,0 +1,253 @@
+set title "Plot"
+set xrange [-400.0: 400.0]
+set yrange [-400.0: 400.0]
+unset key
+set size square
+set arrow from -274.320007, -274.320007 to -205.679993, -274.320007 nohead lt 3
+set arrow from -205.679993, -274.320007 to -205.679993, -205.679993 nohead lt 3
+set arrow from -205.679993, -205.679993 to -274.320007, -205.679993 nohead lt 3
+set arrow from -274.320007, -205.679993 to -274.320007, -274.320007 nohead lt 3
+set arrow from 205.679993, 205.679993 to 274.320007, 205.679993 nohead lt 3
+set arrow from 274.320007, 205.679993 to 274.320007, 274.320007 nohead lt 3
+set arrow from 274.320007, 274.320007 to 205.679993, 274.320007 nohead lt 3
+set arrow from 205.679993, 274.320007 to 205.679993, 205.679993 nohead lt 3
+set arrow from 205.679993, -274.320007 to 274.320007, -274.320007 nohead lt 3
+set arrow from 274.320007, -274.320007 to 274.320007, -205.679993 nohead lt 3
+set arrow from 274.320007, -205.679993 to 205.679993, -205.679993 nohead lt 3
+set arrow from 205.679993, -205.679993 to 205.679993, -274.320007 nohead lt 3
+set arrow from -274.320007, 205.679993 to -205.679993, 205.679993 nohead lt 3
+set arrow from -205.679993, 205.679993 to -205.679993, 274.320007 nohead lt 3
+set arrow from -205.679993, 274.320007 to -274.320007, 274.320007 nohead lt 3
+set arrow from -274.320007, 274.320007 to -274.320007, 205.679993 nohead lt 3
+set arrow from -154.320007, -274.320007 to -85.680000, -274.320007 nohead lt 3
+set arrow from -85.680000, -274.320007 to -85.680000, -205.679993 nohead lt 3
+set arrow from -85.680000, -205.679993 to -154.320007, -205.679993 nohead lt 3
+set arrow from -154.320007, -205.679993 to -154.320007, -274.320007 nohead lt 3
+set arrow from 85.680000, 205.679993 to 154.320007, 205.679993 nohead lt 3
+set arrow from 154.320007, 205.679993 to 154.320007, 274.320007 nohead lt 3
+set arrow from 154.320007, 274.320007 to 85.680000, 274.320007 nohead lt 3
+set arrow from 85.680000, 274.320007 to 85.680000, 205.679993 nohead lt 3
+set arrow from 205.679993, -154.320007 to 274.320007, -154.320007 nohead lt 3
+set arrow from 274.320007, -154.320007 to 274.320007, -85.680000 nohead lt 3
+set arrow from 274.320007, -85.680000 to 205.679993, -85.680000 nohead lt 3
+set arrow from 205.679993, -85.680000 to 205.679993, -154.320007 nohead lt 3
+set arrow from -274.320007, 85.680000 to -205.679993, 85.680000 nohead lt 3
+set arrow from -205.679993, 85.680000 to -205.679993, 154.320007 nohead lt 3
+set arrow from -205.679993, 154.320007 to -274.320007, 154.320007 nohead lt 3
+set arrow from -274.320007, 154.320007 to -274.320007, 85.680000 nohead lt 3
+set arrow from -274.320007, -154.320007 to -205.679993, -154.320007 nohead lt 3
+set arrow from -205.679993, -154.320007 to -205.679993, -85.680000 nohead lt 3
+set arrow from -205.679993, -85.680000 to -274.320007, -85.680000 nohead lt 3
+set arrow from -274.320007, -85.680000 to -274.320007, -154.320007 nohead lt 3
+set arrow from 205.679993, 85.680000 to 274.320007, 85.680000 nohead lt 3
+set arrow from 274.320007, 85.680000 to 274.320007, 154.320007 nohead lt 3
+set arrow from 274.320007, 154.320007 to 205.679993, 154.320007 nohead lt 3
+set arrow from 205.679993, 154.320007 to 205.679993, 85.680000 nohead lt 3
+set arrow from 85.680000, 274.320007 to 154.320007, -274.320007 nohead lt 3
+set arrow from 154.320007, -274.320007 to 154.320007, -205.679993 nohead lt 3
+set arrow from 154.320007, -205.679993 to 85.680000, -205.679993 nohead lt 3
+set arrow from 85.680000, -205.679993 to 85.680000, 274.320007 nohead lt 3
+set arrow from -154.320007, 205.679993 to -85.680000, 205.679993 nohead lt 3
+set arrow from -85.680000, 205.679993 to -85.680000, 274.320007 nohead lt 3
+set arrow from -85.680000, 274.320007 to -154.320007, 274.320007 nohead lt 3
+set arrow from -154.320007, 274.320007 to -154.320007, 205.679993 nohead lt 3
+set arrow from -154.320007, -154.320007 to -85.680000, -154.320007 nohead lt 3
+set arrow from -85.680000, -154.320007 to -85.680000, -85.680000 nohead lt 3
+set arrow from -85.680000, -85.680000 to -154.320007, -85.680000 nohead lt 3
+set arrow from -154.320007, -85.680000 to -154.320007, -154.320007 nohead lt 3
+set arrow from 85.680000, 85.680000 to 154.320007, 85.680000 nohead lt 3
+set arrow from 154.320007, 85.680000 to 154.320007, 154.320007 nohead lt 3
+set arrow from 154.320007, 154.320007 to 85.680000, 154.320007 nohead lt 3
+set arrow from 85.680000, 154.320007 to 85.680000, 85.680000 nohead lt 3
+set arrow from 85.680000, -154.320007 to 154.320007, -154.320007 nohead lt 3
+set arrow from 154.320007, -154.320007 to 154.320007, -85.680000 nohead lt 3
+set arrow from 154.320007, -85.680000 to 85.680000, -85.680000 nohead lt 3
+set arrow from 85.680000, -85.680000 to 85.680000, -154.320007 nohead lt 3
+set arrow from -154.320007, 85.680000 to -85.680000, 85.680000 nohead lt 3
+set arrow from -85.680000, 85.680000 to -85.680000, 154.320007 nohead lt 3
+set arrow from -85.680000, 154.320007 to -154.320007, 154.320007 nohead lt 3
+set arrow from -154.320007, 154.320007 to -154.320007, 85.680000 nohead lt 3
+set arrow from -274.320007, -34.320000 to -205.679993, -34.320000 nohead lt 3
+set arrow from -205.679993, -34.320000 to -205.679993, 34.320000 nohead lt 3
+set arrow from -205.679993, 34.320000 to -274.320007, 34.320000 nohead lt 3
+set arrow from -274.320007, 34.320000 to -274.320007, -34.320000 nohead lt 3
+set arrow from 205.679993, -34.320000 to 274.320007, -34.320000 nohead lt 3
+set arrow from 274.320007, -34.320000 to 274.320007, 34.320000 nohead lt 3
+set arrow from 274.320007, 34.320000 to 205.679993, 34.320000 nohead lt 3
+set arrow from 205.679993, 34.320000 to 205.679993, -34.320000 nohead lt 3
+set arrow from -34.320000, -274.320007 to 34.320000, -274.320007 nohead lt 3
+set arrow from 34.320000, -274.320007 to 34.320000, -205.679993 nohead lt 3
+set arrow from 34.320000, -205.679993 to -34.320000, -205.679993 nohead lt 3
+set arrow from -34.320000, -205.679993 to -34.320000, -274.320007 nohead lt 3
+set arrow from -34.320000, 205.679993 to 34.320000, 205.679993 nohead lt 3
+set arrow from 34.320000, 205.679993 to 34.320000, 274.320007 nohead lt 3
+set arrow from 34.320000, 274.320007 to -34.320000, 274.320007 nohead lt 3
+set arrow from -34.320000, 274.320007 to -34.320000, 205.679993 nohead lt 3
+set arrow from -154.320007, -34.320000 to -85.680000, -34.320000 nohead lt 3
+set arrow from -85.680000, -34.320000 to -85.680000, 34.299999 nohead lt 3
+set arrow from -85.680000, 34.299999 to -154.320007, 34.320000 nohead lt 3
+set arrow from -154.320007, 34.320000 to -154.320007, -34.320000 nohead lt 3
+set arrow from 85.680000, -34.320000 to 154.320007, -34.320000 nohead lt 3
+set arrow from 154.320007, -34.320000 to 154.320007, 34.320000 nohead lt 3
+set arrow from 154.320007, 34.320000 to 85.680000, 34.320000 nohead lt 3
+set arrow from 85.680000, 34.320000 to 85.680000, -34.320000 nohead lt 3
+set arrow from -34.320000, -154.320007 to 34.320000, -154.320007 nohead lt 3
+set arrow from 34.320000, -154.320007 to 34.320000, -85.680000 nohead lt 3
+set arrow from 34.320000, -85.680000 to -34.320000, -85.680000 nohead lt 3
+set arrow from -34.320000, -85.680000 to -34.320000, -154.320007 nohead lt 3
+set arrow from -34.320000, 85.680000 to 34.320000, 85.680000 nohead lt 3
+set arrow from 34.320000, 85.680000 to 34.320000, 154.320007 nohead lt 3
+set arrow from 34.320000, 154.320007 to -34.320000, 154.320007 nohead lt 3
+set arrow from -34.320000, 154.320007 to -34.320000, 85.680000 nohead lt 3
+set arrow from -360.720001, -50.720001 to -335.680023, -50.720001 nohead lt 3
+set arrow from -335.680023, -50.720001 to -335.680023, -25.680000 nohead lt 3
+set arrow from -335.680023, -25.680000 to -360.720001, -25.680000 nohead lt 3
+set arrow from -360.720001, -25.680000 to -360.720001, -50.720001 nohead lt 3
+set arrow from -344.319977, -34.320000 to -319.279999, -34.320000 nohead lt 3
+set arrow from -319.279999, -34.320000 to -319.279999, -9.279999 nohead lt 3
+set arrow from -319.279999, -9.279999 to -344.319977, -9.279999 nohead lt 3
+set arrow from -344.319977, -9.279999 to -344.319977, -34.320000 nohead lt 3
+set arrow from -344.319977, 9.279999 to -319.279999, 9.279999 nohead lt 3
+set arrow from -319.279999, 9.279999 to -319.279999, 34.320000 nohead lt 3
+set arrow from -319.279999, 34.320000 to -344.319977, 34.320000 nohead lt 3
+set arrow from -344.319977, 34.320000 to -344.319977, 9.279999 nohead lt 3
+set arrow from -360.720001, 25.680000 to -335.680023, 25.680000 nohead lt 3
+set arrow from -335.680023, 25.680000 to -335.680023, 50.720001 nohead lt 3
+set arrow from -335.680023, 50.720001 to -360.720001, 50.720001 nohead lt 3
+set arrow from -360.720001, 50.720001 to -360.720001, 25.680000 nohead lt 3
+set arrow from 335.680023, -50.720001 to 360.720001, -50.720001 nohead lt 3
+set arrow from 360.720001, -50.720001 to 360.720001, -25.680000 nohead lt 3
+set arrow from 360.720001, -25.680000 to 335.680023, -25.680000 nohead lt 3
+set arrow from 335.680023, -25.680000 to 335.680023, -50.720001 nohead lt 3
+set arrow from 319.279999, -34.320000 to 344.319977, -34.320000 nohead lt 3
+set arrow from 344.319977, -34.320000 to 344.319977, -9.279999 nohead lt 3
+set arrow from 344.319977, -9.279999 to 319.279999, -9.279999 nohead lt 3
+set arrow from 319.279999, -9.279999 to 319.279999, -34.320000 nohead lt 3
+set arrow from 319.279999, 9.279999 to 344.319977, 9.279999 nohead lt 3
+set arrow from 344.319977, 9.279999 to 344.319977, 34.320000 nohead lt 3
+set arrow from 344.319977, 34.320000 to 319.279999, 34.320000 nohead lt 3
+set arrow from 319.279999, 34.320000 to 319.279999, 9.279999 nohead lt 3
+set arrow from 335.680023, 25.680000 to 360.720001, 25.680000 nohead lt 3
+set arrow from 360.720001, 25.680000 to 360.720001, 50.720001 nohead lt 3
+set arrow from 360.720001, 50.720001 to 335.680023, 50.720001 nohead lt 3
+set arrow from 335.680023, 50.720001 to 335.680023, 25.680000 nohead lt 3
+set arrow from -50.720001, -360.720001 to -25.680000, -360.720001 nohead lt 3
+set arrow from -25.680000, -360.720001 to -25.680000, -335.680023 nohead lt 3
+set arrow from -25.680000, -335.680023 to -50.720001, -335.680023 nohead lt 3
+set arrow from -50.720001, -335.680023 to -50.720001, -360.720001 nohead lt 3
+set arrow from -34.320000, -344.319977 to -9.279999, -344.319977 nohead lt 3
+set arrow from -9.279999, -344.319977 to -9.279999, -319.279999 nohead lt 3
+set arrow from -9.279999, -319.279999 to -34.320000, -319.279999 nohead lt 3
+set arrow from -34.320000, -319.279999 to -34.320000, -344.319977 nohead lt 3
+set arrow from 9.279999, -344.319977 to 34.320000, -344.319977 nohead lt 3
+set arrow from 34.320000, -344.319977 to 34.320000, -319.279999 nohead lt 3
+set arrow from 34.320000, -319.279999 to 9.279999, -319.279999 nohead lt 3
+set arrow from 9.279999, -319.279999 to 9.279999, -344.319977 nohead lt 3
+set arrow from 25.680000, -360.720001 to 50.720001, -360.720001 nohead lt 3
+set arrow from 50.720001, -360.720001 to 50.720001, -335.680023 nohead lt 3
+set arrow from 50.720001, -335.680023 to 25.680000, -335.680023 nohead lt 3
+set arrow from 25.680000, -335.680023 to 25.680000, -360.720001 nohead lt 3
+set arrow from -50.720001, 335.680023 to -25.680000, 335.680023 nohead lt 3
+set arrow from -25.680000, 335.680023 to -25.680000, 360.720001 nohead lt 3
+set arrow from -25.680000, 360.720001 to -50.720001, 360.720001 nohead lt 3
+set arrow from -50.720001, 360.720001 to -50.720001, 335.680023 nohead lt 3
+set arrow from -34.320000, 319.279999 to -9.279999, 319.279999 nohead lt 3
+set arrow from -9.279999, 319.279999 to -9.279999, 344.319977 nohead lt 3
+set arrow from -9.279999, 344.319977 to -34.320000, 344.319977 nohead lt 3
+set arrow from -34.320000, 344.319977 to -34.320000, 319.279999 nohead lt 3
+set arrow from 9.279999, 319.279999 to 34.320000, 319.279999 nohead lt 3
+set arrow from 34.320000, 319.279999 to 34.320000, 344.319977 nohead lt 3
+set arrow from 34.320000, 344.319977 to 9.279999, 344.319977 nohead lt 3
+set arrow from 9.279999, 344.319977 to 9.279999, 319.279999 nohead lt 3
+set arrow from 25.680000, 335.680023 to 50.720001, 335.680023 nohead lt 3
+set arrow from 50.720001, 335.680023 to 50.720001, 360.720001 nohead lt 3
+set arrow from 50.720001, 360.720001 to 25.680000, 360.720001 nohead lt 3
+set arrow from 25.680000, 360.720001 to 25.680000, 335.680023 nohead lt 3
+set arrow from -57.520000, -57.520000 to -32.480000, -57.520000 nohead lt 3
+set arrow from -32.480000, -57.520000 to -32.480000, -32.480000 nohead lt 3
+set arrow from -32.480000, -32.480000 to -57.520000, -32.480000 nohead lt 3
+set arrow from -57.520000, -32.480000 to -57.520000, -57.520000 nohead lt 3
+set arrow from 32.480000, -57.520000 to 57.520000, -57.520000 nohead lt 3
+set arrow from 57.520000, -57.520000 to 57.520000, -32.480000 nohead lt 3
+set arrow from 57.520000, -32.480000 to 32.480000, -32.480000 nohead lt 3
+set arrow from 32.480000, -32.480000 to 32.480000, -57.520000 nohead lt 3
+set arrow from -5.520000, 32.480000 to -32.480000, 32.480000 nohead lt 3
+set arrow from -32.480000, 32.480000 to -32.480000, 57.520000 nohead lt 3
+set arrow from -32.480000, 57.520000 to -57.520000, 57.520000 nohead lt 3
+set arrow from -57.520000, 57.520000 to -5.520000, 32.480000 nohead lt 3
+set arrow from 32.480000, 32.480000 to 57.520000, 32.480000 nohead lt 3
+set arrow from 57.520000, 32.480000 to 57.520000, 57.520000 nohead lt 3
+set arrow from 57.520000, 57.520000 to 32.480000, 57.520000 nohead lt 3
+set arrow from 32.480000, 57.520000 to 32.480000, 32.480000 nohead lt 3
+set arrow from -12.520000, -72.519997 to 12.520000, -72.519997 nohead lt 3
+set arrow from 12.520000, -72.519997 to 12.520000, -47.480000 nohead lt 3
+set arrow from 12.520000, -47.480000 to -12.520000, -47.480000 nohead lt 3
+set arrow from -12.520000, -47.480000 to -12.520000, -72.519997 nohead lt 3
+set arrow from -12.520000, 47.480000 to 12.520000, 47.480000 nohead lt 3
+set arrow from 12.520000, 47.480000 to 12.520000, 72.519997 nohead lt 3
+set arrow from 12.520000, 72.519997 to -12.520000, 72.519997 nohead lt 3
+set arrow from -12.520000, 72.519997 to -12.520000, 47.480000 nohead lt 3
+set arrow from -72.519997, -12.520000 to -47.480000, -12.520000 nohead lt 3
+set arrow from -47.480000, -12.520000 to -47.480000, 12.520000 nohead lt 3
+set arrow from -47.480000, 12.520000 to -72.519997, 12.520000 nohead lt 3
+set arrow from -72.519997, 12.520000 to -72.519997, -12.520000 nohead lt 3
+set arrow from 47.480000, -12.520000 to 72.519997, -12.520000 nohead lt 3
+set arrow from 72.519997, -12.520000 to 72.519997, 12.520000 nohead lt 3
+set arrow from 72.519997, 12.520000 to 47.480000, 12.520000 nohead lt 3
+set arrow from 47.480000, 12.520000 to 47.480000, -12.520000 nohead lt 3
+set arrow from -12.520000, -192.520004 to 12.520000, -192.520004 nohead lt 3
+set arrow from 12.520000, -192.520004 to 12.520000, -167.479996 nohead lt 3
+set arrow from 12.520000, -167.479996 to -12.520000, -167.479996 nohead lt 3
+set arrow from -12.520000, -167.479996 to -12.520000, -192.520004 nohead lt 3
+set arrow from -12.520000, 167.479996 to 12.520000, 167.479996 nohead lt 3
+set arrow from 12.520000, 167.479996 to 12.520000, 192.520004 nohead lt 3
+set arrow from 12.520000, 192.520004 to -12.520000, 192.520004 nohead lt 3
+set arrow from -12.520000, 192.520004 to -12.520000, 167.479996 nohead lt 3
+set arrow from -192.520004, -12.520000 to -167.479996, -12.520000 nohead lt 3
+set arrow from -167.479996, -12.520000 to -167.479996, 12.520000 nohead lt 3
+set arrow from -167.479996, 12.520000 to -192.520004, 12.520000 nohead lt 3
+set arrow from -192.520004, 12.520000 to -192.520004, -12.520000 nohead lt 3
+set arrow from 167.479996, -12.520000 to 192.520004, -12.520000 nohead lt 3
+set arrow from 192.520004, -12.520000 to 192.520004, 12.520000 nohead lt 3
+set arrow from 192.520004, 12.520000 to 167.479996, 12.520000 nohead lt 3
+set arrow from 167.479996, 12.520000 to 167.479996, -12.520000 nohead lt 3
+set arrow from -400.000000, -400.000000 to -380.000000, -400.000000 nohead lt 2
+set arrow from -380.000000, -400.000000 to -380.000000, -380.000000 nohead lt 2
+set arrow from -380.000000, -380.000000 to -400.000000, -380.000000 nohead lt 2
+set arrow from -400.000000, -380.000000 to -400.000000, -400.000000 nohead lt 2
+
+plot '-' with lines
+0 0 0 0
+e
+pause 2.000000
+set arrow from -400.000000, -380.000000 to -380.000000, -380.000000 nohead lt 6
+set arrow from -380.000000, -380.000000 to -380.000000, -360.000000 nohead lt 6
+set arrow from -380.000000, -360.000000 to -400.000000, -360.000000 nohead lt 6
+set arrow from -400.000000, -360.000000 to -400.000000, -380.000000 nohead lt 6
+
+plot '-' with lines
+0 0 0 0
+e
+pause 2.000000
+set arrow from -390.000000, -390.000000 to -390.000000, -370.000000 nohead lt -1
+
+plot '-' with lines
+0 0 0 0
+e
+pause 2.000000
+set arrow from -380.000000, -360.000000 to -360.000000, -360.000000 nohead lt 1
+set arrow from -360.000000, -360.000000 to -360.000000, -340.000000 nohead lt 1
+set arrow from -360.000000, -340.000000 to -380.000000, -340.000000 nohead lt 1
+set arrow from -380.000000, -340.000000 to -380.000000, -360.000000 nohead lt 1
+
+plot '-' with lines
+0 0 0 0
+e
+pause 2.000000
+set arrow from -390.000000, -370.000000 to -370.000000, -350.000000 nohead lt -1
+
+plot '-' with lines
+0 0 0 0
+e
+pause 2.000000
+

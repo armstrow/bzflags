@@ -71,6 +71,7 @@ void RobotController::InitEnvironment() {
     }
     bzfsComm.get_bases(&env.bases);
     bzfsComm.get_mytanks(&env.myTanks);
+    bzfsComm.get_flags(&env.flags);
 }
 //------------------------------------------------------
 void RobotController::UpdateEnvironment() {

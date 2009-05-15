@@ -5,10 +5,13 @@
 
 #include "Node.h"
 #include "SearchAlg.h"
+#include "GnuplotWriter.h"
 
 #include <vector>
 #include <string>
 #include <string.h>
+#include <queue>
+
 
 class BreadthFirstAlg : public SearchAlg {
 
@@ -19,6 +22,8 @@ class BreadthFirstAlg : public SearchAlg {
     public:
 
     private:
+	GnuplotWriter* gw;
+	queue<Position> q;
 
 
 
@@ -28,11 +33,13 @@ class BreadthFirstAlg : public SearchAlg {
      *  +--------------+ */
  
     public:
-        BreadthFirstAlg(vector<vector<Node *> > *map);
-        void DoSearch(Node *startNode);
+        BreadthFirstAlg(vector<vector<Node *> > *map, GnuplotWriter* writer);
+        string DoSearch(Position startNode, Position endNode);
         vector<Node *> GetBestPath();
 
     private:
+	string EnqueueNeighbors(Position p);
+	string EnQ(int row, int col, Position from);
 };
 
 

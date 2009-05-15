@@ -9,8 +9,24 @@
 #include <string>
 
 #include "Node.h"
+#include "GnuplotWriter.h"
 
 using namespace std;
+
+
+class Position{
+   public:
+	int row, col;
+	Position(int r, int c) {
+		row = r;
+		col = c;
+	}
+	void set(int r, int c) {
+	    this->row = r;
+	    this->col = c;
+    	}
+	
+};
 
 
 class SearchAlg {
@@ -20,7 +36,7 @@ class SearchAlg {
      *  +--------------+ */
     
     public:
-        vector<vector<Node *> > *map;//need to either do this dynamically or hard-code the bounds in it...
+        vector<vector<Node *> > *map;
 
     private:
    
@@ -31,8 +47,8 @@ class SearchAlg {
      *  +--------------+ */
  
     public:
-        SearchAlg(vector< vector<Node *> > *map);
-        virtual void DoSearch(Node *startNode) = 0;
+        SearchAlg(vector< vector<Node *> > *map, GnuplotWriter* writer){ }
+        virtual string DoSearch(Position startNode, Position endNode) = 0;
         virtual vector<Node *> GetBestPath() = 0;
 
     private:

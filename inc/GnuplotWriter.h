@@ -39,9 +39,9 @@ class GnuplotWriter{
 	   output+= PrintAniData(delay);
 	*/
 	//Prints a line from the center of current to the center of neighbor
-	string PrintLine(Node current, Node neighbor, int color);
+	string PrintLine(Node* current, Node* neighbor, int color);
 
-	string PrintNode(Node n, int color);
+	string PrintNode(Node* n, int color);
 	
 	//Prints the rest of the command, including the delay for the animation
 	string PrintAniData(double delay);

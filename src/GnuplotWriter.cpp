@@ -54,18 +54,18 @@ string GnuplotWriter::PrintAniData(double delay){
     return s;
 }
 
-string GnuplotWriter::PrintLine(Node current, Node neighbor, int color) {
-    string s = PrintLine(current.x + current.length / 2, current.y + current.length / 2, 
-			neighbor.x + neighbor.length / 2, neighbor.y + current.length /2,
+string GnuplotWriter::PrintLine(Node* current, Node* neighbor, int color) {
+    string s = PrintLine(current->x + current->length / 2, current->y + current->length / 2, 
+			neighbor->x + neighbor->length / 2, neighbor->y + current->length /2,
 			color);
     return s;
 }
 
-string GnuplotWriter::PrintNode(Node n, int color) {
-    string s =	PrintLine(n.x, n.y, n.x + n.length, n.y, color);
-    s += PrintLine(n.x+n.length, n.y, n.x+n.length, n.y+n.length, color);
-    s += PrintLine(n.x+n.length, n.y+n.length, n.x, n.y+n.length, color);
-    s += PrintLine(n.x, n.y+n.length, n.x, n.y, color);
+string GnuplotWriter::PrintNode(Node* n, int color) {
+    string s =	PrintLine(n->x, n->y, n->x + n->length, n->y, color);
+    s += PrintLine(n->x+n->length, n->y, n->x+n->length, n->y+n->length, color);
+    s += PrintLine(n->x+n->length, n->y+n->length, n->x, n->y+n->length, color);
+    s += PrintLine(n->x, n->y+n->length, n->x, n->y, color);
     return s;
 }
 

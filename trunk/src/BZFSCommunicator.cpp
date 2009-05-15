@@ -78,64 +78,81 @@ bool BZFSCommunicator::SendBoolMessage(string msg) {
 //--------------------------------------------------------------------
 bool BZFSCommunicator::shoot(int index) {
 // Perform a shoot request.
+	pthread_mutex_lock(&socket_lock);	    
 	char char_buff[20];
 	sprintf(char_buff, " %d", index);	
 	string str_buff="shoot";
 	str_buff.append(char_buff);
-	return SendBoolMessage(str_buff);
+    bool result = SendBoolMessage(str_buff);
+	pthread_mutex_unlock(&socket_lock);	    
+	return result;
 }
 //--------------------------------------------------------------------
 bool BZFSCommunicator::speed(int index, double value) {
 // Set the desired speed to the specified value.
+	pthread_mutex_lock(&socket_lock);	    
 	char char_buff[20];
 	sprintf(char_buff, " %d", index);	
 	string str_buff="speed";
 	str_buff.append(char_buff);
 	sprintf(char_buff, " %f", value);
 	str_buff.append(char_buff);
-	return SendBoolMessage(str_buff);
+    bool result = SendBoolMessage(str_buff);
+	pthread_mutex_unlock(&socket_lock);	    
+	return result;
 }
 
 bool BZFSCommunicator::angvel(int index, double value) {
 // Set the desired angular velocity to the specified value.
+	pthread_mutex_lock(&socket_lock);	    
 	char char_buff[20];
 	sprintf(char_buff, " %d", index);	
 	string str_buff="angvel";
 	str_buff.append(char_buff);
 	sprintf(char_buff, " %f", value);
 	str_buff.append(char_buff);
-	return SendBoolMessage(str_buff);
+    bool result = SendBoolMessage(str_buff);
+	pthread_mutex_unlock(&socket_lock);	    
+	return result;
 }
 
 bool BZFSCommunicator::accelx(int index, double value) {
 // Set the desired accelaration in x axis to the specified value in hovertank mode.
+	pthread_mutex_lock(&socket_lock);	    
 	char char_buff[20];
 	sprintf(char_buff, " %d", index);	
 	string str_buff="accelx";
 	str_buff.append(char_buff);
 	sprintf(char_buff, " %f", value);
 	str_buff.append(char_buff);
-	return SendBoolMessage(str_buff);
+    bool result = SendBoolMessage(str_buff);
+	pthread_mutex_unlock(&socket_lock);	    
+	return result;
 }
 
 bool BZFSCommunicator::accely(int index, double value) {
 // Set the desired accelaration in x axis to the specified value in hovertank mode.
+	pthread_mutex_lock(&socket_lock);	    
 	char char_buff[20];
 	sprintf(char_buff, " %d", index);	
 	string str_buff="accely";
 	str_buff.append(char_buff);
 	sprintf(char_buff, " %f", value);
 	str_buff.append(char_buff);
-	return SendBoolMessage(str_buff);
+    bool result = SendBoolMessage(str_buff);
+	pthread_mutex_unlock(&socket_lock);	    
+	return result;
 }
 
 //------------------------------------------------------
 bool BZFSCommunicator::get_teams(vector<Team> *AllTeams) {
+	pthread_mutex_lock(&socket_lock);	    
 	SendLine("teams");
 	ReadAck();
 	vector <string> v = ReadArr();
     //cout << "teams v.at(0) = " << v.at(0) << endl;
 	if(v.at(0)!="begin") {
+	pthread_mutex_unlock(&socket_lock);	    
 		return false;
 	}
 	v.clear();
@@ -151,19 +168,27 @@ bool BZFSCommunicator::get_teams(vector<Team> *AllTeams) {
 		i++;
 	}
 	if(v.at(0)!="end") {
+	pthread_mutex_unlock(&socket_lock);	    
 		return false;
 	}
+	pthread_mutex_unlock(&socket_lock);	    
 	return true;
 }
 bool BZFSCommunicator::get_obstacles(vector<Obstacle> *AllObstacles) {
+	pthread_mutex_lock(&socket_lock);	    
+    cout << "locked it" << endl;
 	// Request a list of obstacles.
     //cout << "    gettings obsts" << endl;
 	SendLine("obstacles");
+    cout << "sent line" << endl;
     //cout << "        sent line" << endl;
 	ReadAck();
+    cout << "read ack" << endl;
     //cout << "        read ack" << endl;
 	vector <string> v=ReadArr();
 	if(v.at(0)!="begin") {
+	    pthread_mutex_unlock(&socket_lock);	    
+        cout << "unlocked it 1" << endl;
     	return false;
 	}
 	v.clear();
@@ -178,18 +203,24 @@ bool BZFSCommunicator::get_obstacles(vector<Obstacle> *AllObstacles) {
         //cout << "        obst#: " << i << endl;
 	}
 	if(v.at(0)!="end") {
+	    pthread_mutex_unlock(&socket_lock);	    
+        cout << "unlocked it 2" << endl;
         //cout << "    --> get_obst: NO END" << endl;
     	return false;
 	}
+	pthread_mutex_unlock(&socket_lock);	    
+        cout << "unlocked it 3" << endl;
    //cout << "    --> get_obst: DONE!" << endl;
    return true;
 }
 bool BZFSCommunicator::get_bases(vector<Base> *AllBases) {
+	pthread_mutex_lock(&socket_lock);	    
 	// Request a list of bases.
 	SendLine("bases");
 	ReadAck();
 	vector <string> v=ReadArr();
 	if(v.at(0)!="begin") {
+	pthread_mutex_unlock(&socket_lock);	    
     	return false;
 	}
 	v.clear();
@@ -204,18 +235,22 @@ bool BZFSCommunicator::get_bases(vector<Base> *AllBases) {
         //cout << "        obst#: " << i << endl;
 	}
 	if(v.at(0)!="end") {
+	pthread_mutex_unlock(&socket_lock);	    
         //cout << "    --> get_obst: NO END" << endl;
     	return false;
 	}
+	pthread_mutex_unlock(&socket_lock);	    
    //cout << "    --> get_obst: DONE!" << endl;
    return true;
 }
 bool BZFSCommunicator::get_flags(vector<Flag> *AllFlags) {
+	pthread_mutex_lock(&socket_lock);	    
     // Request a list of flags.
     SendLine("flags");
     ReadAck();
     vector <string> v=ReadArr();
     if(v.at(0)!="begin") {
+	pthread_mutex_unlock(&socket_lock);	    
         return false;
     }
     v.clear();
@@ -234,17 +269,21 @@ bool BZFSCommunicator::get_flags(vector<Flag> *AllFlags) {
 	    i++;
     }
     if(v.at(0)!="end") {
+	pthread_mutex_unlock(&socket_lock);	    
         return false;
     }
+	pthread_mutex_unlock(&socket_lock);	    
     return true;
 }
 
 bool BZFSCommunicator::get_shots(vector<Shot> *AllShots) {
+	pthread_mutex_lock(&socket_lock);	    
     // Request a list of shots.
     SendLine("shots");
     ReadAck();
     vector <string> v=ReadArr();
     if(v.at(0)!="begin") {
+	pthread_mutex_unlock(&socket_lock);	    
     return false;
     }
     v.clear();
@@ -263,17 +302,21 @@ bool BZFSCommunicator::get_shots(vector<Shot> *AllShots) {
 	    i++;
     }
     if(v.at(0)!="end") {
+	pthread_mutex_unlock(&socket_lock);	    
     return false;
     }
+	pthread_mutex_unlock(&socket_lock);	    
     return true;
 }
 
 bool BZFSCommunicator::get_mytanks(vector<MyTank> *AllMyTanks) {
+	pthread_mutex_lock(&socket_lock);	    
     // Request a list of our robots.
     SendLine("mytanks");
     ReadAck();
     vector <string> v=ReadArr();
     if(v.at(0)!="begin") {
+	    pthread_mutex_unlock(&socket_lock);	    
     	return false;
     }
     v.clear();
@@ -292,19 +335,23 @@ bool BZFSCommunicator::get_mytanks(vector<MyTank> *AllMyTanks) {
 	    i++;
     }
     if(v.at(0)!="end") {
+	pthread_mutex_unlock(&socket_lock);	    
     	//if(debug) 
 	//cout << v.at(0) << endl;
     	return false;
     }
+	pthread_mutex_unlock(&socket_lock);	    
     return true;
 }
 
 bool BZFSCommunicator::get_othertanks(vector <OtherTank> *AllOtherTanks) {
+	pthread_mutex_lock(&socket_lock);	    
     // Request a list of tanks that aren't our robots.
     SendLine("othertanks");
     ReadAck();
     vector <string> v=ReadArr();
     if(v.at(0)!="begin") {
+	    pthread_mutex_unlock(&socket_lock);	    
         return false;
     }
     v.clear();
@@ -323,17 +370,21 @@ bool BZFSCommunicator::get_othertanks(vector <OtherTank> *AllOtherTanks) {
 	    i++;
     }
     if(v.at(0)!="end") {
+	pthread_mutex_unlock(&socket_lock);	    
         return false;
     }
+	pthread_mutex_unlock(&socket_lock);	    
      return true;
 }
 
 bool BZFSCommunicator::get_constants(vector <Constant> *AllConstants) {
+	pthread_mutex_lock(&socket_lock);	    
     // Request a dictionary of game constants.
     SendLine("constants");
     ReadAck();
     vector <string> v=ReadArr();
     if(v.at(0)!="begin") {
+	    pthread_mutex_unlock(&socket_lock);	    
         return false;
     }
     v.clear();
@@ -349,8 +400,10 @@ bool BZFSCommunicator::get_constants(vector <Constant> *AllConstants) {
     	i++;
     }
     if(v.at(0)!="end") {
+	    pthread_mutex_unlock(&socket_lock);	    
     	return false;
     }
+	pthread_mutex_unlock(&socket_lock);	    
     return true;
 }
 
@@ -418,9 +471,7 @@ int BZFSCommunicator::SendLine(const char *LineText) {
 	Command[Length+1]='\0';
 	//if(debug) 
 	//cout << Command;
-	pthread_mutex_lock(&socket_lock);	    
     int amountSent = send(s, Command, Length+1, 0);
-	pthread_mutex_unlock(&socket_lock);	    
 	if (amountSent >= 0) {
 		return 0;
 	}
@@ -433,9 +484,7 @@ int BZFSCommunicator::SendLine(const char *LineText) {
 int BZFSCommunicator::ReadReply(char *Reply)
 {
 	char acReadBuffer[BUFFER_SIZE];
-	pthread_mutex_lock(&socket_lock);	    
 	int nNewBytes = recv(s, acReadBuffer, BUFFER_SIZE, 0);
-	pthread_mutex_unlock(&socket_lock);	    
 	if (nNewBytes < 0) {
 		return -1;
 	}

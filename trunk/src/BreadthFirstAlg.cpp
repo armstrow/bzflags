@@ -5,6 +5,7 @@
 #include "Node.h"
 #include "BreadthFirstAlg.h"
 #include "SearchAlg.h"
+#include "GnuplotWriter.h"
 
 
 #define BLACK  -1
@@ -57,19 +58,28 @@ vector<Node *> BreadthFirstAlg::GetBestPath() {
 //------------------------------------------------------
 string BreadthFirstAlg::EnqueueNeighbors(Position p) {
     string s = "";
-    s += EnQ(p.row + 1, p.col - 1, p);
-    s += EnQ(p.row + 1, p.col, p);
-    s += EnQ(p.row + 1, p.col + 1, p);
-    s += EnQ(p.row, p.col - 1, p);
-    s += EnQ(p.row, p.col + 1, p);
-    s += EnQ(p.row - 1, p.col - 1, p);
-    s += EnQ(p.row - 1, p.col, p);
-    s += EnQ(p.row - 1, p.col + 1, p);
+
+    if(p.row < map->size() - 1 && p.col > 0)
+        s += EnQ(p.row + 1, p.col - 1, p);
+    if(p.row < map->size() - 1)
+        s += EnQ(p.row + 1, p.col, p);
+    if(p.row < map->size() - 1 && p.col < map->size() -1)
+        s += EnQ(p.row + 1, p.col + 1, p);
+    if(p.col > 0)
+        s += EnQ(p.row, p.col - 1, p);
+    if(p.col < map->size() - 1)
+        s += EnQ(p.row, p.col + 1, p);
+    if(p.row > 0 && p.col > 0)
+        s += EnQ(p.row - 1, p.col - 1, p);
+    if(p.row > 0)
+        s += EnQ(p.row - 1, p.col, p);
+    if(p.row > 0 && p.col < map->size())
+        s += EnQ(p.row - 1, p.col + 1, p);
     return s;
 }
 string BreadthFirstAlg::EnQ(int row, int col, Position from) {
     string s = ""; 
-    if (map->at(row).at(col)->visitable && !map->at(row).at(col)->visited) {
+    if (/*map->at(row).at(col)->visitable && */ !map->at(row).at(col)->visited) {
         map->at(row).at(col)->visited = true;
         Position n(row, col);
         q.push(n);

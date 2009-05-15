@@ -4,7 +4,7 @@
 using namespace std;
 
 string GnuplotWriter::PrintHeaderData(double size) {
-   char buff[100];;
+   char buff[1000];;
    string s;
    double sz = size / 2;
    sprintf (buff, "set title \"Plot\"\nset xrange [-%f: %f]\nset yrange [-%f: %f]\nunset key\nset size square\n", sz, sz, sz, sz);

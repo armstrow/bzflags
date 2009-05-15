@@ -186,14 +186,19 @@ bool IsVisitable(Node* n) {
             if(nodeMiddle.x >= bottom.x &&
                nodeMiddle.y >= bottom.y &&
                nodeMiddle.x <= top.x &&
-               nodeMiddle.y <= top.y)
+               nodeMiddle.y <= top.y) {
+                //cout << "NOT VISITABLE" << endl;
                 return false;
+            }
         } else {
             if( (IsBelowLine(nodeMiddle, top, right) && IsAboveLine(nodeMiddle, bottom, right)) ||
-                (IsBelowLine(nodeMiddle, top, left) && IsAboveLine(nodeMiddle, bottom, left)))
+                (IsBelowLine(nodeMiddle, top, left) && IsAboveLine(nodeMiddle, bottom, left))) {
+                //cout << "NOT VISITABLE" << endl;
                 return false;
+            }
         }
     }
+    //cout << "VISITABLE!" << endl;
 	return true;
 }
 bool IsBelowLine(Point testPoint, Point linePt1, Point linePt2) {

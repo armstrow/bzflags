@@ -1,0 +1,105 @@
+set title "Plot"
+set xrange [-400.000000: 400.000000]
+set yrange [-400.000000: 400.000000]
+unset key
+set size square
+set arrow from 100.000000, -48.535809 to 148.535812, 0.000001 nohead lt 3
+set arrow from 148.535812, 0.000001 to 100.000000, 48.535809 nohead lt 3
+set arrow from 100.000000, 48.535809 to 51.464191, -0.000001 nohead lt 3
+set arrow from 51.464191, -0.000001 to 100.000000, -48.535809 nohead lt 3
+set arrow from -100.000000, -48.535809 to -51.464191, 0.000001 nohead lt 3
+set arrow from -51.464191, 0.000001 to -100.000000, 48.535809 nohead lt 3
+set arrow from -100.000000, 48.535809 to -148.535812, -0.000001 nohead lt 3
+set arrow from -148.535812, -0.000001 to -100.000000, -48.535809 nohead lt 3
+set arrow from 0.000001, 51.464191 to 48.535809, 100.000000 nohead lt 3
+set arrow from 48.535809, 100.000000 to -0.000001, 148.535812 nohead lt 3
+set arrow from -0.000001, 148.535812 to -48.535809, 100.000000 nohead lt 3
+set arrow from -48.535809, 100.000000 to 0.000001, 51.464191 nohead lt 3
+set arrow from 0.000001, -148.535812 to 48.535809, -100.000000 nohead lt 3
+set arrow from 48.535809, -100.000000 to -0.000001, -51.464191 nohead lt 3
+set arrow from -0.000001, -51.464191 to -48.535809, -100.000000 nohead lt 3
+set arrow from -48.535809, -100.000000 to 0.000001, -148.535812 nohead lt 3
+set arrow from 350.000000, -100.000000 to 400.000000, -100.000000 nohead lt 2
+set arrow from 400.000000, -100.000000 to 400.000000, -50.000000 nohead lt 2
+set arrow from 400.000000, -50.000000 to 350.000000, -50.000000 nohead lt 2
+set arrow from 350.000000, -50.000000 to 350.000000, -100.000000 nohead lt 2
+set arrow from 300.000000, -50.000000 to 350.000000, -50.000000 nohead lt 1
+set arrow from 350.000000, -50.000000 to 350.000000, 0.000000 nohead lt 1
+set arrow from 350.000000, 0.000000 to 300.000000, 0.000000 nohead lt 1
+set arrow from 300.000000, 0.000000 to 300.000000, -50.000000 nohead lt 1
+
+plot '-' with lines
+0 0 0 0
+e
+pause 1.000000
+set arrow from 350.000000, -150.000000 to 400.000000, -150.000000 nohead lt 6
+set arrow from 400.000000, -150.000000 to 400.000000, -100.000000 nohead lt 6
+set arrow from 400.000000, -100.000000 to 350.000000, -100.000000 nohead lt 6
+set arrow from 350.000000, -100.000000 to 350.000000, -150.000000 nohead lt 6
+set arrow from 375.000000, -75.000000 to 375.000000, -125.000000 nohead lt -1
+
+plot '-' with lines
+0 0 0 0
+e
+pause 1.000000
+set arrow from 350.000000, -50.000000 to 400.000000, -50.000000 nohead lt 6
+set arrow from 400.000000, -50.000000 to 400.000000, 0.000000 nohead lt 6
+set arrow from 400.000000, 0.000000 to 350.000000, 0.000000 nohead lt 6
+set arrow from 350.000000, 0.000000 to 350.000000, -50.000000 nohead lt 6
+set arrow from 375.000000, -75.000000 to 375.000000, -25.000000 nohead lt -1
+
+plot '-' with lines
+0 0 0 0
+e
+pause 1.000000
+set arrow from 300.000000, -150.000000 to 350.000000, -150.000000 nohead lt 6
+set arrow from 350.000000, -150.000000 to 350.000000, -100.000000 nohead lt 6
+set arrow from 350.000000, -100.000000 to 300.000000, -100.000000 nohead lt 6
+set arrow from 300.000000, -100.000000 to 300.000000, -150.000000 nohead lt 6
+set arrow from 375.000000, -75.000000 to 325.000000, -125.000000 nohead lt -1
+
+plot '-' with lines
+0 0 0 0
+e
+pause 1.000000
+set arrow from 300.000000, -100.000000 to 350.000000, -100.000000 nohead lt 6
+set arrow from 350.000000, -100.000000 to 350.000000, -50.000000 nohead lt 6
+set arrow from 350.000000, -50.000000 to 300.000000, -50.000000 nohead lt 6
+set arrow from 300.000000, -50.000000 to 300.000000, -100.000000 nohead lt 6
+set arrow from 375.000000, -75.000000 to 325.000000, -75.000000 nohead lt -1
+
+plot '-' with lines
+0 0 0 0
+e
+pause 1.000000
+set arrow from 300.000000, -50.000000 to 350.000000, -50.000000 nohead lt 6
+set arrow from 350.000000, -50.000000 to 350.000000, 0.000000 nohead lt 6
+set arrow from 350.000000, 0.000000 to 300.000000, 0.000000 nohead lt 6
+set arrow from 300.000000, 0.000000 to 300.000000, -50.000000 nohead lt 6
+set arrow from 375.000000, -75.000000 to 325.000000, -25.000000 nohead lt -1
+
+plot '-' with lines
+0 0 0 0
+e
+pause 1.000000
+set arrow from 350.000000, -200.000000 to 400.000000, -200.000000 nohead lt 6
+set arrow from 400.000000, -200.000000 to 400.000000, -150.000000 nohead lt 6
+set arrow from 400.000000, -150.000000 to 350.000000, -150.000000 nohead lt 6
+set arrow from 350.000000, -150.000000 to 350.000000, -200.000000 nohead lt 6
+set arrow from 375.000000, -125.000000 to 375.000000, -175.000000 nohead lt -1
+
+plot '-' with lines
+0 0 0 0
+e
+pause 1.000000
+set arrow from 300.000000, -200.000000 to 350.000000, -200.000000 nohead lt 6
+set arrow from 350.000000, -200.000000 to 350.000000, -150.000000 nohead lt 6
+set arrow from 350.000000, -150.000000 to 300.000000, -150.000000 nohead lt 6
+set arrow from 300.000000, -150.000000 to 300.000000, -200.000000 nohead lt 6
+set arrow from 375.000000, -125.000000 to 325.000000, -175.000000 nohead lt -1
+
+plot '-' with lines
+0 0 0 0
+e
+pause 1.000000
+

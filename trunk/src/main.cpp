@@ -7,6 +7,9 @@
 #include <pthread.h>
 #include <cmath>
 #include <math.h>
+ 
+#include "GnuplotWriter.h"
+#include "Node.h"
 
 
 using namespace std;
@@ -38,6 +41,7 @@ float GetCenterY(vector<Point> pts, int start);
 void PrintGnuplotInfo();
 void SetCenterXY(vector<Point> pts, float *centerX, float *centerY);
 //void *MakeRobot(void *currTank);
+void GnuplotTest();
 
 
 
@@ -55,9 +59,32 @@ int main(int argc, char** argv) {
     }
 
     controller = new RobotController(SERVER, PORT);
+    GnuplotTest();
     controller->PlayGame();
     cout << "DONE WITH GAME!!!" << endl;
 }
+
+void GnuplotTest() {
+	cout << "\nPrinting Gnuplot...\n";
+        GnuplotWriter* gw = new GnuplotWriter(&controller->env);
+        Node startNode(-400, -400, 20);
+        Node nextNode(-400, -380, 20);
+        Node lastNode(-380,-360, 20);
+        string s = gw->PrintNode(startNode, 2);
+        s += gw->PrintAniData(2);
+        s += gw->PrintNode(nextNode, 6);
+        s += gw->PrintAniData(2);
+        s += gw->PrintLine(startNode, nextNode, -1);
+        s += gw->PrintAniData(2);
+        s += gw->PrintNode(lastNode, 1);
+        s += gw->PrintAniData(2);
+        s += gw->PrintLine(nextNode, lastNode, -1);
+        s += gw->PrintAniData(2);
+        gw->PrintState(s, "GnuPlottest.gpi");
+
+}
+
+
 //------------------------------------------------------
 void PrintGnuplotInfo() {
     /*

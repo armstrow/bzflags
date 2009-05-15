@@ -31,7 +31,7 @@ Robot::Robot(MyTank *meTank, BZFSCommunicator *bzfsComm, EnvironmentData *env) {
 //------------------------------------------------------
 void Robot::BeAlive() {
     sleep(2);
-    //cout << "I AM ALIVE!! (" << this->meTank->ToString() << ")" << endl;
+    cout << "I AM ALIVE!! (" << this->meTank->ToString() << ")" << endl;
 
     bzfsComm->speed(meTank->index, 0.7);
     bool turnedOnce = false;

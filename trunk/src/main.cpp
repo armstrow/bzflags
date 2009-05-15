@@ -1,5 +1,7 @@
 #include "RobotController.h"
 #include "MyTank.h"
+#include "Flag.h"
+#include "Base.h"
 #include "Constant.h"
 #include <stdlib.h>
 #include <string>
@@ -11,6 +13,8 @@
  
 #include "GnuplotWriter.h"
 #include "Node.h"
+#include "SearchAlg.h"
+#include "BreadthFirstAlg.h"
 
 
 using namespace std;
@@ -27,8 +31,7 @@ string SERVER;
 string STR_PORT;
 int PORT;
 RobotController* controller;
-vector<vector<Node*> > WorldNodes;
-double worldSize;
+vector<vector<Node*> > *WorldNodes;
 
 void *DummyRobot(void *ptr);
 void *SmartRobot(void *ptr);
@@ -46,6 +49,10 @@ void SetCenterXY(vector<Point> pts, float *centerX, float *centerY);
 //void *MakeRobot(void *currTank);
 void GnuplotTest();
 void DiscretizeWorld(double NodeSize);
+Position GetStartNode();
+Position GetEndNode();
+Position GetNode(float xloc, float yloc);
+bool IsVisitable(Node* n);
 
 
 
@@ -69,14 +76,62 @@ int main(int argc, char** argv) {
 
     controller = new RobotController(SERVER, PORT);
     DiscretizeWorld(NodeS);
-    GnuplotTest();
+    //GnuplotTest();
+
+    /* Searches */
+    cout << "Running search algorithms" << endl;
+    Position startNode = GetStartNode();
+    Position endNode = GetEndNode();
+    string s = "";
+    GnuplotWriter* gw = new GnuplotWriter(&controller->env);
+    BreadthFirstAlg* bfs = new BreadthFirstAlg(WorldNodes, gw);
+    s += bfs->DoSearch(startNode, endNode);
+
+    //Remember to clear the "visited" boolean in the Nodes between each search
+
+    //Print the Results
+    gw->PrintState(s, WorldNodes->size() * WorldNodes->at(0).at(0)->length, "BFSPlot.gpi");
+
+
     controller->PlayGame();
     cout << "DONE WITH GAME!!!" << endl;
 }
 
+Position GetStartNode() {
+   MyTank curTank = controller->env.myTanks.at(0);
+   float xloc = curTank.pos[0];
+   float yloc = curTank.pos[1];
+   return GetNode(xloc, yloc);
+}
+Position GetEndNode() {
+   //Flag redFlag = controller->env.flags.at(0);
+   Base redFlag = controller->env.bases.at(0);
+   float xloc = redFlag.corners.at(0).x;
+   float yloc = redFlag.corners.at(0).y;
+   return GetNode(xloc, yloc);
+}
+Position GetNode(float xloc, float yloc) {
+    int ret[2];
+    double length = WorldNodes->at(0).at(0)->length;
+    for (int c = 0; c < WorldNodes->size(); c++) {
+	if ((WorldNodes->at(0).at(c)->y - yloc) > (0 - length)) {
+		ret[1] = c;
+		break;
+	}
+    }
+    for (int r = 0; r < WorldNodes->size(); r++) {
+	if ((WorldNodes->at(r).at(0)->x - xloc) > (0 - length)) {
+		ret[0] = r;
+		break;
+	}
+    }
+    Position p(ret[0], ret[1]);
+    return p;
+}
+
 void DiscretizeWorld(double NodeSize) {
 	vector<Constant> constants = controller->env.constants;
-
+	double worldSize;
 	for (int i = 0; i < constants.size(); i++) {
 		if (constants.at(i).name == "worldsize") {
 			worldSize = atof(constants.at(i).value.c_str());
@@ -91,26 +146,33 @@ void DiscretizeWorld(double NodeSize) {
 	//Node retBuff[WorldNodesSize][WorldNodesSize];
 	//int countR = 0;
 	//int countC = 0;
-        for (int x = 0 - (worldSize / 2); x < (worldSize / 2); x += NodeSize) {
+        worldSize = worldSize / 2;
+	WorldNodes = new vector<vector<Node*> >();
+        for (int x = 0 - worldSize; x < worldSize; x += NodeSize) {
 		vector<Node*> tmp;
-		for (int y = 0 - (worldSize / 2); y < (worldSize / 2); y += NodeSize) {
-			tmp.push_back(new Node(x, y, NodeSize));
+		for (int y = 0 - worldSize; y < worldSize; y += NodeSize) {
+			Node* n = new Node(x, y, NodeSize);
+			n->visitable = IsVisitable(n);
+			tmp.push_back(n);
 		}
-		WorldNodes.push_back(tmp);
+		WorldNodes->push_back(tmp);
 		//countR++;
 	}
-	cout << "Created WorldNodes size: " << WorldNodes.size();
+	cout << "Created WorldNodes size: " << WorldNodes->size();
 	//*worldNodes = retBuff;
 }
 
+bool IsVisitable(Node* n) {
+	return true;
+}
+
 void GnuplotTest() {
-	cout << "\nPrinting Gnuplot...\n";
-        GnuplotWriter* gw = new GnuplotWriter(&controller->env);
+/*	cout << "\nPrinting Gnuplot...\n";
 	string s = "\n";
-	for (int i = 0; i < WorldNodes.size(); i++)
-		for (int j = 0; j < WorldNodes.size(); j++)
-			s += gw->PrintNode(*WorldNodes.at(i).at(j), 6);
-	s += gw->PrintAniData(1);
+	for (int i = 0; i < WorldNodes->size(); i++)
+		for (int j = 0; j < WorldNodes->size(); j++)
+			s += gw->PrintNode(*WorldNodes->at(i).at(j), 6);
+	s += gw->PrintAniData(1);*/
 	
 /*        Node startNode(-400, -400, 20);
         Node nextNode(-400, -380, 20);
@@ -125,7 +187,7 @@ void GnuplotTest() {
         s += gw->PrintAniData(2);
         s += gw->PrintLine(nextNode, lastNode, -1);
         s += gw->PrintAniData(2);*/
-        gw->PrintState(s, worldSize, "GnuPlottest.gpi");
+     //   gw->PrintState(s, WorldNodes->size() * WorldNodes->at(0).at(0)->length, "GnuPlottest.gpi");
 
 }
 

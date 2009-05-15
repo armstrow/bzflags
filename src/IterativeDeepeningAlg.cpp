@@ -3,9 +3,9 @@
 #include <vector>
 
 #include "Node.h"
-#include "DepthFirstAlg.h"
+#include "IterativeDeepeningAlg.h"
 #include "SearchAlg.h"
-
+#include "GnuplotWriter.h"
 
 
 
@@ -16,11 +16,12 @@
 
 
 //------------------------------------------------------
-IterativeDeepeningAlg::IterativeDeepeningAlg(vector<vector<Node *> > *map): SearchAlg(map) {
+IterativeDeepeningAlg::IterativeDeepeningAlg(vector<vector<Node *> > *map, GnuplotWriter *writer): SearchAlg(map, writer) {
     this->map = map;
+    this->gw = writer;
 }
 //------------------------------------------------------
-void IterativeDeepeningAlg::DoSearch(Node *startNode) {
+string IterativeDeepeningAlg::DoSearch(Node startNode, Node endNode) {
 
 }
 //------------------------------------------------------

@@ -5,7 +5,7 @@
 CC= g++
 FLAGS= -Wall -ggdb -Iinc -lpthread -lm
 EXENAME= robotter
-OBJECTS= obj/RobotController.o obj/BZFSCommunicator.o obj/Robot.o obj/EnvironmentData.o obj/PersonalData.o obj/MyTank.o obj/OtherTank.o obj/Shot.o obj/Obstacle.o obj/Flag.o obj/Team.o obj/Constant.o obj/Base.o obj/GnuplotWriter.o obj/BreadthFirstAlg.o
+OBJECTS= obj/RobotController.o obj/BZFSCommunicator.o obj/Robot.o obj/EnvironmentData.o obj/PersonalData.o obj/MyTank.o obj/OtherTank.o obj/Shot.o obj/Obstacle.o obj/Flag.o obj/Team.o obj/Constant.o obj/Base.o obj/GnuplotWriter.o obj/BreadthFirstAlg.o obj/DepthFirstAlg.o obj/IterativeDeepeningAlg.o
 
 
 
@@ -83,6 +83,8 @@ obj/GnuplotWriter.o: inc/GnuplotWriter.h src/GnuplotWriter.cpp inc/Node.h
 obj/BreadthFirstAlg.o: inc/BreadthFirstAlg.h src/BreadthFirstAlg.cpp
 	$(CC) $(FLAGS) -c src/BreadthFirstAlg.cpp -o obj/BreadthFirstAlg.o
 	
-#obj/SearchAlg.o: inc/SearchAlg.h src/SearchAlg.cpp
-#	$(CC) $(FLAGS) -c src/SearchAlg.cpp -o obj/SearchAlg.o
+obj/DepthFirstAlg.o: inc/DepthFirstAlg.h src/DepthFirstAlg.cpp
+	$(CC) $(FLAGS) -c src/DepthFirstAlg.cpp -o obj/DepthFirstAlg.o
 
+obj/IterativeDeepeningAlg.o: inc/IterativeDeepeningAlg.h src/IterativeDeepeningAlg.cpp
+	$(CC) $(FLAGS) -c src/IterativeDeepeningAlg.cpp -o obj/IterativeDeepeningAlg.o

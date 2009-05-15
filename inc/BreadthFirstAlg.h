@@ -12,6 +12,8 @@
 #include <string.h>
 #include <queue>
 
+using namespace std;
+
 
 class BreadthFirstAlg : public SearchAlg {
 

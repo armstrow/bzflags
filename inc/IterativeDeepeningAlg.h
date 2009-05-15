@@ -5,10 +5,12 @@
 
 #include "Node.h"
 #include "SearchAlg.h"
+#include "GnuplotWriter.h"
 
 #include <vector>
 #include <string>
 #include <string.h>
+#include <queue>
 
 class IterativeDeepeningAlg : public SearchAlg {
 
@@ -19,6 +21,9 @@ class IterativeDeepeningAlg : public SearchAlg {
     public:
 
     private:
+        GnuplotWriter* gw;
+        queue<Position> q;
+
 
 
 
@@ -28,8 +33,8 @@ class IterativeDeepeningAlg : public SearchAlg {
      *  +--------------+ */
  
     public:
-        IterativeDeepeningAlg(vector<vector<Node *> > *map);
-        void DoSearch(Node *startNode);
+        IterativeDeepeningAlg(vector<vector<Node *> > *map, GnuplotWriter *writer);
+        string DoSearch(Node startNode, Node endNode);
         vector<Node *> GetBestPath();
 
     private:

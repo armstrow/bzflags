@@ -1,5 +1,6 @@
 #include "RobotController.h"
 #include "MyTank.h"
+#include "Constant.h"
 #include <stdlib.h>
 #include <string>
 #include <string.h>
@@ -26,6 +27,8 @@ string SERVER;
 string STR_PORT;
 int PORT;
 RobotController* controller;
+vector<vector<Node*> > WorldNodes;
+double worldSize;
 
 void *DummyRobot(void *ptr);
 void *SmartRobot(void *ptr);
@@ -42,6 +45,7 @@ void PrintGnuplotInfo();
 void SetCenterXY(vector<Point> pts, float *centerX, float *centerY);
 //void *MakeRobot(void *currTank);
 void GnuplotTest();
+void DiscretizeWorld(double NodeSize);
 
 
 
@@ -57,17 +61,58 @@ int main(int argc, char** argv) {
     else if(!ParseArgs(argc, argv)) {
         exit(0);
     }
+    double NodeS = 10;
+    if (DEBUG && argc == 5)
+	NodeS = atof(argv[4]);
+    else if (!DEBUG && argc == 4)
+	NodeS = atof(argv[3]);
 
     controller = new RobotController(SERVER, PORT);
+    DiscretizeWorld(NodeS);
     GnuplotTest();
     controller->PlayGame();
     cout << "DONE WITH GAME!!!" << endl;
 }
 
+void DiscretizeWorld(double NodeSize) {
+	vector<Constant> constants = controller->env.constants;
+
+	for (int i = 0; i < constants.size(); i++) {
+		if (constants.at(i).name == "worldsize") {
+			worldSize = atof(constants.at(i).value.c_str());
+			break;
+		}
+	}
+	if ((int)worldSize % (int)NodeSize != 0) {
+		cout << "Could not divide world up evenly into node size." << endl;
+		exit(0);
+	}
+	//WorldNodesSize = (int) (worldSize / NodeSize);
+	//Node retBuff[WorldNodesSize][WorldNodesSize];
+	//int countR = 0;
+	//int countC = 0;
+        for (int x = 0 - (worldSize / 2); x < (worldSize / 2); x += NodeSize) {
+		vector<Node*> tmp;
+		for (int y = 0 - (worldSize / 2); y < (worldSize / 2); y += NodeSize) {
+			tmp.push_back(new Node(x, y, NodeSize));
+		}
+		WorldNodes.push_back(tmp);
+		//countR++;
+	}
+	cout << "Created WorldNodes size: " << WorldNodes.size();
+	//*worldNodes = retBuff;
+}
+
 void GnuplotTest() {
 	cout << "\nPrinting Gnuplot...\n";
         GnuplotWriter* gw = new GnuplotWriter(&controller->env);
-        Node startNode(-400, -400, 20);
+	string s = "\n";
+	for (int i = 0; i < WorldNodes.size(); i++)
+		for (int j = 0; j < WorldNodes.size(); j++)
+			s += gw->PrintNode(*WorldNodes.at(i).at(j), 6);
+	s += gw->PrintAniData(1);
+	
+/*        Node startNode(-400, -400, 20);
         Node nextNode(-400, -380, 20);
         Node lastNode(-380,-360, 20);
         string s = gw->PrintNode(startNode, 2);
@@ -79,8 +124,8 @@ void GnuplotTest() {
         s += gw->PrintNode(lastNode, 1);
         s += gw->PrintAniData(2);
         s += gw->PrintLine(nextNode, lastNode, -1);
-        s += gw->PrintAniData(2);
-        gw->PrintState(s, "GnuPlottest.gpi");
+        s += gw->PrintAniData(2);*/
+        gw->PrintState(s, worldSize, "GnuPlottest.gpi");
 
 }
 
@@ -243,10 +288,11 @@ void DisplayBanner() {
 }
 //------------------------------------------------------
 void DisplayUsage() {
-    cout << "USAGE: " << arg0 << " [-d] <server> <port>" << endl
+    cout << "USAGE: " << arg0 << " [-d] <server> <port> [NodeSize]" << endl
          << endl
          << "    -d       --    DEBUG MODE" << endl
          << "    server   --    bzrobots server " << endl
-         << "    port     --    bzrobots port " << endl << endl << endl;
+         << "    port     --    bzrobots port " << endl
+	 << "    NodeSize --    size of nodes used in search algorithm " << endl << endl << endl;
 }
 //------------------------------------------------------

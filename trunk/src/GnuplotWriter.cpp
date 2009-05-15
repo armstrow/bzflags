@@ -3,8 +3,13 @@
 
 using namespace std;
 
-string GnuplotWriter::PrintHeaderData() {
-   return "set title \"Plot\"\nset xrange [-400.0: 400.0]\nset yrange [-400.0: 400.0]\nunset key\nset size square\n";
+string GnuplotWriter::PrintHeaderData(double size) {
+   char buff[100];;
+   string s;
+   double sz = size / 2;
+   sprintf (buff, "set title \"Plot\"\nset xrange [-%f: %f]\nset yrange [-%f: %f]\nunset key\nset size square\n", sz, sz, sz, sz);
+   s += buff;
+   return s;
 }
   
 GnuplotWriter::GnuplotWriter(EnvironmentData* environment) {
@@ -69,11 +74,11 @@ string GnuplotWriter::PrintFooterData() {
 	return "\n";
 }
 
-void GnuplotWriter::PrintState(string s, char * filename) {
+void GnuplotWriter::PrintState(string s, double size, char * filename) {
     printf("Writing Plot Data to File: %s\n", filename);
     ofstream myfile;
     myfile.open(filename);
-    myfile << PrintHeaderData();
+    myfile << PrintHeaderData(size);
     myfile << PrintObstacleData(env->obstacles);
     myfile << s;
     //myfile << PrintTankData();

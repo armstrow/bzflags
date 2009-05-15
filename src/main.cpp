@@ -15,6 +15,8 @@
 #include "Node.h"
 #include "SearchAlg.h"
 #include "BreadthFirstAlg.h"
+#include "DepthFirstAlg.h"
+#include "IterativeDeepeningAlg.h"
 
 
 using namespace std;
@@ -64,7 +66,6 @@ float GetB(Point p, float slope);
 
 //------------------------------------------------------
 int main(int argc, char** argv) {
-
     DisplayBanner();
 
     arg0 = argv[0];
@@ -76,9 +77,9 @@ int main(int argc, char** argv) {
     }
     double NodeS = 10;
     if (DEBUG && argc == 5)
-	NodeS = atof(argv[4]);
+        NodeS = atof(argv[4]);
     else if (!DEBUG && argc == 4)
-	NodeS = atof(argv[3]);
+        NodeS = atof(argv[3]);
 
     controller = new RobotController(SERVER, PORT);
     DiscretizeWorld(NodeS);
@@ -90,14 +91,20 @@ int main(int argc, char** argv) {
     Position endNode = GetEndNode();
     string s = "";
     GnuplotWriter* gw = new GnuplotWriter(&controller->env);
-    BreadthFirstAlg* bfs = new BreadthFirstAlg(WorldNodes, gw);
-    s += bfs->DoSearch(startNode, endNode);
+
+    SearchAlg* alg;
+    //alg = new BreadthFirstAlg(WorldNodes, gw);
+    alg = new DepthFirstAlg(WorldNodes, gw);
+    //alg = new IterativeDeepeningSearch(WorldNodes, gw);
+    //alg = new GreedyBestFirstSearch(WorldNodes, gw);
+    //alg = new AStartSearch(WorldNodes, gw);
+
+    s += alg->DoSearch(startNode, endNode);
 
     //Remember to clear the "visited" boolean in the Nodes between each search
 
     //Print the Results
     gw->PrintState(s, WorldNodes->size() * WorldNodes->at(0).at(0)->length, "BFSPlot.gpi");
-
 
     controller->PlayGame();
     cout << "DONE WITH GAME!!!" << endl;
@@ -120,52 +127,52 @@ Position GetNode(float xloc, float yloc) {
     int ret[2];
     double length = WorldNodes->at(0).at(0)->length;
     for (int c = 0; c < WorldNodes->size(); c++) {
-	if ((WorldNodes->at(0).at(c)->y - yloc) > (0 - length)) {
-		ret[1] = c;
-		break;
-	}
+        if ((WorldNodes->at(0).at(c)->y - yloc) > (0 - length)) {
+            ret[1] = c;
+            break;
+        }
     }
     for (int r = 0; r < WorldNodes->size(); r++) {
-	if ((WorldNodes->at(r).at(0)->x - xloc) > (0 - length)) {
-		ret[0] = r;
-		break;
-	}
+        if ((WorldNodes->at(r).at(0)->x - xloc) > (0 - length)) {
+            ret[0] = r;
+            break;
+        }
     }
     Position p(ret[0], ret[1]);
     return p;
 }
 
 void DiscretizeWorld(double NodeSize) {
-	vector<Constant> constants = controller->env.constants;
-	double worldSize;
-	for (int i = 0; i < constants.size(); i++) {
-		if (constants.at(i).name == "worldsize") {
-			worldSize = atof(constants.at(i).value.c_str());
-			break;
-		}
-	}
-	if ((int)worldSize % (int)NodeSize != 0) {
-		cout << "Could not divide world up evenly into node size." << endl;
-		exit(0);
-	}
-	//WorldNodesSize = (int) (worldSize / NodeSize);
-	//Node retBuff[WorldNodesSize][WorldNodesSize];
-	//int countR = 0;
-	//int countC = 0;
-        worldSize = worldSize / 2;
-	WorldNodes = new vector<vector<Node*> >();
-        for (int x = 0 - worldSize; x < worldSize; x += NodeSize) {
-		vector<Node*> tmp;
-		for (int y = 0 - worldSize; y < worldSize; y += NodeSize) {
-			Node* n = new Node(x, y, NodeSize);
-			n->visitable = IsVisitable(n);
-			tmp.push_back(n);
-		}
-		WorldNodes->push_back(tmp);
-		//countR++;
-	}
-	cout << "Created WorldNodes size: " << WorldNodes->size();
-	//*worldNodes = retBuff;
+    vector<Constant> constants = controller->env.constants;
+    double worldSize;
+    for (int i = 0; i < constants.size(); i++) {
+        if (constants.at(i).name == "worldsize") {
+            worldSize = atof(constants.at(i).value.c_str());
+            break;
+        }
+    }
+    if ((int)worldSize % (int)NodeSize != 0) {
+        cout << "Could not divide world up evenly into node size." << endl;
+        exit(0);
+    }
+    //WorldNodesSize = (int) (worldSize / NodeSize);
+    //Node retBuff[WorldNodesSize][WorldNodesSize];
+    //int countR = 0;
+    //int countC = 0;
+    worldSize = worldSize / 2;
+    WorldNodes = new vector<vector<Node*> >();
+    for (int x = 0 - worldSize; x < worldSize; x += NodeSize) {
+        vector<Node*> tmp;
+        for (int y = 0 - worldSize; y < worldSize; y += NodeSize) {
+            Node* n = new Node(x, y, NodeSize);
+            n->visitable = IsVisitable(n);
+            tmp.push_back(n);
+        }
+        WorldNodes->push_back(tmp);
+        //countR++;
+    }
+    cout << "Created WorldNodes size: " << WorldNodes->size();
+    //*worldNodes = retBuff;
 }
 
 bool IsVisitable(Node* n) {
@@ -199,7 +206,7 @@ bool IsVisitable(Node* n) {
         }
     }
     //cout << "VISITABLE!" << endl;
-	return true;
+    return true;
 }
 bool IsBelowLine(Point testPoint, Point linePt1, Point linePt2) {
     float m = GetSlope(linePt1, linePt2);

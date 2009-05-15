@@ -81,7 +81,7 @@ string DepthFirstAlg::EnqueueNeighbors(Position p) {
 }
 string DepthFirstAlg::EnQ(int row, int col, Position from) {
     string s = ""; 
-    if (map->at(row).at(col)->visitable && !map->at(row).at(col)->visited) {
+    if (/*map->at(row).at(col)->visitable && */ !map->at(row).at(col)->visited) {
         map->at(row).at(col)->visited = true;
         Position n(row, col);
         q.push(n);

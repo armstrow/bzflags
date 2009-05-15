@@ -24,7 +24,7 @@ class GnuplotWriter{
 
     private:
 
-	string PrintHeaderData();
+	string PrintHeaderData(double size);
 	string PrintObstacleData(vector<Obstacle> obstacles);
 	//plots anything else that needs to be ploted that did not get ploted elsewhere
 	string PrintFooterData();
@@ -51,7 +51,7 @@ class GnuplotWriter{
 	   PrintState(output, "AStar.gpi");
 	   ...
 	*/
-	void PrintState(string s, char * filename);
+	void PrintState(string s, double size, char * filename);
 };
 
 #endif

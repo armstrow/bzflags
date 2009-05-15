@@ -53,6 +53,12 @@ Position GetStartNode();
 Position GetEndNode();
 Position GetNode(float xloc, float yloc);
 bool IsVisitable(Node* n);
+bool IsBelowLine(Point test, Point p1, Point p2);
+bool IsAboveLine(Point test, Point p1, Point p2);
+bool IsLeftOfLine(Point test, Point p1, Point p2);
+bool IsRightOfLine(Point test, Point p1, Point p2);
+float GetSlope(Point p1, Point p2);
+float GetB(Point p, float slope);
 
 
 
@@ -163,9 +169,75 @@ void DiscretizeWorld(double NodeSize) {
 }
 
 bool IsVisitable(Node* n) {
+    float middleX = n->x + n->length/2;
+    float middleY = n->y + n->length/2;
+    Point nodeMiddle;
+    nodeMiddle.x = middleX;
+    nodeMiddle.y = middleY;
+    //cout << "middle: " << middleX << ", " << middleY << endl;
+    for(int i = 0; i < controller->env.obstacles.size(); i++) {
+        Obstacle currObst = controller->env.obstacles.at(i);
+        Point bottom = currObst.corners.at(0);
+        Point right = currObst.corners.at(1);
+        Point top = currObst.corners.at(2);
+        Point left = currObst.corners.at(3);
+
+        if(bottom.x == left.x && right.x == top.x) {
+            if(nodeMiddle.x >= bottom.x &&
+               nodeMiddle.y >= bottom.y &&
+               nodeMiddle.x <= top.x &&
+               nodeMiddle.y <= top.y)
+                return false;
+        } else {
+            if( (IsBelowLine(nodeMiddle, top, right) && IsAboveLine(nodeMiddle, bottom, right)) ||
+                (IsBelowLine(nodeMiddle, top, left) && IsAboveLine(nodeMiddle, bottom, left)))
+                return false;
+        }
+    }
 	return true;
 }
-
+bool IsBelowLine(Point testPoint, Point linePt1, Point linePt2) {
+    float m = GetSlope(linePt1, linePt2);
+    float yVal = testPoint.x*m + GetB(linePt1, m);
+    float yDist = testPoint.y - yVal;
+    if(yDist <= 0)
+        return true;
+    else
+        return false;
+}
+bool IsAboveLine(Point testPoint, Point linePt1, Point linePt2) {
+    float m = GetSlope(linePt1, linePt2);
+    float yVal = testPoint.x*m + GetB(linePt1, m);
+    float yDist = testPoint.y - yVal;
+    if(yDist >= 0)
+        return true;
+    else
+        return false;
+}
+bool IsLeftOfLine(Point testPoint, Point linePt1, Point linePt2) {
+    float m = GetSlope(linePt1, linePt2);
+    float xVal = (testPoint.y - GetB(linePt1, m))/m;
+    float xDist = testPoint.x - xVal;
+    if(xDist <= 0)
+        return true;
+    else
+        return false;
+}
+bool IsRightOfLine(Point testPoint, Point linePt1, Point linePt2) {
+    float m = GetSlope(linePt1, linePt2);
+    float xVal = (testPoint.y - GetB(linePt1, m))/m;
+    float xDist = testPoint.x - xVal;
+    if(xDist >= 0)
+        return true;
+    else
+        return false;
+}
+float GetSlope(Point p1, Point p2) {
+    return (p1.y - p2.y)/(p1.x - p2.x);
+}
+float GetB(Point p, float slope) {
+    return p.y - (slope*p.x);
+}
 void GnuplotTest() {
 /*	cout << "\nPrinting Gnuplot...\n";
 	string s = "\n";

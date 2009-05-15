@@ -1,6 +1,6 @@
 
-#ifndef BREADTH_FIRST_ALG
-#define BREADTH_FIRST_ALG
+#ifndef DEPTH_FIRST_ALG
+#define DEPTH_FIRST_ALG
 
 
 #include "Node.h"
@@ -10,10 +10,10 @@
 #include <vector>
 #include <string>
 #include <string.h>
-#include <queue>
+#include <stack>
 
 
-class BreadthFirstAlg : public SearchAlg {
+class DepthFirstAlg : public SearchAlg {
 
     /*  +--------------+
      *  |  VARIABLES   |
@@ -23,7 +23,7 @@ class BreadthFirstAlg : public SearchAlg {
 
     private:
         GnuplotWriter* gw;
-        queue<Position> q;
+        stack<Position> q;
 
 
 
@@ -33,13 +33,13 @@ class BreadthFirstAlg : public SearchAlg {
      *  +--------------+ */
  
     public:
-        BreadthFirstAlg(vector<vector<Node *> > *map, GnuplotWriter* writer);
-        string DoSearch(Position startNode, Position endNode);
+        DepthFirstAlg(vector<vector<Node *> > *map, GnuplotWriter* writer);
+        void DoSearch(Node *startNode);
         vector<Node *> GetBestPath();
 
     private:
         string EnqueueNeighbors(Position p);
-        string EnQ(int row, int col, Position from);
+        string EnQ(int row, int col, Position from);   private:
 };
 
 

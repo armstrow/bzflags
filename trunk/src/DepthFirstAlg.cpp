@@ -3,35 +3,25 @@
 #include <vector>
 
 #include "Node.h"
-#include "BreadthFirstAlg.h"
+#include "DepthFirstAlg.h"
 #include "SearchAlg.h"
 
 
-#define BLACK  -1
-#define RED     1
-#define GREEN   2
-#define BLUE    3
-#define MAGENTA 4
-#define AQUA    5
-#define BROWN   6
-#define YELLOW  7
-#define ORANGE  8
 
-#define DELAY   1
 
 
 /* +--------------------------------+
  * |             PUBLIC             |
  * +--------------------------------+  */
-using namespace std;
+
 
 //------------------------------------------------------
-BreadthFirstAlg::BreadthFirstAlg(vector<vector<Node *> > *map, GnuplotWriter* writer): SearchAlg(map, writer) {
+DepthFirstAlg::DepthFirstAlg(vector<vector<Node *> > *map, GnuplotWriter* writer);
     this->map = map;
     this->gw = writer;
 }
 //------------------------------------------------------
-string BreadthFirstAlg::DoSearch(Position startNode, Position endNode) {
+void DepthFirstAlg::DoSearch(Node *startNode) {
     Position pos(startNode.row, startNode.col);
     map->at(pos.row).at(pos.col)->visited = true;
     string s = "";
@@ -51,11 +41,11 @@ string BreadthFirstAlg::DoSearch(Position startNode, Position endNode) {
     return s;
 }
 //------------------------------------------------------
-vector<Node *> BreadthFirstAlg::GetBestPath() {
+vector<Node *> DepthFirstAlg::GetBestPath() {
     
 }
 //------------------------------------------------------
-string BreadthFirstAlg::EnqueueNeighbors(Position p) {
+string DepthFirstAlg::EnqueueNeighbors(Position p) {
     string s = "";
     s += EnQ(p.row + 1, p.col - 1, p);
     s += EnQ(p.row + 1, p.col, p);
@@ -67,7 +57,7 @@ string BreadthFirstAlg::EnqueueNeighbors(Position p) {
     s += EnQ(p.row - 1, p.col + 1, p);
     return s;
 }
-string BreadthFirstAlg::EnQ(int row, int col, Position from) {
+string DepthFirstAlg::EnQ(int row, int col, Position from) {
     string s = ""; 
     if (map->at(row).at(col)->visitable && !map->at(row).at(col)->visited) {
         map->at(row).at(col)->visited = true;
@@ -79,6 +69,7 @@ string BreadthFirstAlg::EnQ(int row, int col, Position from) {
     }
     return s;
 }
+
 
 
 

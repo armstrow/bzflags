@@ -22,6 +22,7 @@
 #include <fstream>
 #include <iostream>
 #include <unistd.h>
+#include <pthread.h>
 
 
 #define BUFFER_SIZE 1024
@@ -40,7 +41,7 @@ int start;
 
 //------------------------------------------------------
 BZFSCommunicator::BZFSCommunicator() {
-
+    
 }
 //------------------------------------------------------
 int BZFSCommunicator::Connect(string server, int port) {
@@ -64,36 +65,87 @@ vector <string> BZFSCommunicator::SendMessage(string message) {
 	ReadAck();
 	return ReadArr();
 }
+
+bool BZFSCommunicator::SendBoolMessage(string msg) {
+	vector <string> reply = SendMessage(msg);
+	if(reply.at(0) == "ok") {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+//--------------------------------------------------------------------
+bool BZFSCommunicator::shoot(int index) {
+// Perform a shoot request.
+	char char_buff[20];
+	sprintf(char_buff, " %d", index);	
+	string str_buff="shoot";
+	str_buff.append(char_buff);
+	return SendBoolMessage(str_buff);
+}
+//--------------------------------------------------------------------
+bool BZFSCommunicator::speed(int index, double value) {
+// Set the desired speed to the specified value.
+	char char_buff[20];
+	sprintf(char_buff, " %d", index);	
+	string str_buff="speed";
+	str_buff.append(char_buff);
+	sprintf(char_buff, " %f", value);
+	str_buff.append(char_buff);
+	return SendBoolMessage(str_buff);
+}
+
+bool BZFSCommunicator::angvel(int index, double value) {
+// Set the desired angular velocity to the specified value.
+	char char_buff[20];
+	sprintf(char_buff, " %d", index);	
+	string str_buff="angvel";
+	str_buff.append(char_buff);
+	sprintf(char_buff, " %f", value);
+	str_buff.append(char_buff);
+	return SendBoolMessage(str_buff);
+}
+
+bool BZFSCommunicator::accelx(int index, double value) {
+// Set the desired accelaration in x axis to the specified value in hovertank mode.
+	char char_buff[20];
+	sprintf(char_buff, " %d", index);	
+	string str_buff="accelx";
+	str_buff.append(char_buff);
+	sprintf(char_buff, " %f", value);
+	str_buff.append(char_buff);
+	return SendBoolMessage(str_buff);
+}
+
+bool BZFSCommunicator::accely(int index, double value) {
+// Set the desired accelaration in x axis to the specified value in hovertank mode.
+	char char_buff[20];
+	sprintf(char_buff, " %d", index);	
+	string str_buff="accely";
+	str_buff.append(char_buff);
+	sprintf(char_buff, " %f", value);
+	str_buff.append(char_buff);
+	return SendBoolMessage(str_buff);
+}
+
 //------------------------------------------------------
 bool BZFSCommunicator::get_teams(vector<Team> *AllTeams) {
 	SendLine("teams");
 	ReadAck();
 	vector <string> v = ReadArr();
-    cout << "teams v.at(0) = " << v.at(0) << endl;
+    //cout << "teams v.at(0) = " << v.at(0) << endl;
 	if(v.at(0)!="begin") {
 		return false;
 	}
 	v.clear();
 	v=ReadArr();
-    cout << "size of v: " << v.size() << endl;
 	int i=0;
-    cout << "v(0): " << v.at(0) << endl;
-    cout << "v(1): " << v.at(1) << endl;
 	while(v.at(0)=="team") {
 		Team MyTeam(v);
-        cout << "team to string: " << MyTeam.ToString() << endl;
-        /*
-		MyTeam.base_corner[0][0]=atof(v.at(3).c_str());
-		MyTeam.base_corner[0][1]=atof(v.at(4).c_str());
-		MyTeam.base_corner[1][0]=atof(v.at(5).c_str());
-		MyTeam.base_corner[1][1]=atof(v.at(6).c_str());
-		MyTeam.base_corner[2][0]=atof(v.at(7).c_str());
-		MyTeam.base_corner[2][1]=atof(v.at(8).c_str());
-		MyTeam.base_corner[3][0]=atof(v.at(9).c_str());
-		MyTeam.base_corner[3][1]=atof(v.at(10).c_str());
-        */
+        //cout << "team to string: " << MyTeam.ToString() << endl;
 		AllTeams->push_back(MyTeam);
-        cout << "teams size: " << AllTeams->size() << endl;
+        //cout << "teams size: " << AllTeams->size() << endl;
 		v.clear();
 		v=ReadArr();
 		i++;
@@ -105,8 +157,11 @@ bool BZFSCommunicator::get_teams(vector<Team> *AllTeams) {
 }
 bool BZFSCommunicator::get_obstacles(vector<Obstacle> *AllObstacles) {
 	// Request a list of obstacles.
+    //cout << "    gettings obsts" << endl;
 	SendLine("obstacles");
+    //cout << "        sent line" << endl;
 	ReadAck();
+    //cout << "        read ack" << endl;
 	vector <string> v=ReadArr();
 	if(v.at(0)!="begin") {
     	return false;
@@ -279,14 +334,16 @@ bool BZFSCommunicator::get_constants(vector <Constant> *AllConstants) {
     ReadAck();
     vector <string> v=ReadArr();
     if(v.at(0)!="begin") {
-    return false;
+        return false;
     }
     v.clear();
     v=ReadArr();
     int i=0;
     while(v.at(0)=="constant") {
-    	Constant MyConstant(v);
-	   AllConstants->push_back(MyConstant);
+        Constant MyConstant(v);
+        if(MyConstant.name == "team")
+            this->myColor = MyConstant.value;
+	    AllConstants->push_back(MyConstant);
     	v.clear();
     	v=ReadArr();
     	i++;
@@ -361,7 +418,10 @@ int BZFSCommunicator::SendLine(const char *LineText) {
 	Command[Length+1]='\0';
 	//if(debug) 
 	//cout << Command;
-	if (send(s, Command, Length+1, 0) >= 0) {
+	pthread_mutex_lock(&socket_lock);	    
+    int amountSent = send(s, Command, Length+1, 0);
+	pthread_mutex_unlock(&socket_lock);	    
+	if (amountSent >= 0) {
 		return 0;
 	}
 	else {
@@ -373,7 +433,9 @@ int BZFSCommunicator::SendLine(const char *LineText) {
 int BZFSCommunicator::ReadReply(char *Reply)
 {
 	char acReadBuffer[BUFFER_SIZE];
+	pthread_mutex_lock(&socket_lock);	    
 	int nNewBytes = recv(s, acReadBuffer, BUFFER_SIZE, 0);
+	pthread_mutex_unlock(&socket_lock);	    
 	if (nNewBytes < 0) {
 		return -1;
 	}

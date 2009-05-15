@@ -29,8 +29,8 @@ Obstacle::Obstacle(vector<string> data) {
         Point corner;
         float x = atof(data.at(index).c_str());
         float y = atof(data.at(index + 1).c_str());
-        cout << "X: " << x << endl;
-        cout << "Y: " << y << endl;
+        //cout << "X: " << x << endl;
+        //cout << "Y: " << y << endl;
         corner.x = x;
         corner.y = y;
         this->corners.push_back(corner);

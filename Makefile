@@ -5,7 +5,7 @@
 CC= g++
 FLAGS= -Wall -ggdb -Iinc -lpthread -lm
 EXENAME= robotter
-OBJECTS= obj/RobotController.o obj/BZFSCommunicator.o obj/Robot.o obj/EnvironmentData.o obj/PersonalData.o obj/MyTank.o obj/OtherTank.o obj/Shot.o obj/Obstacle.o obj/Flag.o obj/Team.o obj/Constant.o obj/Base.o
+OBJECTS= obj/RobotController.o obj/BZFSCommunicator.o obj/Robot.o obj/EnvironmentData.o obj/PersonalData.o obj/MyTank.o obj/OtherTank.o obj/Shot.o obj/Obstacle.o obj/Flag.o obj/Team.o obj/Constant.o obj/Base.o obj/GnuplotWriter.o
 
 
 
@@ -76,5 +76,8 @@ obj/Constant.o: inc/Constant.h src/Constant.cpp
 
 obj/Base.o: inc/Base.h src/Base.cpp
 	$(CC) $(FLAGS) -c src/Base.cpp -o obj/Base.o
+
+obj/GnuplotWriter.o: inc/GnuplotWriter.h src/GnuplotWriter.cpp inc/Node.h
+	$(CC) $(FLAGS) -c src/GnuplotWriter.cpp -o obj/GnuplotWriter.o
 
 

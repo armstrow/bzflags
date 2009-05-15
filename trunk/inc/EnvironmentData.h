@@ -1,7 +1,7 @@
 
 
 #ifndef ENVIRONMENT_DATA
-#define ENVIRONTMENT_DATA
+#define ENVIRONMENT_DATA
 
 
 #include <vector>

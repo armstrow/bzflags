@@ -1,9 +1,10 @@
 #ifndef ROBOCONTROLLER
 #define ROBOCONTROLLER
 
-#include "Robot.h"
 #include "BZFSCommunicator.h"
-#include "EnvironmentData.h"
+//#include "EnvironmentData.h"
+#include "Robot.h"
+#include "MyTank.h"
 
 #include <vector>
 #include <string>
@@ -17,11 +18,13 @@ class RobotController {
 
 
     private:
+        vector<pthread_t> robotThreads;
         vector<Robot> robotList; 
-        BZFSCommunicator bzfsComm;
-	pthread_mutex_t socket_lock;
+	    pthread_mutex_t socket_lock;
     public:
+        BZFSCommunicator bzfsComm;
         EnvironmentData env;
+        string myColor;
 
 
 
@@ -32,22 +35,35 @@ class RobotController {
 
     public:
         RobotController(string server, int port);
-	void DummyRobot(int index);
-	    //Commands
-    	bool shoot(int index);
-    	bool speed(int index, double value);
-    	bool angvel(int index, double value);
-    	bool accelx(int index, double value);
-    	bool accely(int index, double value);
-        void LoopAction();
+	    void DummyRobot(int index);
+        void PlayGame();
+        bool shoot(int tankIndex);
+        bool speed(int tankIndex, double speed);
+        bool angvel(int tankIndex, double angVel);
+        bool accelx(int tankIndex, double accelX);
+        bool accely(int tankIndex, double accelY);
 
 	    //Information Requests
         //  +---> these are now found in the BZFSCommunicator
 
     private:
-	bool SendBoolMessage(string msg);
+        //static void* MakeRobot(void *robotArgs);
+        void LoopAction();
+        void InitRobots();
+	    bool SendBoolMessage(string msg);
         void UpdateEnvironment();
         void InitEnvironment();
+};
+
+
+
+class MakeRobotArgs {
+    public:
+        RobotController *thisRC;
+        MyTank *meTank;
+        EnvironmentData *env;
+
+        MakeRobotArgs(RobotController *thisRC, MyTank *meTank, EnvironmentData *env): thisRC(thisRC),meTank(meTank), env(env){}
 };
 
 

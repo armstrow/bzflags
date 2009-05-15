@@ -41,10 +41,13 @@ void MyTank::SetData(vector<string> data) {
 	    this->angvel=atof(data.at(12).c_str());
 }
 string MyTank::ToString() {
+    return "tank blah blah";
+    /*
     stringstream sout;
     sout << "tank #" << this->index << " status: " << this->status << " angvel: " << this->angvel << " vx: " << this->velocity[0] << " vy: " << this->velocity[1];
     string result = sout.str();
     return result;
+    */
 }
 
 

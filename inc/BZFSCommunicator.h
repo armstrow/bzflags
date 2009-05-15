@@ -25,6 +25,7 @@
 #include <fstream>
 #include <iostream>
 #include <unistd.h>
+#include <pthread.h>
 
 using namespace std;
 
@@ -39,9 +40,11 @@ class BZFSCommunicator {
         string ipAddress;
         int port;
         struct sockaddr_in connection;
+	    pthread_mutex_t socket_lock;
         int s;
 
     public:
+        string myColor;
 
 
     /*  +--------------+
@@ -63,7 +66,15 @@ class BZFSCommunicator {
         bool get_constants(vector<Constant> *allConstants);
         bool get_bases(vector<Base> *allBases);
 
+     	bool shoot(int index);
+    	bool speed(int index, double value);
+    	bool angvel(int index, double value);
+    	bool accelx(int index, double value);
+    	bool accely(int index, double value);
+
     private:
+        bool SendBoolMessage(string msg);
+
 	    void ReadAck();
     	vector <string> SplitString(string str);
     	int SendLine(const char* LineText);

@@ -2,32 +2,55 @@
 
 #include "Team.h"
 #include "RobotController.h"
+#include "Constant.h"
+#include <pthread.h>
 
 #include <vector>
 
+void *MakeRobot(void *args);
 
 //------------------------------------------------------
 RobotController::RobotController(string server, int port) {
- 
 	if (bzfsComm.Connect(server, port) == 0) {
-		pthread_mutex_lock(&socket_lock);	    
 		InitEnvironment();
-		pthread_mutex_unlock(&socket_lock);	
 	}
 	//pthread_mutex_init(&socket_lock, NULL);
-
 }
 
 
 
 //------------------------------------------------------
+void RobotController::PlayGame() {
+    InitRobots();
+    LoopAction();
+}
+//------------------------------------------------------
+void RobotController::InitRobots() {
+    cout << "number of mytanks: " << env.myTanks.size() << endl;
+    for(int i = 0; i < env.myTanks.size(); i++) {
+        pthread_t *newThread = new pthread_t();
+        //robotThreads.push_back(newThread);
+
+        MyTank *currTank = &env.myTanks.at(i);
+        MakeRobotArgs args(this, currTank, &env);
+
+        pthread_create(newThread, NULL, &MakeRobot, (void *)&args);
+    }
+}
+//------------------------------------------------------
+void* MakeRobot(void *passedArgs) {
+    //cout << "IN NEW THREAD: MAKE-ROBOT!!" << endl;
+    MakeRobotArgs *args = (MakeRobotArgs *)passedArgs;
+    Robot currBot(args->meTank, &args->thisRC->bzfsComm, args->env);
+    currBot.BeAlive();
+}
+//------------------------------------------------------
 void RobotController::LoopAction() {
     while(1 == 1) {
-        //cout << "------------------------------------------" << endl;
         pthread_mutex_lock(&socket_lock);
         UpdateEnvironment();
         pthread_mutex_unlock(&socket_lock);
-        usleep(100);
+        usleep(500);
     }
 }
 //------------------------------------------------------
@@ -35,14 +58,25 @@ void RobotController::InitEnvironment() {
     bzfsComm.get_obstacles(&env.obstacles);
     bzfsComm.get_teams(&env.teams);
     bzfsComm.get_constants(&env.constants);
+    for(int i = 0; i < env.constants.size(); i++) {
+        Constant currConstant = env.constants.at(i);
+        if(currConstant.name == "team") {
+            this->myColor = currConstant.value;
+        }
+    }
     bzfsComm.get_bases(&env.bases);
+    bzfsComm.get_mytanks(&env.myTanks);
 }
 //------------------------------------------------------
 void RobotController::UpdateEnvironment() {
     bzfsComm.get_shots(&env.shots);
+    cout << "RC --> GOT SHOTS" << endl;
     bzfsComm.get_othertanks(&env.otherTanks);
+    cout << "RC --> GOT OTHER TANKS" << endl;
     bzfsComm.get_mytanks(&env.myTanks);    
+    cout << "RC --> GOT MY TANKS" << endl;
     bzfsComm.get_flags(&env.flags);
+    cout << "RC --> GOT FLAGS" << endl;
 }
 //------------------------------------------------------
 

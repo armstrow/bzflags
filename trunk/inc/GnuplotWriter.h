@@ -52,6 +52,7 @@ class GnuplotWriter{
 	   ...
 	*/
 	void PrintState(string s, double size, char * filename);
+    string ClearScreen();
 };
 
 #endif

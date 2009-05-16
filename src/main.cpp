@@ -111,13 +111,8 @@ int main(int argc, char** argv) {
     //alg = new BreadthFirstAlg(WorldNodes, gw);
     //alg = new DepthFirstAlg(WorldNodes, gw);
     //alg = new IterativeDeepeningAlg(WorldNodes, gw);
-<<<<<<< .mine
-    alg = new GreedyBestFirstAlg(WorldNodes, gw, penalized, &controller->env);
-    //alg = new AStarAlg(WorldNodes, gw, penalized);
-=======
     //alg = new GreedyBestFirstAlg(WorldNodes, gw);
     alg = new AStarAlg(WorldNodes, gw);
->>>>>>> .r67
 
     s += alg->DoSearch(startNode, endNode);
 

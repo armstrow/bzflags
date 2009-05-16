@@ -92,5 +92,5 @@ obj/IterativeDeepeningAlg.o: inc/IterativeDeepeningAlg.h src/IterativeDeepeningA
 obj/GreedyBestFirstAlg.o: inc/GreedyBestFirstAlg.h src/GreedyBestFirstAlg.cpp
 	$(CC) $(FLAGS) -c src/GreedyBestFirstAlg.cpp -o obj/GreedyBestFirstAlg.o
 
-obj/AStarAlg.o: inc/AStarAlg.h src/AStarAlg.cpp
+obj/AStarAlg.o: inc/AStarAlg.h src/AStarAlg.cpp inc/SearchAlg.h
 	$(CC) $(FLAGS) -c src/AStarAlg.cpp -o obj/AStarAlg.o

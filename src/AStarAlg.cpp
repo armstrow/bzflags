@@ -19,7 +19,7 @@
 #define YELLOW  7
 #define ORANGE  8
 
-#define DELAY   1
+#define DELAY   0.1
 
 
 /* +--------------------------------+
@@ -102,7 +102,7 @@ string AStarAlg::EnQ(int row, int col, Position* from, Position endNode) {
     if (row >= map->size() || col >= map->size() || row < 0 || col < 0)
         return s;
     if (map->at(row).at(col)->visitable) {        
-        Position n(row, col);
+       
         float ns = map->at(row).at(col)->length / 2;
         float x = map->at(row).at(col)->x + ns;
         float y = map->at(row).at(col)->y + ns;
@@ -110,9 +110,10 @@ string AStarAlg::EnQ(int row, int col, Position* from, Position endNode) {
         float fromY = map->at(from->row).at(from->col)->y + ns;
         float dist = sqrt( (x - fromX)*(x - fromX) +
                        (y - fromY)*(y - fromY) ) + from->distSoFar;
-        n.distSoFar = dist;
+	Position n(row, col, dist + GetHeuristic(row, col, endNode), dist, from);        
+/*n.distSoFar = dist;
         n.from = from; 
-        n.heuristic = dist + GetHeuristic(row, col, endNode);
+        n.heuristic = dist + GetHeuristic(row, col, endNode);*/
         cout << "Enqueued Node: (" << row << "," << col << "):" << n.heuristic << " = " << dist << " + " << GetHeuristic (row, col, endNode) << endl;
         q.push(n);
         s += gw->PrintNode(map->at(row).at(col), BROWN);

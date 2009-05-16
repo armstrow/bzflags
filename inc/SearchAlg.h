@@ -17,8 +17,8 @@ using namespace std;
 class Position{
     public:
         int row, col, level;
-        float distSoFar;
         float heuristic;
+	float distSoFar;
         Position* from;
         Position(int r, int c) {
             row = r;
@@ -28,6 +28,14 @@ class Position{
             distSoFar = 0;
             from = NULL;
         }
+	Position(int r, int c, float h, float d, Position* f){
+	    row = r;
+            col = c;
+            level = 0;
+            heuristic = h;
+            distSoFar = d;
+            from = f;
+        }	
         void set(int r, int c) {
             this->row = r;
             this->col = c;

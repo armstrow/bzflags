@@ -34,7 +34,8 @@ AStarAlg::AStarAlg(vector<vector<Node *> > *map, GnuplotWriter* writer): SearchA
 }
 //------------------------------------------------------
 string AStarAlg::DoSearch(Position startNode, Position endNode) {
-    Position* pos = &startNode;
+    Position p = startNode;
+    Position* pos = &p;
     map->at(pos->row).at(pos->col)->visited = true;
 
     string s = "";
@@ -49,18 +50,27 @@ string AStarAlg::DoSearch(Position startNode, Position endNode) {
             cout << "Error, goal not found in BFS" << endl;
             return s;
         }
-        Position tmp = (Position)q.top();
-        while (map->at(tmp.row).at(tmp.col)->visited == true) {
+        Position *tmp = q.top();
+        while (map->at(tmp->row).at(tmp->col)->visited == true) {
         		q.pop();
         		tmp = q.top();
         }
-        map->at(tmp.row).at(tmp.col)->visited = true;
-        s += gw->PrintLine(map->at(pos->row).at(pos->col), map->at(tmp.row).at(tmp.col), ORANGE);
+        map->at(tmp->row).at(tmp->col)->visited = true;
+        s += gw->PrintLine(map->at(pos->row).at(pos->col), map->at(tmp->row).at(tmp->col), ORANGE);
         s += gw->PrintAniData(DELAY);
-        pos = &tmp;
+        pos = tmp;
         q.pop();
         cout << "checking node at: " << pos->row << "," << pos->col << endl;
     }
+
+    Position *lastPos = pos;
+    while(lastPos->col != startNode.col || lastPos->row != startNode.row) {
+        cout << "in loop" << endl;
+        s += gw->PrintLine(map->at(lastPos->row).at(lastPos->col), map->at(lastPos->from->row).at(lastPos->from->col), GREEN);
+        s += gw->PrintAniData(0);
+        lastPos = lastPos->from;
+    }
+
     cout << "Goal found!!!" << endNode.row << "," << endNode.col << endl;
     return s;
     /*
@@ -68,14 +78,14 @@ string AStarAlg::DoSearch(Position startNode, Position endNode) {
 }
 //------------------------------------------------------
 float AStarAlg::GetHeuristic(int row, int col, Position endNode) {
-	float ns = map->at(row).at(col)->length / 2;	
-	float x = map->at(row).at(col)->x + ns;
-   float y = map->at(row).at(col)->y + ns;
-   float endX = map->at(endNode.row).at(endNode.col)->x + ns;
-   float endY = map->at(endNode.row).at(endNode.col)->y + ns;
-   float dist = sqrt( (x - endX)*(x - endX) +
-                       (y - endY)*(y - endY) );
-   return dist;
+    float ns = map->at(row).at(col)->length / 2;	
+    float x = map->at(row).at(col)->x + ns;
+    float y = map->at(row).at(col)->y + ns;
+    float endX = map->at(endNode.row).at(endNode.col)->x + ns;
+    float endY = map->at(endNode.row).at(endNode.col)->y + ns;
+    float dist = sqrt( (x - endX)*(x - endX) +
+            (y - endY)*(y - endY) );
+    return dist;
 }
 //------------------------------------------------------
 vector<Node *> AStarAlg::GetBestPath() {
@@ -102,19 +112,19 @@ string AStarAlg::EnQ(int row, int col, Position* from, Position endNode) {
     if (row >= map->size() || col >= map->size() || row < 0 || col < 0)
         return s;
     if (map->at(row).at(col)->visitable) {        
-       
+
         float ns = map->at(row).at(col)->length / 2;
         float x = map->at(row).at(col)->x + ns;
         float y = map->at(row).at(col)->y + ns;
         float fromX = map->at(from->row).at(from->col)->x + ns;
         float fromY = map->at(from->row).at(from->col)->y + ns;
         float dist = sqrt( (x - fromX)*(x - fromX) +
-                       (y - fromY)*(y - fromY) ) + from->distSoFar;
-	Position n(row, col, dist + GetHeuristic(row, col, endNode), dist, from);        
-/*n.distSoFar = dist;
-        n.from = from; 
-        n.heuristic = dist + GetHeuristic(row, col, endNode);*/
-        cout << "Enqueued Node: (" << row << "," << col << "):" << n.heuristic << " = " << dist << " + " << GetHeuristic (row, col, endNode) << endl;
+                (y - fromY)*(y - fromY) ) + from->distSoFar;
+        Position *n = new Position(row, col, dist + GetHeuristic(row, col, endNode), dist, from);
+        /*n.distSoFar = dist;
+          n.from = from; 
+          n.heuristic = dist + GetHeuristic(row, col, endNode);*/
+        cout << "Enqueued Node: (" << row << "," << col << "):" << n->heuristic << " = " << dist << " + " << GetHeuristic (row, col, endNode) << endl;
         q.push(n);
         s += gw->PrintNode(map->at(row).at(col), BROWN);
         s += gw->PrintLine(map->at(from->row).at(from->col), map->at(row).at(col), BLACK);

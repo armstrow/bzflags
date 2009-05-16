@@ -25,7 +25,7 @@ class AStarAlg : public SearchAlg {
 
     private:
         GnuplotWriter* gw;
-        priority_queue<Position, vector<Position>, ComparePosition> q;
+        priority_queue<Position *, vector<Position *>, ComparePosition> q;
 
   
     /*  +--------------+

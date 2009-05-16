@@ -28,7 +28,7 @@ class GreedyBestFirstAlg : public SearchAlg {
 
     private:
         GnuplotWriter* gw;
-        priority_queue<Position, vector<Position>, ComparePosition> q;
+        priority_queue<Position*, vector<Position *>, ComparePosition> q;
 
   
     /*  +--------------+
@@ -44,8 +44,8 @@ class GreedyBestFirstAlg : public SearchAlg {
         void GetCenter(float *centerX, float *centerY, vector<Point> points);
         void GetCenter(vector<Point> points);
         Position GetNode(float xloc, float yloc);
-        string EnqueueNeighbors(Position p, Position endNode);
-        string EnQ(int row, int col, Position from, Position endNode);
+        string EnqueueNeighbors(Position *p, Position endNode);
+        string EnQ(int row, int col, Position *from, Position endNode);
         float GetHeuristic(int row, int col, Position pos);
 };
 

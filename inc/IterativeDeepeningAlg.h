@@ -21,7 +21,6 @@ class IterativeDeepeningAlg : public SearchAlg {
     public:
 
     private:
-        int currMaxDepth;
         GnuplotWriter* gw;
         stack<Position> q;
 

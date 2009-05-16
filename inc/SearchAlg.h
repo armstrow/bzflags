@@ -16,10 +16,11 @@ using namespace std;
 
 class Position{
    public:
-       int row, col;
+       int row, col, level;
        Position(int r, int c) {
            row = r;
            col = c;
+           level = 0;
        }
        void set(int r, int c) {
            this->row = r;

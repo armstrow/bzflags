@@ -18,7 +18,7 @@ class Position{
     public:
         int row, col, level;
         float heuristic;
-	float distSoFar;
+        float distSoFar;
         Position* from;
         Position(int r, int c) {
             row = r;
@@ -28,8 +28,8 @@ class Position{
             distSoFar = 0;
             from = NULL;
         }
-	Position(int r, int c, float h, float d, Position* f){
-	    row = r;
+        Position(int r, int c, float h, float d, Position* f){
+            row = r;
             col = c;
             level = 0;
             heuristic = h;
@@ -46,6 +46,9 @@ class ComparePosition {
     public:
         bool operator()(Position &p1, Position &p2) {
             return p1.heuristic > p2.heuristic;
+        }
+        bool operator()(Position *p1, Position *p2) {
+            return p1->heuristic > p2->heuristic;
         }
 };
 

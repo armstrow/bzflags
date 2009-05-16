@@ -38,6 +38,7 @@ GreedyBestFirstAlg::GreedyBestFirstAlg(vector<vector<Node *> > *map, GnuplotWrit
 //------------------------------------------------------
 string GreedyBestFirstAlg::DoSearch(Position startNode, Position endNode) {
     Position pos(startNode.row, startNode.col);
+    pos.from = NULL;
     map->at(pos.row).at(pos.col)->visited = true;
 
     string s = "";
@@ -46,19 +47,30 @@ string GreedyBestFirstAlg::DoSearch(Position startNode, Position endNode) {
     s += gw->PrintNode(map->at(endNode.row).at(endNode.col), RED);
     s += gw->PrintAniData(DELAY);
 
-    while (pos.row != endNode.row || pos.col != endNode.col) {
-        s += EnqueueNeighbors(pos, endNode);
+    Position *currPos = &pos;
+
+    while (currPos->row != endNode.row || currPos->col != endNode.col) {
+        s += EnqueueNeighbors(currPos, endNode);
         if (q.empty()) {
             cout << "Error, goal not found in BFS" << endl;
             return s;
         }
-        Position tmp = (Position)q.top();
-        s += gw->PrintLine(map->at(pos.row).at(pos.col), map->at(tmp.row).at(tmp.col), ORANGE);
+        Position *tmp = q.top();
+        s += gw->PrintLine(map->at(currPos->row).at(currPos->col), map->at(tmp->row).at(tmp->col), ORANGE);
         s += gw->PrintAniData(DELAY);
-        pos.set(tmp.row, tmp.col);
+        currPos = tmp;
         q.pop();
-        cout << "checking node at: " << pos.row << "," << pos.col << endl;
+        cout << "checking node at: " << currPos->row << "," << currPos->col << endl;
     }
+    
+    Position *lastPos = currPos;
+    while(lastPos->col != startNode.col || lastPos->row != startNode.row) {
+        cout << "in loop" << endl;
+        s += gw->PrintLine(map->at(lastPos->row).at(lastPos->col), map->at(lastPos->from->row).at(lastPos->from->col), GREEN);
+        s += gw->PrintAniData(0);
+        lastPos = lastPos->from;
+    }
+
     cout << "Goal found!!!" << endNode.row << "," << endNode.col << endl;
     return s;
     /*
@@ -86,7 +98,8 @@ float GreedyBestFirstAlg::GetHeuristic(int row, int col, Position endNode) {
             Position pos = GetNode(otherTank.x, otherTank.y);
             float dist = sqrt( (row - pos.row)*(row - pos.row) +
                                (col - pos.col)*(col - pos.col));
-            tankValues += (10 - dist < 0) ? 0 : 10 - dist;
+            float radius = 100/nodeSize;
+            tankValues += (radius - dist < 0) ? 0 : radius - dist;
         }
 
         //check the walls
@@ -108,8 +121,8 @@ float GreedyBestFirstAlg::GetHeuristic(int row, int col, Position endNode) {
         }
     }
 
-    result += tankValues*2;
-    result += wallValues*1.5;
+    result += tankValues;
+    //result += wallValues*1.5;
     result += dist;
 
     return result;
@@ -152,31 +165,32 @@ vector<Node *> GreedyBestFirstAlg::GetBestPath() {
     
 }
 //------------------------------------------------------
-string GreedyBestFirstAlg::EnqueueNeighbors(Position p, Position endNode) {
+string GreedyBestFirstAlg::EnqueueNeighbors(Position *p, Position endNode) {
     string s = "";
-    s += EnQ(p.row - 1, p.col - 1, p, endNode);
-    s += EnQ(p.row - 1, p.col, p, endNode);
-    s += EnQ(p.row - 1, p.col + 1, p, endNode);
-    s += EnQ(p.row, p.col + 1, p, endNode);
-    s += EnQ(p.row + 1, p.col + 1, p, endNode);
-    s += EnQ(p.row + 1, p.col, p, endNode);
-    s += EnQ(p.row + 1, p.col - 1, p, endNode);
-    s += EnQ(p.row, p.col - 1, p, endNode);
+    s += EnQ(p->row - 1, p->col - 1, p, endNode);
+    s += EnQ(p->row - 1, p->col, p, endNode);
+    s += EnQ(p->row - 1, p->col + 1, p, endNode);
+    s += EnQ(p->row, p->col + 1, p, endNode);
+    s += EnQ(p->row + 1, p->col + 1, p, endNode);
+    s += EnQ(p->row + 1, p->col, p, endNode);
+    s += EnQ(p->row + 1, p->col - 1, p, endNode);
+    s += EnQ(p->row, p->col - 1, p, endNode);
     return s;
 }
 //------------------------------------------------------
-string GreedyBestFirstAlg::EnQ(int row, int col, Position from, Position endNode) {
+string GreedyBestFirstAlg::EnQ(int row, int col, Position *from, Position endNode) {
     string s = ""; 
     //bounds check
     if (row >= map->size() || col >= map->size() || row < 0 || col < 0)
         return s;
     if (map->at(row).at(col)->visitable && !map->at(row).at(col)->visited) {
         map->at(row).at(col)->visited = true;
-        Position n(row, col);
-        n.heuristic = GetHeuristic(row, col, endNode);
+        Position *n = new Position(row, col);
+        n->from = from;
+        n->heuristic = GetHeuristic(row, col, endNode);
         q.push(n);
         s += gw->PrintNode(map->at(row).at(col), BROWN);
-        s += gw->PrintLine(map->at(from.row).at(from.col), map->at(row).at(col), BLACK);
+        s += gw->PrintLine(map->at(from->row).at(from->col), map->at(row).at(col), BLACK);
         s += gw->PrintAniData(DELAY);
     }
     return s;

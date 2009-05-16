@@ -25,7 +25,7 @@ class BreadthFirstAlg : public SearchAlg {
 
     private:
         GnuplotWriter* gw;
-        queue<Position> q;
+        queue<Position *> q;
 
   
     /*  +--------------+
@@ -38,8 +38,8 @@ class BreadthFirstAlg : public SearchAlg {
         vector<Node *> GetBestPath();
 
     private:
-        string EnqueueNeighbors(Position p);
-        string EnQ(int row, int col, Position from);
+        string EnqueueNeighbors(Position *p);
+        string EnQ(int row, int col, Position *from);
 };
 
 

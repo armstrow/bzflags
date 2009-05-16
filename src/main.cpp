@@ -94,9 +94,9 @@ int main(int argc, char** argv) {
     GnuplotWriter* gw = new GnuplotWriter(&controller->env);
     
     SearchAlg* alg;
-    //alg = new BreadthFirstAlg(WorldNodes, gw);
-    alg = new DepthFirstAlg(WorldNodes, gw);
-    //alg = new IterativeDeepeningSearch(WorldNodes, gw);
+    alg = new BreadthFirstAlg(WorldNodes, gw);
+    //alg = new DepthFirstAlg(WorldNodes, gw);
+    //alg = new IterativeDeepeningAlg(WorldNodes, gw);
     //alg = new GreedyBestFirstSearch(WorldNodes, gw);
     //alg = new AStartSearch(WorldNodes, gw);
 

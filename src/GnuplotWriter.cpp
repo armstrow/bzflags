@@ -73,7 +73,9 @@ string GnuplotWriter::PrintNode(Node* n, int color) {
 string GnuplotWriter::PrintFooterData() {
 	return "\n";
 }
-
+string GnuplotWriter::ClearScreen() {
+    return "\nclear\n";
+}
 void GnuplotWriter::PrintState(string s, double size, char * filename) {
     printf("Writing Plot Data to File: %s\n", filename);
     ofstream myfile;

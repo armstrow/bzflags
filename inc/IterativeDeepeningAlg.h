@@ -10,7 +10,7 @@
 #include <vector>
 #include <string>
 #include <string.h>
-#include <queue>
+#include <stack>
 
 class IterativeDeepeningAlg : public SearchAlg {
 
@@ -21,8 +21,9 @@ class IterativeDeepeningAlg : public SearchAlg {
     public:
 
     private:
+        int currMaxDepth;
         GnuplotWriter* gw;
-        queue<Position> q;
+        stack<Position> q;
 
 
 
@@ -34,10 +35,13 @@ class IterativeDeepeningAlg : public SearchAlg {
  
     public:
         IterativeDeepeningAlg(vector<vector<Node *> > *map, GnuplotWriter *writer);
-        string DoSearch(Node startNode, Node endNode);
+        string DoSearch(Position startNode, Position endNode);
         vector<Node *> GetBestPath();
 
     private:
+        string EnqueueNeighbors(Position p);
+        string EnQ(int row, int col, Position from);
+
 };
 
 

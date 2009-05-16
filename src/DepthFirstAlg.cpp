@@ -63,14 +63,14 @@ vector<Node *> DepthFirstAlg::GetBestPath() {
 //------------------------------------------------------
 string DepthFirstAlg::EnqueueNeighbors(Position p) {
     string s = "";
-        s += EnQ(p.row - 1, p.col - 1, p);
-        s += EnQ(p.row - 1, p.col, p);
-    	s += EnQ(p.row - 1, p.col + 1, p);
-	s += EnQ(p.row, p.col + 1, p);
-	s += EnQ(p.row + 1, p.col + 1, p);
-	s += EnQ(p.row + 1, p.col, p);
-        s += EnQ(p.row + 1, p.col - 1, p);
-        s += EnQ(p.row, p.col - 1, p);
+    s += EnQ(p.row - 1, p.col - 1, p);
+    s += EnQ(p.row - 1, p.col, p);
+    s += EnQ(p.row - 1, p.col + 1, p);
+    s += EnQ(p.row, p.col + 1, p);
+    s += EnQ(p.row + 1, p.col + 1, p);
+    s += EnQ(p.row + 1, p.col, p);
+    s += EnQ(p.row + 1, p.col - 1, p);
+    s += EnQ(p.row, p.col - 1, p);
     return s;
 }
 string DepthFirstAlg::EnQ(int row, int col, Position from) {

@@ -16,16 +16,16 @@ using namespace std;
 
 class Position{
    public:
-	int row, col;
-	Position(int r, int c) {
-		row = r;
-		col = c;
-	}
-	void set(int r, int c) {
-	    this->row = r;
-	    this->col = c;
-    	}
-	
+       int row, col;
+       Position(int r, int c) {
+           row = r;
+           col = c;
+       }
+       void set(int r, int c) {
+           this->row = r;
+           this->col = c;
+       }
+
 };
 
 

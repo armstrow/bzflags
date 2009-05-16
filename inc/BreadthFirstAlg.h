@@ -27,11 +27,9 @@ class BreadthFirstAlg : public SearchAlg {
         GnuplotWriter* gw;
         queue<Position> q;
 
-
-
   
     /*  +--------------+
-     *  |  VARIABLES   |
+     *  |  FUNCTIONS   |
      *  +--------------+ */
  
     public:

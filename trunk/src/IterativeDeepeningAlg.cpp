@@ -38,30 +38,32 @@ IterativeDeepeningAlg::IterativeDeepeningAlg(vector<vector<Node *> > *map, Gnupl
 //------------------------------------------------------
 string IterativeDeepeningAlg::DoSearch(Position startNode, Position endNode) {
     Position pos(startNode.row, startNode.col);
+    pos.level = 0;
     map->at(pos.row).at(pos.col)->visited = true;
     string s = "";
     s += gw->PrintNode(map->at(pos.row).at(pos.col), GREEN);
     s += gw->PrintNode(map->at(endNode.row).at(endNode.col), RED);
     s += gw->PrintAniData(DELAY);
 
-    int currLevel = 0;
     int maxDepth = 1;
-    int totalVisited = 0;
 
-    while (pos.row != endNode.row || pos.col != endNode.col) {
-        if(currLevel < maxDepth)
+    while ((pos.row != endNode.row || pos.col != endNode.col)) {
+        if(pos.level <= maxDepth){
             s += EnqueueNeighbors(pos);
-        else if(currLevel >= maxDepth && q.empty()){
-            //reset everything and increase the max level
-            maxDepth++;
+        }
+
+        if(q.empty()) {
+
             while(!q.empty())
                 q.pop();
+
             for(int i = 0; i < map->size(); i++)
                 for(int j = 0; j < map->at(i).size(); j++)
                     map->at(i).at(j)->visited = false;
-            totalVisited = 0;
-            currLevel = 0;
+
+            maxDepth += 1;
             pos.set(startNode.row, startNode.col);
+            pos.level = 0;
             continue;
         }
 
@@ -69,16 +71,14 @@ string IterativeDeepeningAlg::DoSearch(Position startNode, Position endNode) {
             cout << "Error, goal not found in DFS" << endl;
             return s;
         }
-        /*
-        */
 
         Position tmp = (Position)q.top();
         s += gw->PrintLine(map->at(pos.row).at(pos.col), map->at(tmp.row).at(tmp.col), ORANGE);
         s += gw->PrintAniData(DELAY);
         pos.set(tmp.row, tmp.col);
+        pos.level = tmp.level;
         q.pop();
         cout << "checking node at: " << pos.row << "," << pos.col << endl;
-        currLevel++;
     }
 
     return s;
@@ -106,9 +106,10 @@ string IterativeDeepeningAlg::EnQ(int row, int col, Position from) {
     //bounds check
     if (row >= map->size() || col >= map->size() || row < 0 || col < 0)
         return s;
-    if (map->at(row).at(col)->visitable &&  !map->at(row).at(col)->visited) {
+    if (map->at(row).at(col)->visitable && !map->at(row).at(col)->visited) {
         map->at(row).at(col)->visited = true;
         Position n(row, col);
+        n.level = from.level + 1;
         q.push(n);
         s += gw->PrintNode(map->at(row).at(col), BROWN);
         s += gw->PrintLine(map->at(from.row).at(from.col), map->at(row).at(col), BLACK);

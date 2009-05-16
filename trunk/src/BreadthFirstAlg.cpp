@@ -50,7 +50,7 @@ string BreadthFirstAlg::DoSearch(Position startNode, Position endNode) {
         s += gw->PrintAniData(DELAY);
         pos.set(tmp.row, tmp.col);
         q.pop();
-	cout << "checking node at: " << pos.row << "," << pos.col << endl;
+        cout << "checking node at: " << pos.row << "," << pos.col << endl;
     }
     cout << "Goal found!!!" << endNode.row << "," << endNode.col << endl;
     return s;
@@ -62,14 +62,14 @@ vector<Node *> BreadthFirstAlg::GetBestPath() {
 //------------------------------------------------------
 string BreadthFirstAlg::EnqueueNeighbors(Position p) {
     string s = "";
-        s += EnQ(p.row - 1, p.col - 1, p);
-        s += EnQ(p.row - 1, p.col, p);
-    	s += EnQ(p.row - 1, p.col + 1, p);
-	s += EnQ(p.row, p.col + 1, p);
-	s += EnQ(p.row + 1, p.col + 1, p);
-	s += EnQ(p.row + 1, p.col, p);
-        s += EnQ(p.row + 1, p.col - 1, p);
-        s += EnQ(p.row, p.col - 1, p);
+    s += EnQ(p.row - 1, p.col - 1, p);
+    s += EnQ(p.row - 1, p.col, p);
+    s += EnQ(p.row - 1, p.col + 1, p);
+    s += EnQ(p.row, p.col + 1, p);
+    s += EnQ(p.row + 1, p.col + 1, p);
+    s += EnQ(p.row + 1, p.col, p);
+    s += EnQ(p.row + 1, p.col - 1, p);
+    s += EnQ(p.row, p.col - 1, p);
     return s;
 }
 string BreadthFirstAlg::EnQ(int row, int col, Position from) {
@@ -77,7 +77,7 @@ string BreadthFirstAlg::EnQ(int row, int col, Position from) {
     //bounds check
     if (row >= map->size() || col >= map->size() || row < 0 || col < 0)
 	return s;
-    if (/*map->at(row).at(col)->visitable && */ !map->at(row).at(col)->visited) {
+    if (map->at(row).at(col)->visitable && !map->at(row).at(col)->visited) {
         map->at(row).at(col)->visited = true;
         Position n(row, col);
         q.push(n);

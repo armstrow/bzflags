@@ -15,18 +15,26 @@ using namespace std;
 
 
 class Position{
-   public:
-       int row, col, level;
-       Position(int r, int c) {
-           row = r;
-           col = c;
-           level = 0;
-       }
-       void set(int r, int c) {
-           this->row = r;
-           this->col = c;
-       }
+    public:
+        int row, col, level;
+        float heuristic;
+        Position(int r, int c) {
+            row = r;
+            col = c;
+            level = 0;
+            heuristic = 0;
+        }
+        void set(int r, int c) {
+            this->row = r;
+            this->col = c;
+        }
+};
 
+class ComparePosition {
+    public:
+        bool operator()(Position &p1, Position &p2) {
+            return p1.heuristic > p2.heuristic;
+        }
 };
 
 

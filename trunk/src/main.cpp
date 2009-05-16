@@ -19,6 +19,7 @@
 #include "DepthFirstAlg.h"
 #include "IterativeDeepeningAlg.h"
 #include "GreedyBestFirstAlg.h"
+#include "AStarAlg.h"
 
 
 using namespace std;
@@ -102,8 +103,8 @@ int main(int argc, char** argv) {
     //alg = new BreadthFirstAlg(WorldNodes, gw);
     //alg = new DepthFirstAlg(WorldNodes, gw);
     //alg = new IterativeDeepeningAlg(WorldNodes, gw);
-    alg = new GreedyBestFirstAlg(WorldNodes, gw);
-    //alg = new AStartSearch(WorldNodes, gw);
+    //alg = new GreedyBestFirstAlg(WorldNodes, gw);
+    alg = new AStarAlg(WorldNodes, gw);
 
     s += alg->DoSearch(startNode, endNode);
 

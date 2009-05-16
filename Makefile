@@ -5,7 +5,7 @@
 CC= g++
 FLAGS= -Wall -ggdb -Iinc -lpthread -lm
 EXENAME= robotter
-OBJECTS= obj/RobotController.o obj/BZFSCommunicator.o obj/Robot.o obj/EnvironmentData.o obj/PersonalData.o obj/MyTank.o obj/OtherTank.o obj/Shot.o obj/Obstacle.o obj/Flag.o obj/Team.o obj/Constant.o obj/Base.o obj/GnuplotWriter.o obj/BreadthFirstAlg.o obj/DepthFirstAlg.o obj/IterativeDeepeningAlg.o obj/GreedyBestFirstAlg.o
+OBJECTS= obj/RobotController.o obj/BZFSCommunicator.o obj/Robot.o obj/EnvironmentData.o obj/PersonalData.o obj/MyTank.o obj/OtherTank.o obj/Shot.o obj/Obstacle.o obj/Flag.o obj/Team.o obj/Constant.o obj/Base.o obj/GnuplotWriter.o obj/BreadthFirstAlg.o obj/DepthFirstAlg.o obj/IterativeDeepeningAlg.o obj/GreedyBestFirstAlg.o obj/AStarAlg.o
 
 
 
@@ -91,3 +91,6 @@ obj/IterativeDeepeningAlg.o: inc/IterativeDeepeningAlg.h src/IterativeDeepeningA
 
 obj/GreedyBestFirstAlg.o: inc/GreedyBestFirstAlg.h src/GreedyBestFirstAlg.cpp
 	$(CC) $(FLAGS) -c src/GreedyBestFirstAlg.cpp -o obj/GreedyBestFirstAlg.o
+
+obj/AStarAlg.o: inc/AStarAlg.h src/AStarAlg.cpp
+	$(CC) $(FLAGS) -c src/AStarAlg.cpp -o obj/AStarAlg.o

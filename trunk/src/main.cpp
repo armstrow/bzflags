@@ -56,7 +56,8 @@ void DiscretizeWorld(double NodeSize);
 Position GetStartNode();
 Position GetEndNode();
 Position GetNode(float xloc, float yloc);
-void SetVisitableNodes();
+bool IsVisitable(Node* n);
+void PrintVisitableNodes();
 bool IsBelowLine(Point test, Point p1, Point p2);
 bool IsAboveLine(Point test, Point p1, Point p2);
 bool IsLeftOfLine(Point test, Point p1, Point p2);
@@ -95,6 +96,9 @@ int main(int argc, char** argv) {
     GnuplotWriter* gw = new GnuplotWriter(&controller->env);
     
     SearchAlg* alg;
+    //alg = new BreadthFirstAlg(WorldNodes, gw);
+    //alg = new DepthFirstAlg(WorldNodes, gw);
+    //alg = new IterativeDeepeningSearch(WorldNodes, gw);
     //alg = new BreadthFirstAlg(WorldNodes, gw);
     //alg = new DepthFirstAlg(WorldNodes, gw);
     //alg = new IterativeDeepeningAlg(WorldNodes, gw);
@@ -167,53 +171,53 @@ void DiscretizeWorld(double NodeSize) {
         vector<Node*> tmp;
         for (int y = 0 - worldSize; y < worldSize; y += NodeSize) {
             Node* n = new Node(x, y, NodeSize);
+	    n->visitable = IsVisitable(n);
             tmp.push_back(n);
         }
         WorldNodes->push_back(tmp);
         //countR++;
     }
-    SetVisitableNodes();
+    PrintVisitableNodes();
     cout << "Created WorldNodes size: " << WorldNodes->size();
     //*worldNodes = retBuff;
 }
 
-void SetVisitableNodes() {
-    //Iterate through obstacles
-    int arraySize = WorldNodes->size() * WorldNodes->at(0).at(0)->length + 1;
-    bool map[arraySize][arraySize];
-    cout << "Setting Visible Nodes" << endl;
-    //initialize to true
-    for (int i = 0; i < arraySize; i++)
-	for (int j = 0; j < arraySize; j++)
-		map[i][j] = true;
-    for (int i = 0; i < controller->env.obstacles.size(); i ++) {
-	Obstacle currObst = controller->env.obstacles.at(i);
-        Point bl = currObst.corners.at(0);
-        Point br = currObst.corners.at(1);
-	if (bl.x == 85.68 && bl.y == 274.320007 && br.y == -274.320007)
-		bl.y = -274.320007;
-        Point tr = currObst.corners.at(2);
-        Point tl = currObst.corners.at(3);
-        for (int x = (int)bl.x; x <= (int)br.x; x++)
-		for (int y = (int)bl.y; y <= (int)tl.y; y++)
-			map[x+(arraySize / 2)][y+(arraySize / 2)] = false;
+bool IsVisitable(Node* n) {
+    //Get Center
+    float testx = n->x + (n->length / 2);
+    float testy = n->y + (n->length / 2);
+    int nvert;
+    bool c = false;
+
+
+    for (int o = 0; o < controller->env.obstacles.size(); o ++) {
+	Obstacle currObst = controller->env.obstacles.at(o);
+	nvert = currObst.corners.size();
+	float verty[4] = {currObst.corners.at(0).y, currObst.corners.at(1).y, currObst.corners.at(2).y, currObst.corners.at(3).y};
+	float vertx[4] = {currObst.corners.at(0).x, currObst.corners.at(1).x, currObst.corners.at(2).x, currObst.corners.at(3).x};
+	for (int i = 0, j = nvert-1; i < nvert; j = i++) {
+	    if ( ((verty[i]>testy) != (verty[j]>testy)) &&
+		 (testx < (vertx[j]-vertx[i]) * (testy-verty[i]) / (verty[j]-verty[i]) + vertx[i]) )
+	       c = !c;
+	}
+	if (c)
+	   return !c;
     }
+    return true;
+}
+void PrintVisitableNodes(){
     GnuplotWriter* g = new GnuplotWriter(&controller->env);
     string s = "";
     //iterate through corners
     for (int i = 0; i < WorldNodes->size(); i++) {
 	for (int j = 0; j < WorldNodes->size(); j++) {
-		int ns = WorldNodes->at(i).at(j)->length;
-		int row = WorldNodes->at(i).at(j)->x+(ns / 2) + (arraySize / 2);
-		int col = WorldNodes->at(i).at(j)->y+(ns / 2) +(arraySize / 2);
-		WorldNodes->at(i).at(j)->visitable = map[row][col];
-		if (map[row][col] == false)
-			s += g->PrintNode(WorldNodes->at(i).at(j), 6);
+	    if (WorldNodes->at(i).at(j)->visitable == false)
+		s += g->PrintNode(WorldNodes->at(i).at(j), 6);
 	}
     }
     s += g->PrintAniData(1);
     g->PrintState(s, WorldNodes->size() * WorldNodes->at(0).at(0)->length, "unvisitable.gpi");
-
+}
 
 
  /*   float middleX = n->x + n->length/2;
@@ -248,7 +252,7 @@ void SetVisitableNodes() {
     //cout << "VISITABLE!" << endl;
     return true;
 */
-}
+
 bool IsBelowLine(Point testPoint, Point linePt1, Point linePt2) {
     float m = GetSlope(linePt1, linePt2);
     float yVal = testPoint.x*m + GetB(linePt1, m);

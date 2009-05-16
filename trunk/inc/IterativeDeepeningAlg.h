@@ -22,7 +22,7 @@ class IterativeDeepeningAlg : public SearchAlg {
 
     private:
         GnuplotWriter* gw;
-        stack<Position> q;
+        stack<Position *> q;
 
 
 
@@ -38,8 +38,8 @@ class IterativeDeepeningAlg : public SearchAlg {
         vector<Node *> GetBestPath();
 
     private:
-        string EnqueueNeighbors(Position p);
-        string EnQ(int row, int col, Position from);
+        string EnqueueNeighbors(Position *p);
+        string EnQ(int row, int col, Position *from);
 
 };
 

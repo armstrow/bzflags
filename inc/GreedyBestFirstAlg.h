@@ -6,6 +6,7 @@
 #include "Node.h"
 #include "SearchAlg.h"
 #include "GnuplotWriter.h"
+#include "EnvironmentData.h"
 
 #include <vector>
 #include <string>
@@ -22,6 +23,8 @@ class GreedyBestFirstAlg : public SearchAlg {
      *  +--------------+ */
     
     public:
+        bool penalize;
+        EnvironmentData *env;
 
     private:
         GnuplotWriter* gw;
@@ -33,11 +36,14 @@ class GreedyBestFirstAlg : public SearchAlg {
      *  +--------------+ */
  
     public:
-        GreedyBestFirstAlg(vector<vector<Node *> > *map, GnuplotWriter* writer);
+        GreedyBestFirstAlg(vector<vector<Node *> > *map, GnuplotWriter* writer, bool penalized, EnvironmentData *env);
         string DoSearch(Position startNode, Position endNode);
         vector<Node *> GetBestPath();
 
     private:
+        void GetCenter(float *centerX, float *centerY, vector<Point> points);
+        void GetCenter(vector<Point> points);
+        Position GetNode(float xloc, float yloc);
         string EnqueueNeighbors(Position p, Position endNode);
         string EnQ(int row, int col, Position from, Position endNode);
         float GetHeuristic(int row, int col, Position pos);

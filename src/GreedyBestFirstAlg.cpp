@@ -6,6 +6,7 @@
 #include "GreedyBestFirstAlg.h"
 #include "SearchAlg.h"
 #include "GnuplotWriter.h"
+#include "EnvironmentData.h"
 #include <math.h>
 
 
@@ -28,9 +29,11 @@
 using namespace std;
 
 //------------------------------------------------------
-GreedyBestFirstAlg::GreedyBestFirstAlg(vector<vector<Node *> > *map, GnuplotWriter* writer): SearchAlg(map, writer) {
+GreedyBestFirstAlg::GreedyBestFirstAlg(vector<vector<Node *> > *map, GnuplotWriter* writer, bool penalize, EnvironmentData *env): SearchAlg(map, writer) {
     this->map = map;
     this->gw = writer;
+    this->penalize = penalize;
+    this->env = env;
 }
 //------------------------------------------------------
 string GreedyBestFirstAlg::DoSearch(Position startNode, Position endNode) {
@@ -65,7 +68,84 @@ string GreedyBestFirstAlg::DoSearch(Position startNode, Position endNode) {
 float GreedyBestFirstAlg::GetHeuristic(int row, int col, Position endNode) {
     float dist = sqrt( (row - endNode.row)*(row - endNode.row) +
                        (col - endNode.col)*(col - endNode.col) );
-    return dist;
+
+    float result = 0;
+
+    Node *aNode = map->at(0).at(0);
+    float nodeSize = aNode->length;
+    int mapWidth = map->size();
+
+    float tankValues = 0;
+    float wallValues = 0;
+    float obstValues = 0;
+
+    if(penalize) {
+        //iterate enemy tanks
+        for(int i = 0; i < env->otherTanks.size(); i++) {
+            OtherTank otherTank = env->otherTanks.at(i);
+            Position pos = GetNode(otherTank.x, otherTank.y);
+            float dist = sqrt( (row - pos.row)*(row - pos.row) +
+                               (col - pos.col)*(col - pos.col));
+            tankValues += (10 - dist < 0) ? 0 : 10 - dist;
+        }
+
+        //check the walls
+        double horizDist = (row < mapWidth/2) ? row : row - mapWidth/2;
+        double vertDist = (col < mapWidth/2) ? col : col - mapWidth/2;
+        //wallValues += 
+        
+
+        //check obstacles
+        for(int i = 0; i < env->obstacles.size(); i++) {
+            Obstacle currObst = env->obstacles.at(i);
+            float centerX;
+            float centerY;
+            GetCenter(&centerX, &centerY, currObst.corners);
+            Position pos = GetNode(centerX, centerY);
+            float dist = sqrt( (row - pos.row)*(row - pos.row) +
+                               (col - pos.col)*(col - pos.col) );
+            wallValues += dist;
+        }
+    }
+
+    result += tankValues*2;
+    result += wallValues*1.5;
+    result += dist;
+
+    return result;
+}
+//------------------------------------------------------
+void GreedyBestFirstAlg::GetCenter(float *centerX, float *centerY, vector<Point> points) {
+    float tempX = 0;
+    float tempY = 0;
+    for(int i = 0; i < points.size(); i++) {
+        Point p = points.at(i);
+        tempX += p.x;
+        tempY += p.y;
+    }
+    tempX *= .25;
+    tempY *= .25;
+    *centerX = tempX;
+    *centerY = tempY;
+}
+//------------------------------------------------------
+Position GreedyBestFirstAlg::GetNode(float xloc, float yloc) {
+    int ret[2];
+    double length = map->at(0).at(0)->length;
+    for (int c = 0; c < map->size(); c++) {
+        if ((map->at(0).at(c)->y - yloc) > (0 - length)) {
+            ret[1] = c;
+            break;
+        }
+    }
+    for (int r = 0; r < map->size(); r++) {
+        if ((map->at(r).at(0)->x - xloc) > (0 - length)) {
+            ret[0] = r;
+            break;
+        }
+    }
+    Position p(ret[0], ret[1]);
+    return p;
 }
 //------------------------------------------------------
 vector<Node *> GreedyBestFirstAlg::GetBestPath() {

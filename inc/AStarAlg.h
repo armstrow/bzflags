@@ -38,8 +38,8 @@ class AStarAlg : public SearchAlg {
         vector<Node *> GetBestPath();
 
     private:
-        string EnqueueNeighbors(Position p, Position endNode);
-        string EnQ(int row, int col, Position from, Position endNode);
+        string EnqueueNeighbors(Position* p, Position endNode);
+        string EnQ(int row, int col, Position* from, Position endNode);
         float GetHeuristic(int row, int col, Position pos);
 };
 

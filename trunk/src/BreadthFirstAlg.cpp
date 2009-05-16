@@ -72,6 +72,7 @@ string BreadthFirstAlg::EnqueueNeighbors(Position p) {
     s += EnQ(p.row, p.col - 1, p);
     return s;
 }
+//------------------------------------------------------
 string BreadthFirstAlg::EnQ(int row, int col, Position from) {
     string s = ""; 
     //bounds check
@@ -87,6 +88,7 @@ string BreadthFirstAlg::EnQ(int row, int col, Position from) {
     }
     return s;
 }
+//------------------------------------------------------
 
 
 

@@ -79,11 +79,19 @@ int main(int argc, char** argv) {
     else if(!ParseArgs(argc, argv)) {
         exit(0);
     }
-    double NodeS = 10;
+    double NodeS = 20;
     if (DEBUG && argc == 5)
         NodeS = atof(argv[4]);
     else if (!DEBUG && argc == 4)
         NodeS = atof(argv[3]);
+    
+    bool penalized = false;
+    if(DEBUG && argc == 6)
+        penalized = (strcmp(argv[5],"-p") == 0);
+    else if (!DEBUG && argc == 5)
+        penalized = (strcmp(argv[4],"-p") == 0);
+
+    cout << "penalized: " << (penalized ? "YES" : "NO" ) << endl;
 
     controller = new RobotController(SERVER, PORT);
     DiscretizeWorld(NodeS);
@@ -103,8 +111,13 @@ int main(int argc, char** argv) {
     //alg = new BreadthFirstAlg(WorldNodes, gw);
     //alg = new DepthFirstAlg(WorldNodes, gw);
     //alg = new IterativeDeepeningAlg(WorldNodes, gw);
+<<<<<<< .mine
+    alg = new GreedyBestFirstAlg(WorldNodes, gw, penalized, &controller->env);
+    //alg = new AStarAlg(WorldNodes, gw, penalized);
+=======
     //alg = new GreedyBestFirstAlg(WorldNodes, gw);
     alg = new AStarAlg(WorldNodes, gw);
+>>>>>>> .r67
 
     s += alg->DoSearch(startNode, endNode);
 
@@ -138,8 +151,7 @@ Position GetNode(float xloc, float yloc) {
             ret[1] = c;
             break;
         }
-    }
-    for (int r = 0; r < WorldNodes->size(); r++) {
+    } for (int r = 0; r < WorldNodes->size(); r++) {
         if ((WorldNodes->at(r).at(0)->x - xloc) > (0 - length)) {
             ret[0] = r;
             break;
@@ -172,7 +184,7 @@ void DiscretizeWorld(double NodeSize) {
         vector<Node*> tmp;
         for (int y = 0 - worldSize; y < worldSize; y += NodeSize) {
             Node* n = new Node(x, y, NodeSize);
-	    n->visitable = IsVisitable(n);
+    	    n->visitable = IsVisitable(n);
             tmp.push_back(n);
         }
         WorldNodes->push_back(tmp);
@@ -429,7 +441,7 @@ void RotateDegrees(MyTank *tank, int index, float originalAngle, float amount, b
 }
 //------------------------------------------------------
 bool ParseArgs(int argc, char** argv) {
-    if(argc < 3 || argc > 4)
+    if(argc < 3)// || argc > 4)
         return false;
     
     string currArg = "";

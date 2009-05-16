@@ -34,7 +34,6 @@ using namespace std;
 IterativeDeepeningAlg::IterativeDeepeningAlg(vector<vector<Node *> > *map, GnuplotWriter *writer): SearchAlg(map, writer) {
     this->map = map;
     this->gw = writer;
-    this->currMaxDepth = 1;
 }
 //------------------------------------------------------
 string IterativeDeepeningAlg::DoSearch(Position startNode, Position endNode) {
@@ -44,48 +43,44 @@ string IterativeDeepeningAlg::DoSearch(Position startNode, Position endNode) {
     s += gw->PrintNode(map->at(pos.row).at(pos.col), GREEN);
     s += gw->PrintNode(map->at(endNode.row).at(endNode.col), RED);
     s += gw->PrintAniData(DELAY);
-    int currLevel = 0;
-    while (pos.row != endNode.row || pos.col != endNode.col) {
-        //reset the dfs if we don't find anything
-        if(currLevel >= this->currMaxDepth && q.size() == 0) {
-            cout << "SHOULD BE SDLFK" << endl;
-            currLevel = -1;
-            this->currMaxDepth++;
 
+    int currLevel = 0;
+    int maxDepth = 1;
+    int totalVisited = 0;
+
+    while (pos.row != endNode.row || pos.col != endNode.col) {
+        if(currLevel < maxDepth)
+            s += EnqueueNeighbors(pos);
+        else if(currLevel >= maxDepth && q.empty()){
+            //reset everything and increase the max level
+            maxDepth++;
             while(!q.empty())
                 q.pop();
-
             for(int i = 0; i < map->size(); i++)
                 for(int j = 0; j < map->at(i).size(); j++)
                     map->at(i).at(j)->visited = false;
-
-            pos.row = startNode.row;
-            pos.col = startNode.col;
-
-            s += gw->ClearScreen();
-            s += gw->PrintNode(map->at(pos.row).at(pos.col), GREEN);
-            s += gw->PrintNode(map->at(endNode.row).at(endNode.col), RED);
-            s += gw->PrintAniData(DELAY);
+            totalVisited = 0;
+            currLevel = 0;
+            pos.set(startNode.row, startNode.col);
+            continue;
         }
 
-        if(currLevel < this->currMaxDepth)
-            s += EnqueueNeighbors(pos);
-        /*
         if (q.empty()) {
             cout << "Error, goal not found in DFS" << endl;
             return s;
         }
+        /*
         */
-        if(!q.empty()) {
-            Position tmp = (Position)q.top();
-            s += gw->PrintLine(map->at(pos.row).at(pos.col), map->at(tmp.row).at(tmp.col), ORANGE);
-            s += gw->PrintAniData(DELAY);
-            pos.set(tmp.row, tmp.col);
-            q.pop();
-            cout << "checking node at: " << pos.row << "," << pos.col << endl;
-        }
+
+        Position tmp = (Position)q.top();
+        s += gw->PrintLine(map->at(pos.row).at(pos.col), map->at(tmp.row).at(tmp.col), ORANGE);
+        s += gw->PrintAniData(DELAY);
+        pos.set(tmp.row, tmp.col);
+        q.pop();
+        cout << "checking node at: " << pos.row << "," << pos.col << endl;
         currLevel++;
     }
+
     return s;
 }
 //------------------------------------------------------

@@ -105,11 +105,11 @@ int main(int argc, char** argv) {
     GnuplotWriter* gw = new GnuplotWriter(&controller->env);
     
     SearchAlg* alg;
-    alg = new BreadthFirstAlg(WorldNodes, gw); //BT--DONE
+    //alg = new BreadthFirstAlg(WorldNodes, gw); //BT--DONE
     //alg = new DepthFirstAlg(WorldNodes, gw); //BT--DONE
     //alg = new IterativeDeepeningAlg(WorldNodes, gw);
-    //alg = new GreedyBestFirstAlg(WorldNodes, gw, penalized, &controller->env); //BT--DONE
-    //alg = new AStarAlg(WorldNodes, gw); //BT--DONE
+    alg = new GreedyBestFirstAlg(WorldNodes, gw, penalized, &controller->env); //BT--DONE
+    //alg = new AStarAlg(WorldNodes, gw, penalized, &controller->env); //BT--DONE
 
     s += alg->DoSearch(startNode, endNode);
 

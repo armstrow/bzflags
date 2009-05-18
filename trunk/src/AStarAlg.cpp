@@ -21,6 +21,11 @@
 
 #define DELAY   0.1
 
+#define TANK_PENALTY_SIZE 2
+#define OBST_PENALTY_SIZE 1.5
+#define TANK_PENALTY_FAC 5
+#define OBST_PENALTY_FAC 5
+
 
 /* +--------------------------------+
  * |             PUBLIC             |
@@ -28,9 +33,11 @@
 using namespace std;
 
 //------------------------------------------------------
-AStarAlg::AStarAlg(vector<vector<Node *> > *map, GnuplotWriter* writer): SearchAlg(map, writer) {
+AStarAlg::AStarAlg(vector<vector<Node *> > *map, GnuplotWriter* writer, bool penalized, EnvironmentData *env): SearchAlg(map, writer) {
     this->map = map;
     this->gw = writer;
+    this->penalize = penalized;
+    this->env = env;
 }
 //------------------------------------------------------
 string AStarAlg::DoSearch(Position startNode, Position endNode) {
@@ -60,7 +67,7 @@ string AStarAlg::DoSearch(Position startNode, Position endNode) {
         s += gw->PrintAniData(DELAY);
         pos = tmp;
         q.pop();
-        cout << "checking node at: " << pos->row << "," << pos->col << endl;
+       // cout << "checking node at: " << pos->row << "," << pos->col << endl;
     }
 
     Position *lastPos = pos;
@@ -77,15 +84,106 @@ string AStarAlg::DoSearch(Position startNode, Position endNode) {
     */
 }
 //------------------------------------------------------
-float AStarAlg::GetHeuristic(int row, int col, Position endNode) {
-    float ns = map->at(row).at(col)->length / 2;	
-    float x = map->at(row).at(col)->x + ns;
-    float y = map->at(row).at(col)->y + ns;
-    float endX = map->at(endNode.row).at(endNode.col)->x + ns;
-    float endY = map->at(endNode.row).at(endNode.col)->y + ns;
+void AStarAlg::GetCenter(float *centerX, float *centerY, vector<Point> points) {
+    float tempX = 0;
+    float tempY = 0;
+    for(int i = 0; i < points.size(); i++) {
+        Point p = points.at(i);
+        tempX += p.x;
+        tempY += p.y;
+    }
+    tempX *= .25;
+    tempY *= .25;
+    *centerX = tempX;
+    *centerY = tempY;
+}
+//------------------------------------------------------
+Position AStarAlg::GetNode(float xloc, float yloc) {
+    int ret[2];
+    double length = map->at(0).at(0)->length;
+    for (int c = 0; c < map->size(); c++) {
+        if ((map->at(0).at(c)->y - yloc) > (0 - length)) {
+            ret[1] = c;
+            break;
+        }
+    }
+    for (int r = 0; r < map->size(); r++) {
+        if ((map->at(r).at(0)->x - xloc) > (0 - length)) {
+            ret[0] = r;
+            break;
+        }
+    }
+    Position p(ret[0], ret[1]);
+    return p;
+}
+
+//------------------------------------------------------
+float AStarAlg::GetRealDistance(Position start, Position end) {
+	float ns = map->at(start.row).at(start.col)->length / 2;	
+    float x = map->at(start.row).at(start.col)->x + ns;
+    float y = map->at(start.row).at(start.col)->y + ns;
+    float endX = map->at(end.row).at(end.col)->x + ns;
+    float endY = map->at(end.row).at(end.col)->y + ns;
     float dist = sqrt( (x - endX)*(x - endX) +
             (y - endY)*(y - endY) );
     return dist;
+}
+
+float AStarAlg::GetHeuristic(int row, int col, Position endNode) {
+	 Position start(row, col);    
+    float dist = GetRealDistance(start, endNode);
+    
+    float result = 0;
+
+    Node *aNode = map->at(0).at(0);
+    float nodeSize = aNode->length;
+    int mapWidth = map->size();
+    int mapSize = mapWidth * map->at(0).at(0)->length;
+
+    float tankValues = 0;
+    float wallValues = 0;
+    float obstValues = 0;
+
+    if(penalize) {
+    		//cout << "Penalizing!!" << endl;
+        //iterate enemy tanks
+        for(int i = 0; i < env->otherTanks.size(); i++) {
+            OtherTank otherTank = env->otherTanks.at(i);
+            Position pos = GetNode(otherTank.x, otherTank.y);
+            float dist = GetRealDistance(start, pos);
+            float radius = nodeSize * TANK_PENALTY_SIZE;
+            float offBy = (radius - dist < 0) ? 0 : radius - dist;
+            tankValues += offBy * TANK_PENALTY_FAC;
+            //if (offBy > 0) cout << "Tank Penalty Added!!!!!!!" << offBy << endl;
+        }
+
+        //check the walls
+        double horizDist = (row < mapWidth/2) ? row : row - mapWidth/2;
+        double vertDist = (col < mapWidth/2) ? col : col - mapWidth/2;
+        
+        
+
+        //check obstacles
+        for(int i = 0; i < env->obstacles.size(); i++) {
+            Obstacle currObst = env->obstacles.at(i);
+            float centerX;
+            float centerY;
+            GetCenter(&centerX, &centerY, currObst.corners);
+            Position pos = GetNode(centerX, centerY);
+            float dist = GetRealDistance(start, pos);
+            Position corner = GetNode(currObst.corners.at(0).x, currObst.corners.at(0).y);
+            float radius = GetRealDistance(pos, corner) * OBST_PENALTY_SIZE;
+            float offBy = (radius - dist < 0) ? 0 : radius - dist;
+            wallValues += offBy * OBST_PENALTY_FAC;
+            //if (offBy > 0) cout << "Obstacle Penalty Added!!!!!!!" << offBy << endl;
+        }
+    }
+
+    result += tankValues;
+    result += wallValues;
+    result += dist;
+
+    return result;
 }
 //------------------------------------------------------
 vector<Node *> AStarAlg::GetBestPath() {
@@ -124,7 +222,7 @@ string AStarAlg::EnQ(int row, int col, Position* from, Position endNode) {
         /*n.distSoFar = dist;
           n.from = from; 
           n.heuristic = dist + GetHeuristic(row, col, endNode);*/
-        cout << "Enqueued Node: (" << row << "," << col << "):" << n->heuristic << " = " << dist << " + " << GetHeuristic (row, col, endNode) << endl;
+        //cout << "Enqueued Node: (" << row << "," << col << "):" << n->heuristic << " = " << dist << " + " << GetHeuristic (row, col, endNode) << endl;
         q.push(n);
         s += gw->PrintNode(map->at(row).at(col), BROWN);
         s += gw->PrintLine(map->at(from->row).at(from->col), map->at(row).at(col), BLACK);

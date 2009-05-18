@@ -43,7 +43,7 @@ string IterativeDeepeningAlg::DoSearch(Position startNode, Position endNode) {
     string s = "";
     s += gw->PrintNode(map->at(pos.row).at(pos.col), GREEN);
     s += gw->PrintNode(map->at(endNode.row).at(endNode.col), RED);
-    s += gw->PrintAniData(DELAY);
+    //s += gw->PrintAniData(DELAY);
 
     int maxDepth = 1;
 
@@ -73,8 +73,8 @@ string IterativeDeepeningAlg::DoSearch(Position startNode, Position endNode) {
         }
 
         Position *tmp = q.top();
-        s += gw->PrintLine(map->at(currPos->row).at(currPos->col), map->at(tmp->row).at(tmp->col), ORANGE);
-        s += gw->PrintAniData(DELAY);
+        //s += gw->PrintLine(map->at(currPos->row).at(currPos->col), map->at(tmp->row).at(tmp->col), ORANGE);
+        //s += gw->PrintAniData(DELAY);
         currPos = tmp;
         q.pop();
         cout << "checking node at: " << currPos->row << "," << currPos->col << endl;
@@ -121,7 +121,7 @@ string IterativeDeepeningAlg::EnQ(int row, int col, Position *from) {
         q.push(n);
         s += gw->PrintNode(map->at(row).at(col), BROWN);
         s += gw->PrintLine(map->at(from->row).at(from->col), map->at(row).at(col), BLACK);
-        s += gw->PrintAniData(DELAY);
+        //s += gw->PrintAniData(DELAY);
     }
     return s;
 }

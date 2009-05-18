@@ -19,6 +19,38 @@ set arrow from 0.000001, -148.535812 to 48.535809, -100.000000 nohead lt 3
 set arrow from 48.535809, -100.000000 to -0.000001, -51.464191 nohead lt 3
 set arrow from -0.000001, -51.464191 to -48.535809, -100.000000 nohead lt 3
 set arrow from -48.535809, -100.000000 to 0.000001, -148.535812 nohead lt 3
+set arrow from -120.000000, -40.000000 to -80.000000, -40.000000 nohead lt 6
+set arrow from -80.000000, -40.000000 to -80.000000, 0.000000 nohead lt 6
+set arrow from -80.000000, 0.000000 to -120.000000, 0.000000 nohead lt 6
+set arrow from -120.000000, 0.000000 to -120.000000, -40.000000 nohead lt 6
+set arrow from -120.000000, 0.000000 to -80.000000, 0.000000 nohead lt 6
+set arrow from -80.000000, 0.000000 to -80.000000, 40.000000 nohead lt 6
+set arrow from -80.000000, 40.000000 to -120.000000, 40.000000 nohead lt 6
+set arrow from -120.000000, 40.000000 to -120.000000, 0.000000 nohead lt 6
+set arrow from -40.000000, -120.000000 to 0.000000, -120.000000 nohead lt 6
+set arrow from 0.000000, -120.000000 to 0.000000, -80.000000 nohead lt 6
+set arrow from 0.000000, -80.000000 to -40.000000, -80.000000 nohead lt 6
+set arrow from -40.000000, -80.000000 to -40.000000, -120.000000 nohead lt 6
+set arrow from -40.000000, 80.000000 to 0.000000, 80.000000 nohead lt 6
+set arrow from 0.000000, 80.000000 to 0.000000, 120.000000 nohead lt 6
+set arrow from 0.000000, 120.000000 to -40.000000, 120.000000 nohead lt 6
+set arrow from -40.000000, 120.000000 to -40.000000, 80.000000 nohead lt 6
+set arrow from 0.000000, -120.000000 to 40.000000, -120.000000 nohead lt 6
+set arrow from 40.000000, -120.000000 to 40.000000, -80.000000 nohead lt 6
+set arrow from 40.000000, -80.000000 to 0.000000, -80.000000 nohead lt 6
+set arrow from 0.000000, -80.000000 to 0.000000, -120.000000 nohead lt 6
+set arrow from 0.000000, 80.000000 to 40.000000, 80.000000 nohead lt 6
+set arrow from 40.000000, 80.000000 to 40.000000, 120.000000 nohead lt 6
+set arrow from 40.000000, 120.000000 to 0.000000, 120.000000 nohead lt 6
+set arrow from 0.000000, 120.000000 to 0.000000, 80.000000 nohead lt 6
+set arrow from 80.000000, -40.000000 to 120.000000, -40.000000 nohead lt 6
+set arrow from 120.000000, -40.000000 to 120.000000, 0.000000 nohead lt 6
+set arrow from 120.000000, 0.000000 to 80.000000, 0.000000 nohead lt 6
+set arrow from 80.000000, 0.000000 to 80.000000, -40.000000 nohead lt 6
+set arrow from 80.000000, 0.000000 to 120.000000, 0.000000 nohead lt 6
+set arrow from 120.000000, 0.000000 to 120.000000, 40.000000 nohead lt 6
+set arrow from 120.000000, 40.000000 to 80.000000, 40.000000 nohead lt 6
+set arrow from 80.000000, 40.000000 to 80.000000, 0.000000 nohead lt 6
 
 plot '-' with lines
 0 0 0 0

@@ -22,6 +22,11 @@
 
 #define DELAY   0.1
 
+#define TANK_PENALTY_SIZE 1
+#define OBST_PENALTY_SIZE 1.5
+#define TANK_PENALTY_FAC 2
+#define OBST_PENALTY_FAC 2
+
 
 /* +--------------------------------+
  * |             PUBLIC             |
@@ -98,8 +103,9 @@ float GreedyBestFirstAlg::GetHeuristic(int row, int col, Position endNode) {
             Position pos = GetNode(otherTank.x, otherTank.y);
             float dist = sqrt( (row - pos.row)*(row - pos.row) +
                                (col - pos.col)*(col - pos.col));
-            float radius = 100/nodeSize;
-            tankValues += (radius - dist < 0) ? 0 : radius - dist;
+            float radius = 100/nodeSize * TANK_PENALTY_SIZE;
+            float offBy = (radius - dist < 0) ? 0 : radius - dist;
+            tankValues += offBy * TANK_PENALTY_FAC;
         }
 
         //check the walls
@@ -117,12 +123,18 @@ float GreedyBestFirstAlg::GetHeuristic(int row, int col, Position endNode) {
             Position pos = GetNode(centerX, centerY);
             float dist = sqrt( (row - pos.row)*(row - pos.row) +
                                (col - pos.col)*(col - pos.col) );
-            wallValues += dist;
+            Position corner = GetNode(currObst.corners.at(0).x, currObst.corners.at(0).y);
+            float radius = sqrt( (corner.row - pos.row)*(corner.row - pos.row) +
+                               (corner.col - pos.col)*(corner.col - pos.col) ) * OBST_PENALTY_SIZE;
+            float offBy = (radius - dist < 0) ? 0 : radius - dist;
+            wallValues += offBy * OBST_PENALTY_FAC;
+            //if (offBy > 0) cout << "Obstacle Penalty Added!!!!!!!" << offBy << endl;
+            //wallValues += dist;
         }
     }
 
     result += tankValues;
-    //result += wallValues*1.5;
+    result += wallValues;
     result += dist;
 
     return result;

@@ -24,6 +24,7 @@
 /* +--------------------------------+
  * |             PUBLIC             |
  * +--------------------------------+  */
+
 using namespace std;
 
 //------------------------------------------------------
@@ -41,6 +42,7 @@ string BreadthFirstAlg::DoSearch(Position startNode, Position endNode) {
     s += gw->PrintAniData(DELAY);
 
     Position *currPos = &pos;
+    int nodesPopped = 0;
     while (currPos->row != endNode.row || currPos->col != endNode.col) {
         s += EnqueueNeighbors(currPos);
         if (q.empty()) {
@@ -52,16 +54,21 @@ string BreadthFirstAlg::DoSearch(Position startNode, Position endNode) {
         s += gw->PrintAniData(DELAY);
         currPos = tmp;
         q.pop();
-        cout << "checking node at: " << currPos->row << "," << currPos->col << endl;
+        nodesPopped++;
+        //cout << "checking node at: " << currPos->row << "," << currPos->col << endl;
     }
 
+    cout << "              NODES POPPED: " << nodesPopped << endl;
     Position *lastPos = currPos;
+    int pathLength = 0;
     while(lastPos->col != startNode.col || lastPos->row != startNode.row) {
         cout << "in loop" << endl;
         s += gw->PrintLine(map->at(lastPos->row).at(lastPos->col), map->at(lastPos->from->row).at(lastPos->from->col), GREEN);
         s += gw->PrintAniData(0);
         lastPos = lastPos->from;
+        pathLength++;
     }
+    cout << "              PATH LENGTH: " << pathLength << endl;
 
     cout << "Goal found!!!" << endNode.row << "," << endNode.col << endl;
     return s;

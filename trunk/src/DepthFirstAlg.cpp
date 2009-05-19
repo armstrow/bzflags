@@ -40,7 +40,7 @@ string DepthFirstAlg::DoSearch(Position startNode, Position endNode) {
     string s = "";
     s += gw->PrintNode(map->at(pos.row).at(pos.col), GREEN);
     s += gw->PrintNode(map->at(endNode.row).at(endNode.col), RED);
-    s += gw->PrintAniData(DELAY);
+    //s += gw->PrintAniData(DELAY);
 
     Position *currPos = &pos;
     int nodesPopped = 0;
@@ -52,7 +52,7 @@ string DepthFirstAlg::DoSearch(Position startNode, Position endNode) {
         }
         Position *tmp = q.top();
         s += gw->PrintLine(map->at(currPos->row).at(currPos->col), map->at(tmp->row).at(tmp->col), ORANGE);
-        s += gw->PrintAniData(DELAY);
+        //s += gw->PrintAniData(DELAY);
         currPos = tmp;
         q.pop();
         nodesPopped++;
@@ -66,7 +66,6 @@ string DepthFirstAlg::DoSearch(Position startNode, Position endNode) {
     while(lastPos->col != startNode.col || lastPos->row != startNode.row) {
         cout << "in loop" << endl;
         s += gw->PrintLine(map->at(lastPos->row).at(lastPos->col), map->at(lastPos->from->row).at(lastPos->from->col), GREEN);
-        s += gw->PrintAniData(0);
         lastPos = lastPos->from;
         pathLength++;
     }
@@ -74,6 +73,7 @@ string DepthFirstAlg::DoSearch(Position startNode, Position endNode) {
     /*
     */
 
+    s += gw->PrintAniData(0);
     return s;
 }
 //------------------------------------------------------
@@ -105,7 +105,7 @@ string DepthFirstAlg::EnQ(int row, int col, Position *from) {
         q.push(n);
         s += gw->PrintNode(map->at(row).at(col), BROWN);
         s += gw->PrintLine(map->at(from->row).at(from->col), map->at(row).at(col), BLACK);
-        s += gw->PrintAniData(DELAY);
+        //s += gw->PrintAniData(DELAY);
     }
     return s;
 }

@@ -48,6 +48,7 @@ string IterativeDeepeningAlg::DoSearch(Position startNode, Position endNode) {
     int maxDepth = 1;
 
     Position *currPos = &pos;
+    int nodesPopped = 0;
     while ((currPos->row != endNode.row || currPos->col != endNode.col)) {
         if(currPos->level <= maxDepth){
             s += EnqueueNeighbors(currPos);
@@ -73,20 +74,23 @@ string IterativeDeepeningAlg::DoSearch(Position startNode, Position endNode) {
         }
 
         Position *tmp = q.top();
-        //s += gw->PrintLine(map->at(currPos->row).at(currPos->col), map->at(tmp->row).at(tmp->col), ORANGE);
-        //s += gw->PrintAniData(DELAY);
         currPos = tmp;
         q.pop();
-        cout << "checking node at: " << currPos->row << "," << currPos->col << endl;
+        nodesPopped++;
+        //cout << "checking node at: " << currPos->row << "," << currPos->col << endl;
     }
+    cout << "              NODES POPPED: " << nodesPopped << endl;
 
     Position *lastPos = currPos;
+    int pathLength = 0;
     while(lastPos->col != startNode.col || lastPos->row != startNode.row) {
         cout << "in loop" << endl;
         s += gw->PrintLine(map->at(lastPos->row).at(lastPos->col), map->at(lastPos->from->row).at(lastPos->from->col), GREEN);
         s += gw->PrintAniData(0);
         lastPos = lastPos->from;
+        pathLength++;
     }
+    cout << "              PATH LENGTH: " << pathLength << endl;
 
     return s;
 }

@@ -54,6 +54,7 @@ string GreedyBestFirstAlg::DoSearch(Position startNode, Position endNode) {
 
     Position *currPos = &pos;
 
+    int nodesPopped = 0;
     while (currPos->row != endNode.row || currPos->col != endNode.col) {
         s += EnqueueNeighbors(currPos, endNode);
         if (q.empty()) {
@@ -65,16 +66,24 @@ string GreedyBestFirstAlg::DoSearch(Position startNode, Position endNode) {
         s += gw->PrintAniData(DELAY);
         currPos = tmp;
         q.pop();
+        nodesPopped++;
         cout << "checking node at: " << currPos->row << "," << currPos->col << endl;
     }
+    cout << "              NODES POPPED: " << nodesPopped << endl;
     
     Position *lastPos = currPos;
+    float pathCost = 0;
+    int pathLength = 0;
     while(lastPos->col != startNode.col || lastPos->row != startNode.row) {
         cout << "in loop" << endl;
         s += gw->PrintLine(map->at(lastPos->row).at(lastPos->col), map->at(lastPos->from->row).at(lastPos->from->col), GREEN);
         s += gw->PrintAniData(0);
+        pathCost += lastPos->heuristic;
         lastPos = lastPos->from;
+        pathLength++;
     }
+    cout << "              PATH COST  : " << pathCost << endl;
+    cout << "              PATH LENGTH: " << pathLength << endl;
 
     cout << "Goal found!!!" << endNode.row << "," << endNode.col << endl;
     return s;

@@ -65,7 +65,7 @@ string AStarAlg::DoSearch(Position startNode, Position endNode) {
         }
         map->at(tmp->row).at(tmp->col)->visited = true;
         s += gw->PrintLine(map->at(pos->row).at(pos->col), map->at(tmp->row).at(tmp->col), ORANGE);
-        s += gw->PrintAniData(DELAY);
+        //s += gw->PrintAniData(DELAY);
         pos = tmp;
         q.pop();
         nodesPopped++;
@@ -79,7 +79,6 @@ string AStarAlg::DoSearch(Position startNode, Position endNode) {
     while(lastPos->col != startNode.col || lastPos->row != startNode.row) {
         cout << "in loop" << endl;
         s += gw->PrintLine(map->at(lastPos->row).at(lastPos->col), map->at(lastPos->from->row).at(lastPos->from->col), GREEN);
-        s += gw->PrintAniData(0);
         pathCost += lastPos->heuristic;
         lastPos = lastPos->from;
         pathLength++;
@@ -88,6 +87,7 @@ string AStarAlg::DoSearch(Position startNode, Position endNode) {
     cout << "              PATH LENGTH: " << pathLength << endl;
 
     cout << "Goal found!!!" << endNode.row << "," << endNode.col << endl;
+    s += gw->PrintAniData(0);
     return s;
     /*
     */
@@ -235,7 +235,7 @@ string AStarAlg::EnQ(int row, int col, Position* from, Position endNode) {
         q.push(n);
         s += gw->PrintNode(map->at(row).at(col), BROWN);
         s += gw->PrintLine(map->at(from->row).at(from->col), map->at(row).at(col), BLACK);
-        s += gw->PrintAniData(DELAY);
+        //s += gw->PrintAniData(DELAY);
     }
     return s;
 }

@@ -6,8 +6,7 @@
 #include "SearchAlg.h"
 #include "GnuplotWriter.h"
 #include <string>
-#include <string.h>
-#include "Node.h"
+#include <string.h> #include "Node.h"
 
 #define BLACK  -1
 #define RED     1
@@ -86,12 +85,12 @@ string IterativeDeepeningAlg::DoSearch(Position startNode, Position endNode) {
     while(lastPos->col != startNode.col || lastPos->row != startNode.row) {
         cout << "in loop" << endl;
         s += gw->PrintLine(map->at(lastPos->row).at(lastPos->col), map->at(lastPos->from->row).at(lastPos->from->col), GREEN);
-        s += gw->PrintAniData(0);
         lastPos = lastPos->from;
         pathLength++;
     }
     cout << "              PATH LENGTH: " << pathLength << endl;
 
+    s += gw->PrintAniData(0);
     return s;
 }
 //------------------------------------------------------

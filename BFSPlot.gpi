@@ -31,140 +31,68 @@ set arrow from 200.000000, 0.000000 to 200.000000, -200.000000 nohead lt 1
 plot '-' with lines
 0 0 0 0
 e
-pause 0.050000
+pause 0.100000
 set arrow from -400.000000, 0.000000 to -200.000000, 0.000000 nohead lt 6
 set arrow from -200.000000, 0.000000 to -200.000000, 200.000000 nohead lt 6
 set arrow from -200.000000, 200.000000 to -400.000000, 200.000000 nohead lt 6
 set arrow from -400.000000, 200.000000 to -400.000000, 0.000000 nohead lt 6
 set arrow from -300.000000, -100.000000 to -300.000000, 100.000000 nohead lt -1
-
-plot '-' with lines
-0 0 0 0
-e
-pause 0.050000
 set arrow from -200.000000, 0.000000 to 0.000000, 0.000000 nohead lt 6
 set arrow from 0.000000, 0.000000 to 0.000000, 200.000000 nohead lt 6
 set arrow from 0.000000, 200.000000 to -200.000000, 200.000000 nohead lt 6
 set arrow from -200.000000, 200.000000 to -200.000000, 0.000000 nohead lt 6
 set arrow from -300.000000, -100.000000 to -100.000000, 100.000000 nohead lt -1
-
-plot '-' with lines
-0 0 0 0
-e
-pause 0.050000
 set arrow from -200.000000, -200.000000 to 0.000000, -200.000000 nohead lt 6
 set arrow from 0.000000, -200.000000 to 0.000000, 0.000000 nohead lt 6
 set arrow from 0.000000, 0.000000 to -200.000000, 0.000000 nohead lt 6
 set arrow from -200.000000, 0.000000 to -200.000000, -200.000000 nohead lt 6
 set arrow from -300.000000, -100.000000 to -100.000000, -100.000000 nohead lt -1
-
-plot '-' with lines
-0 0 0 0
-e
-pause 0.050000
 set arrow from -200.000000, -400.000000 to 0.000000, -400.000000 nohead lt 6
 set arrow from 0.000000, -400.000000 to 0.000000, -200.000000 nohead lt 6
 set arrow from 0.000000, -200.000000 to -200.000000, -200.000000 nohead lt 6
 set arrow from -200.000000, -200.000000 to -200.000000, -400.000000 nohead lt 6
 set arrow from -300.000000, -100.000000 to -100.000000, -300.000000 nohead lt -1
-
-plot '-' with lines
-0 0 0 0
-e
-pause 0.050000
 set arrow from -400.000000, -400.000000 to -200.000000, -400.000000 nohead lt 6
 set arrow from -200.000000, -400.000000 to -200.000000, -200.000000 nohead lt 6
 set arrow from -200.000000, -200.000000 to -400.000000, -200.000000 nohead lt 6
 set arrow from -400.000000, -200.000000 to -400.000000, -400.000000 nohead lt 6
 set arrow from -300.000000, -100.000000 to -300.000000, -300.000000 nohead lt -1
-
-plot '-' with lines
-0 0 0 0
-e
-pause 0.050000
-set arrow from -300.000000, -100.000000 to -300.000000, -300.000000 nohead lt 8
-
-plot '-' with lines
-0 0 0 0
-e
-pause 0.050000
-set arrow from -300.000000, -300.000000 to -100.000000, -300.000000 nohead lt 8
-
-plot '-' with lines
-0 0 0 0
-e
-pause 0.050000
+set arrow from -300.000000, -100.000000 to -100.000000, -100.000000 nohead lt 8
+set arrow from 0.000000, 0.000000 to 200.000000, 0.000000 nohead lt 6
+set arrow from 200.000000, 0.000000 to 200.000000, 200.000000 nohead lt 6
+set arrow from 200.000000, 200.000000 to 0.000000, 200.000000 nohead lt 6
+set arrow from 0.000000, 200.000000 to 0.000000, 0.000000 nohead lt 6
+set arrow from -100.000000, -100.000000 to 100.000000, 100.000000 nohead lt -1
 set arrow from 0.000000, -200.000000 to 200.000000, -200.000000 nohead lt 6
 set arrow from 200.000000, -200.000000 to 200.000000, 0.000000 nohead lt 6
 set arrow from 200.000000, 0.000000 to 0.000000, 0.000000 nohead lt 6
 set arrow from 0.000000, 0.000000 to 0.000000, -200.000000 nohead lt 6
-set arrow from -100.000000, -300.000000 to 100.000000, -100.000000 nohead lt -1
-
-plot '-' with lines
-0 0 0 0
-e
-pause 0.050000
+set arrow from -100.000000, -100.000000 to 100.000000, -100.000000 nohead lt -1
 set arrow from 0.000000, -400.000000 to 200.000000, -400.000000 nohead lt 6
 set arrow from 200.000000, -400.000000 to 200.000000, -200.000000 nohead lt 6
 set arrow from 200.000000, -200.000000 to 0.000000, -200.000000 nohead lt 6
 set arrow from 0.000000, -200.000000 to 0.000000, -400.000000 nohead lt 6
-set arrow from -100.000000, -300.000000 to 100.000000, -300.000000 nohead lt -1
-
-plot '-' with lines
-0 0 0 0
-e
-pause 0.050000
-set arrow from -100.000000, -300.000000 to 100.000000, -300.000000 nohead lt 8
-
-plot '-' with lines
-0 0 0 0
-e
-pause 0.050000
+set arrow from -100.000000, -100.000000 to 100.000000, -300.000000 nohead lt -1
+set arrow from -100.000000, -100.000000 to 100.000000, -100.000000 nohead lt 8
+set arrow from 200.000000, 0.000000 to 400.000000, 0.000000 nohead lt 6
+set arrow from 400.000000, 0.000000 to 400.000000, 200.000000 nohead lt 6
+set arrow from 400.000000, 200.000000 to 200.000000, 200.000000 nohead lt 6
+set arrow from 200.000000, 200.000000 to 200.000000, 0.000000 nohead lt 6
+set arrow from 100.000000, -100.000000 to 300.000000, 100.000000 nohead lt -1
 set arrow from 200.000000, -200.000000 to 400.000000, -200.000000 nohead lt 6
 set arrow from 400.000000, -200.000000 to 400.000000, 0.000000 nohead lt 6
 set arrow from 400.000000, 0.000000 to 200.000000, 0.000000 nohead lt 6
 set arrow from 200.000000, 0.000000 to 200.000000, -200.000000 nohead lt 6
-set arrow from 100.000000, -300.000000 to 300.000000, -100.000000 nohead lt -1
-
-plot '-' with lines
-0 0 0 0
-e
-pause 0.050000
+set arrow from 100.000000, -100.000000 to 300.000000, -100.000000 nohead lt -1
 set arrow from 200.000000, -400.000000 to 400.000000, -400.000000 nohead lt 6
 set arrow from 400.000000, -400.000000 to 400.000000, -200.000000 nohead lt 6
 set arrow from 400.000000, -200.000000 to 200.000000, -200.000000 nohead lt 6
 set arrow from 200.000000, -200.000000 to 200.000000, -400.000000 nohead lt 6
-set arrow from 100.000000, -300.000000 to 300.000000, -300.000000 nohead lt -1
-
-plot '-' with lines
-0 0 0 0
-e
-pause 0.050000
-set arrow from 100.000000, -300.000000 to 300.000000, -300.000000 nohead lt 8
-
-plot '-' with lines
-0 0 0 0
-e
-pause 0.050000
-set arrow from 300.000000, -300.000000 to 300.000000, -100.000000 nohead lt 8
-
-plot '-' with lines
-0 0 0 0
-e
-pause 0.050000
-set arrow from 300.000000, -100.000000 to 100.000000, -300.000000 nohead lt 2
-
-plot '-' with lines
-0 0 0 0
-e
-pause 0.000000
-set arrow from 100.000000, -300.000000 to -100.000000, -300.000000 nohead lt 2
-
-plot '-' with lines
-0 0 0 0
-e
-pause 0.000000
-set arrow from -100.000000, -300.000000 to -300.000000, -100.000000 nohead lt 2
+set arrow from 100.000000, -100.000000 to 300.000000, -300.000000 nohead lt -1
+set arrow from 100.000000, -100.000000 to 300.000000, -100.000000 nohead lt 8
+set arrow from 300.000000, -100.000000 to 100.000000, -100.000000 nohead lt 2
+set arrow from 100.000000, -100.000000 to -100.000000, -100.000000 nohead lt 2
+set arrow from -100.000000, -100.000000 to -300.000000, -100.000000 nohead lt 2
 
 plot '-' with lines
 0 0 0 0

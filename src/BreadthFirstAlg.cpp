@@ -51,7 +51,7 @@ string BreadthFirstAlg::DoSearch(Position startNode, Position endNode) {
         }
         Position *tmp = q.front();
         s += gw->PrintLine(map->at(currPos->row).at(currPos->col), map->at(tmp->row).at(tmp->col), ORANGE);
-        s += gw->PrintAniData(DELAY);
+        //s += gw->PrintAniData(0);
         currPos = tmp;
         q.pop();
         nodesPopped++;
@@ -64,13 +64,13 @@ string BreadthFirstAlg::DoSearch(Position startNode, Position endNode) {
     while(lastPos->col != startNode.col || lastPos->row != startNode.row) {
         cout << "in loop" << endl;
         s += gw->PrintLine(map->at(lastPos->row).at(lastPos->col), map->at(lastPos->from->row).at(lastPos->from->col), GREEN);
-        s += gw->PrintAniData(0);
         lastPos = lastPos->from;
         pathLength++;
     }
     cout << "              PATH LENGTH: " << pathLength << endl;
 
     cout << "Goal found!!!" << endNode.row << "," << endNode.col << endl;
+    s += gw->PrintAniData(0);
     return s;
 }
 //------------------------------------------------------
@@ -103,7 +103,7 @@ string BreadthFirstAlg::EnQ(int row, int col, Position *from) {
         q.push(n);
         s += gw->PrintNode(map->at(row).at(col), BROWN);
         s += gw->PrintLine(map->at(from->row).at(from->col), map->at(row).at(col), BLACK);
-        s += gw->PrintAniData(DELAY);
+        //s += gw->PrintAniData(DELAY);
     }
     return s;
 }

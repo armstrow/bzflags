@@ -79,7 +79,7 @@ int main(int argc, char** argv) {
     else if(!ParseArgs(argc, argv)) {
         exit(0);
     }
-    double NodeS = 80;
+    double NodeS = 20;
     if (DEBUG && argc == 5)
         NodeS = atof(argv[4]);
     else if (!DEBUG && argc == 4)
@@ -108,8 +108,8 @@ int main(int argc, char** argv) {
     //alg = new BreadthFirstAlg(WorldNodes, gw); //BT--DONE
     //alg = new DepthFirstAlg(WorldNodes, gw); //BT--DONE
     //alg = new IterativeDeepeningAlg(WorldNodes, gw);
-    alg = new GreedyBestFirstAlg(WorldNodes, gw, penalized, &controller->env); //BT--DONE
-    //alg = new AStarAlg(WorldNodes, gw, penalized, &controller->env); //BT--DONE
+    //alg = new GreedyBestFirstAlg(WorldNodes, gw, penalized, &controller->env); //BT--DONE
+    alg = new AStarAlg(WorldNodes, gw, penalized, &controller->env); //BT--DONE
 
     s += alg->DoSearch(startNode, endNode);
 

@@ -8,6 +8,8 @@
 #include <vector>
 
 void *MakeRobot(void *args);
+void *MakeSniper(void *args);
+void *MakeDecoy(void *args);
 
 //------------------------------------------------------
 RobotController::RobotController(string server, int port) {
@@ -28,14 +30,18 @@ void RobotController::PlayGame() {
 //------------------------------------------------------
 void RobotController::InitRobots() {
     cout << "number of mytanks: " << env.myTanks.size() << endl;
+    bool sniper = false;
     for(int i = 0; i < env.myTanks.size(); i++) {
         pthread_t *newThread = new pthread_t();
         //robotThreads.push_back(newThread);
 
         MyTank *currTank = &env.myTanks.at(i);
         MakeRobotArgs args(this, currTank, &env);
-
-        pthread_create(newThread, NULL, &MakeRobot, (void *)&args);
+		  if(sniper) 
+		    pthread_create(newThread, NULL, &MakeSniper, (void *)&args);
+		  else
+		    pthread_create(newThread, NULL, &MakeDecoy, (void *)&args);
+		  sniper = true;
     }
 }
 //------------------------------------------------------
@@ -45,6 +51,20 @@ void* MakeRobot(void *passedArgs) {
     MakeRobotArgs *args = (MakeRobotArgs *)passedArgs;
     Robot currBot(args->meTank, &args->thisRC->bzfsComm, args->env);
     currBot.BeAlive();
+}
+void* MakeSniper(void *passedArgs) {
+    //cout << "IN NEW THREAD: MAKE-ROBOT!!" << endl;
+    //sleep(2);
+    MakeRobotArgs *args = (MakeRobotArgs *)passedArgs;
+    Robot currBot(args->meTank, &args->thisRC->bzfsComm, args->env);
+    currBot.BeSniper();
+}
+void* MakeDecoy(void *passedArgs) {
+    //cout << "IN NEW THREAD: MAKE-ROBOT!!" << endl;
+    //sleep(2);
+    MakeRobotArgs *args = (MakeRobotArgs *)passedArgs;
+    Robot currBot(args->meTank, &args->thisRC->bzfsComm, args->env);
+    currBot.BeDecoy();
 }
 //------------------------------------------------------
 void RobotController::LoopAction() {

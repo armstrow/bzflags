@@ -14,6 +14,9 @@ class Robot {
      *  +--------------+ */
 
     public:
+	bool gotoPoint;
+	float gotoX;
+	float gotoY;
 
     private:
         BZFSCommunicator *bzfsComm;
@@ -33,6 +36,9 @@ class Robot {
         void GetFlag(double agression);
         void SetPersonalData(string data);
         void BeAlive();
+        void BeDecoy();
+        void BeSniper();
+	
 
     private:
         void UpdatePosition();
@@ -47,6 +53,7 @@ class Robot {
         void SetEnemyFlagField(float *forceX, float *forceY);
         void SetMyBaseField(float *forceX, float *forceY);
         void SetObstaclesField(float *forceX, float *forceY);
+		  void SetGotoField(float *forceX, float *forceY) ;
 
         void SetPotentialFieldVals(float *xField, float *yfield, float meX, float meY, float goalX, float goalY, bool attract, float radius, float spread, float alpha);
 };

@@ -94,6 +94,7 @@ string GreedyBestFirstAlg::DoSearch(Position startNode, Position endNode) {
 float GreedyBestFirstAlg::GetHeuristic(int row, int col, Position endNode) {
     float dist = sqrt( (row - endNode.row)*(row - endNode.row) +
                        (col - endNode.col)*(col - endNode.col) );
+   
 
     float result = 0;
 

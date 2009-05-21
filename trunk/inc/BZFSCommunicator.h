@@ -41,11 +41,13 @@ class BZFSCommunicator {
         int port;
         struct sockaddr_in connection;
 	    pthread_mutex_t socket_lock;
+	    pthread_mutex_t variable_lock;
         int s;
+        float worldSize;
 
     public:
         string myColor;
-        float worldSize;
+
 
 
     /*  +--------------+
@@ -66,6 +68,7 @@ class BZFSCommunicator {
         bool get_shots(vector<Shot> *allShot);
         bool get_constants(vector<Constant> *allConstants);
         bool get_bases(vector<Base> *allBases);
+        	float get_worldSize();
 
      	bool shoot(int index);
     	bool speed(int index, double value);

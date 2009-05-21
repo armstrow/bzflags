@@ -41,8 +41,9 @@ int start;
 
 //------------------------------------------------------
 BZFSCommunicator::BZFSCommunicator() {
-    
+    pthread_mutex_init(&variable_lock, NULL);
 }
+
 //------------------------------------------------------
 int BZFSCommunicator::Connect(string server, int port) {
     this->host = server;
@@ -74,6 +75,12 @@ bool BZFSCommunicator::SendBoolMessage(string msg) {
 	else {
 		return false;
 	}
+}
+float BZFSCommunicator::get_worldSize() {
+	pthread_mutex_lock(&variable_lock);
+	float retVal = worldSize;
+	pthread_mutex_unlock(&variable_lock);
+	return retVal;
 }
 //--------------------------------------------------------------------
 bool BZFSCommunicator::shoot(int index) {

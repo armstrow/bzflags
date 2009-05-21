@@ -42,6 +42,10 @@ AStarAlg::AStarAlg(vector<vector<Node *> > *map, GnuplotWriter* writer, bool pen
 //------------------------------------------------------
 string AStarAlg::DoSearch(Position startNode, Position endNode) {
     cout << "IN ASTAR* : DOSEARCH" << endl;
+	 //clear queue
+	 while (!q.empty()) {
+	 	q.pop();
+	 }    
     Position p = startNode;
     Position* pos = &p;
     map->at(pos->row).at(pos->col)->visited = true;
@@ -56,10 +60,10 @@ string AStarAlg::DoSearch(Position startNode, Position endNode) {
     int nodesPopped = 0;
     cout << "ASTAR* : starting loop" << endl;
     while (pos->row != endNode.row || pos->col != endNode.col) {
-        //cout << "ASTAR* : in loop (nodesPopped: " << nodesPopped << " )" << endl;
+        cout << "ASTAR* : in loop (nodesPopped: " << nodesPopped << " )" << endl;
         s += EnqueueNeighbors(pos, endNode);
         if (q.empty()) {
-        s += EnqueueNeighbors(pos, endNode);
+        		//s += EnqueueNeighbors(pos, endNode);
             return s;
         }
         while (map->at(q.top().row).at(q.top().col)->visited == true) {
@@ -69,14 +73,14 @@ string AStarAlg::DoSearch(Position startNode, Position endNode) {
         //cout << "    tmp->row: " << tmp->row << ",  tmp->col: " << tmp->col << endl;
         map->at(q.top().row).at(q.top().col)->visited = true;
         //cout << "A* here we are" << endl;
-        s += gw->PrintLine(map->at(pos->row).at(pos->col), map->at(tmp->row).at(tmp->col), ORANGE);
+        //s += gw->PrintLine(map->at(pos->row).at(pos->col), map->at(q.top().row).at(q.top().col), ORANGE);
         //cout << "A* noch mals" << endl;
         //s += gw->PrintAniData(DELAY);
-        pos = tmp;
+        pos = (Position *)&q.top();
         q.pop();
         nodesPopped++;
         //cout << "A* schon wieder" << endl;
-        // cout << "checking node at: " << pos->row << "," << pos->col << endl;
+        //cout << "checking node at: " << pos->row << "," << pos->col << endl;
     }
     cout << "              NODES POPPED: " << nodesPopped << endl;
 
@@ -86,7 +90,7 @@ string AStarAlg::DoSearch(Position startNode, Position endNode) {
     while(lastPos->col != startNode.col || lastPos->row != startNode.row) {
         cout << "in loop" << endl;
         finalPath.push_back(lastPos);
-        s += gw->PrintLine(map->at(lastPos->row).at(lastPos->col), map->at(lastPos->from->row).at(lastPos->from->col), GREEN);
+        //s += gw->PrintLine(map->at(lastPos->row).at(lastPos->col), map->at(lastPos->from->row).at(lastPos->from->col), GREEN);
         pathCost += lastPos->heuristic;
         lastPos = lastPos->from;
         pathLength++;
@@ -95,7 +99,7 @@ string AStarAlg::DoSearch(Position startNode, Position endNode) {
     cout << "              PATH LENGTH: " << pathLength << endl;
 
     cout << "Goal found!!!" << endNode.row << "," << endNode.col << endl;
-    s += gw->PrintAniData(0);
+    //s += gw->PrintAniData(0);
     return s;
 }
 //------------------------------------------------------
@@ -160,8 +164,9 @@ float AStarAlg::GetHeuristic(int row, int col, Position endNode) {
 
     if(penalize) {
         //iterate enemy tanks
-        for(int i = 0; i < env->otherTanks.size(); i++) {
-            OtherTank otherTank = env->otherTanks.at(i);
+        vector<OtherTank> otherTanks = env->getOtherTanks();
+        for(int i = 0; i < otherTanks.size(); i++) {
+            OtherTank otherTank = otherTanks.at(i);
             Position pos = GetNode(otherTank.x, otherTank.y);
             float dist = GetRealDistance(start, pos);
             float radius = nodeSize * TANK_PENALTY_SIZE;
@@ -178,8 +183,9 @@ float AStarAlg::GetHeuristic(int row, int col, Position endNode) {
 
         //check obstacles
         /*
-        for(int i = 0; i < env->obstacles.size(); i++) {
-            Obstacle currObst = env->obstacles.at(i);
+        vector<Obstacle> obstacles = env->getObstacles();
+        for(int i = 0; i < obstacles.size(); i++) {
+            Obstacle currObst = obstacles.at(i);
             float centerX;
             float centerY;
             GetCenter(&centerX, &centerY, currObst.corners);
@@ -222,10 +228,10 @@ string AStarAlg::EnqueueNeighbors(Position* p, Position endNode) {
 string AStarAlg::EnQ(int row, int col, Position* from, Position endNode) {
     string s = ""; 
     //bounds check
+    //cout << "Enqueing: " << row << "," << col << endl;
     if (row >= map->size() || col >= map->size() || row < 0 || col < 0)
         return s;
     if (map->at(row).at(col)->visitable) {        
-
         float ns = map->at(row).at(col)->length / 2;
         float x = map->at(row).at(col)->x + ns;
         float y = map->at(row).at(col)->y + ns;
@@ -234,13 +240,11 @@ string AStarAlg::EnQ(int row, int col, Position* from, Position endNode) {
         float dist = sqrt( (x - fromX)*(x - fromX) +
                 (y - fromY)*(y - fromY) ) + from->distSoFar;
         Position n(row, col, dist + GetHeuristic(row, col, endNode), dist, from);
-        /*n.distSoFar = dist;
-          n.from = from; 
-          n.heuristic = dist + GetHeuristic(row, col, endNode);*/
-        //cout << "Enqueued Node: (" << row << "," << col << "):" << n->heuristic << " = " << dist << " + " << GetHeuristic (row, col, endNode) << endl;
+        //cout << "Enqueued Node: (" << row << "," << col << "):" << n.heuristic << " = " << dist << " + " << GetHeuristic (row, col, endNode) << endl;
         q.push(n);
-        s += gw->PrintNode(map->at(row).at(col), BROWN);
-        s += gw->PrintLine(map->at(from->row).at(from->col), map->at(row).at(col), BLACK);
+        //cout << "Enqueued Node: (" << row << "," << col << "):" << n.heuristic << " = " << dist << " + " << GetHeuristic (row, col, endNode) << endl;
+        //s += gw->PrintNode(map->at(row).at(col), BROWN);
+        //s += gw->PrintLine(map->at(from->row).at(from->col), map->at(row).at(col), BLACK);
         //s += gw->PrintAniData(DELAY);
     }
     return s;

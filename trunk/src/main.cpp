@@ -93,8 +93,10 @@ int main(int argc, char** argv) {
 
     cout << "penalized: " << (penalized ? "YES" : "NO" ) << endl;
 
+
     controller = new RobotController(SERVER, PORT);
-    DiscretizeWorld(NodeS);
+    DiscretizeWorld(NodeS); 
+    
     //GnuplotTest();
 
     /* Searches */
@@ -109,14 +111,14 @@ int main(int argc, char** argv) {
     //alg = new DepthFirstAlg(WorldNodes, gw); //BT--DONE
     //alg = new IterativeDeepeningAlg(WorldNodes, gw);
     //alg = new GreedyBestFirstAlg(WorldNodes, gw, penalized, &controller->env); //BT--DONE
-    alg = new AStarAlg(WorldNodes, gw, penalized, &controller->env); //BT--DONE
-
-    s += alg->DoSearch(startNode, endNode);
+    //alg = new AStarAlg(WorldNodes, gw, penalized, &controller->env); //BT--DONE
+    //cout << "first search done" << endl;
+    //s += alg->DoSearch(startNode, endNode);
 
     //Remember to clear the "visited" boolean in the Nodes between each search
 
     //Print the Results
-    gw->PrintState(s, WorldNodes->size() * WorldNodes->at(0).at(0)->length, "BFSPlot.gpi");
+    //gw->PrintState(s, WorldNodes->size() * WorldNodes->at(0).at(0)->length, "BFSPlot.gpi");
     //exit(1);
     controller->PlayGame();
     cout << "DONE WITH GAME!!!" << endl;

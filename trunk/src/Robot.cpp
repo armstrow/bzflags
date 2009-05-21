@@ -36,15 +36,16 @@ Robot::Robot(MyTank *meTank, BZFSCommunicator *bzfsComm, EnvironmentData *env): 
     this->gotoX = 0;
     this->gotoY = 0;
     this->actionType = TRAVEL;
+    //DiscretizeWorld();
 }
 //------------------------------------------------------
 void Robot::DiscretizeWorld() {
     int NodeSize = NODE_SIZE;
 
-    worldSize = bzfsComm->worldSize;
-
+    worldSize = bzfsComm->get_worldSize();
+	cout << "World Size: " << worldSize;
     if ((int)worldSize % (int)NodeSize != 0) {
-        cout << "Could not divide world up evenly into node size." << endl;
+        cout << "Could not divide world up evenly into node size: " << NodeSize << endl;
         exit(0);
     }
     
@@ -269,7 +270,7 @@ void Robot::GenerateField(float x, float y, float *outX, float *outY, string col
 
             Position endNode = GetEndNode();
             cout << "endNode: "; cout << endNode.ToString() << endl;
-
+            //alg = new AStarAlg(&WorldNodes, &gpw, true, env);
             alg->DoSearch(startNode, endNode);
             cout << "finished Search" << endl;
             cout << "alg->finalPath.size(): " << alg->finalPath.size() << endl;

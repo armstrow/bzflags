@@ -19,7 +19,7 @@ class RobotController {
 
     private:
         vector<pthread_t> robotThreads;
-        vector<Robot> robotList; 
+        //vector<Robot *> robotList; 
 	    pthread_mutex_t socket_lock;
     public:
         BZFSCommunicator bzfsComm;
@@ -53,6 +53,7 @@ class RobotController {
 	    bool SendBoolMessage(string msg);
         void UpdateEnvironment();
         void InitEnvironment();
+        void ControlRobots();
 };
 
 

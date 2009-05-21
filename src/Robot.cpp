@@ -93,21 +93,26 @@ bool Robot::IsVisitable(Node* n) {
     return true;
 }
 //------------------------------------------------------
-void Robot::BeAlive() {
+void Robot::BeAlive(string actionType) {
     sleep(2);
-    cout << "I AM ALIVE!! (" << this->meTank->ToString() << ")" << endl;
+    this->actionType = actionType;
+    cout << "I AM A " << actionType << endl;
 
     bzfsComm->speed(meTank->index, 0.7);
+    cout << "set speed" << endl;
     bool turnedOnce = false;
 
     while(1 == 1) {
+        cout << "updating currgoal" << endl;
         UpdateCurrGoal();
+        cout << "done updating currgoal" << endl;
         if(actionType == TRAVEL)
             DoTravel();
         else if(actionType == DECOY)
             DoDecoy();
         else if(actionType == SNIPER)
             DoSniper();
+        cout << "done in first loop" << endl;
     }
 }
 //------------------------------------------------------
@@ -321,6 +326,16 @@ void Robot::SetEnemyField(float *forceX, float *forceY) {
     
 }
 //------------------------------------------------------
+void Robot::UpdateCurrGoal() {
+    bool hasFlag = (meTank->flag != "none");
+
+    if(actionType == TRAVEL && hasFlag) {
+        SetCurrGoalToMyBase();
+    } else if(actionType == TRAVEL && !hasFlag) {
+        SetCurrGoalToEnemyBase();
+    }
+}
+//------------------------------------------------------
 void Robot::SetCurrGoalToEnemyBase() {
     Base *selectedBase;
     for(int i = 0; i < env->bases.size(); i++) {
@@ -369,16 +384,6 @@ void Robot::SetCurrGoalToMyBase() {
 
     currGoal.x = tempx;
     currGoal.y = tempy;
-}
-//------------------------------------------------------
-void Robot::UpdateCurrGoal() {
-    bool hasFlag = (meTank->flag != "none");
-
-    if(actionType == TRAVEL && hasFlag) {
-        SetCurrGoalToMyBase();
-    } else if(actionType == TRAVEL && !hasFlag) {
-        SetCurrGoalToEnemyBase();
-    }
 }
 //------------------------------------------------------
 void Robot::SetEnemyBaseField(float *forceX, float *forceY) {

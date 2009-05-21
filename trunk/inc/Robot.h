@@ -7,6 +7,11 @@
 #include "EnvironmentData.h"
 #include <vector>
 
+#define SNIPER "sniper"
+#define DECOY "decoy"
+#define TRAVEL "travel"
+
+
 class Robot {
 
     /*  +--------------+
@@ -14,15 +19,15 @@ class Robot {
      *  +--------------+ */
 
     public:
-	bool gotoPoint;
-	float gotoX;
-	float gotoY;
+        bool gotoPoint;
+        float gotoX;
+        float gotoY;
+        string actionType;
 
     private:
         BZFSCommunicator *bzfsComm;
         MyTank *meTank;
         EnvironmentData *env;
-
 
 
     /*  +--------------+
@@ -36,11 +41,13 @@ class Robot {
         void GetFlag(double agression);
         void SetPersonalData(string data);
         void BeAlive();
-        void BeDecoy();
-        void BeSniper();
+        void SwitchTo(string type);
 	
 
     private:
+        void DoTravel();
+        void DoSniper();
+        void DoDecoy();
         void UpdatePosition();
         float Wrap(float original, float max);
         void GenerateField(float x, float y, float *outX, float *outY, string color, bool HAVE_FLAG);
@@ -53,7 +60,7 @@ class Robot {
         void SetEnemyFlagField(float *forceX, float *forceY);
         void SetMyBaseField(float *forceX, float *forceY);
         void SetObstaclesField(float *forceX, float *forceY);
-		  void SetGotoField(float *forceX, float *forceY) ;
+        void SetGotoField(float *forceX, float *forceY) ;
 
         void SetPotentialFieldVals(float *xField, float *yfield, float meX, float meY, float goalX, float goalY, bool attract, float radius, float spread, float alpha);
 };

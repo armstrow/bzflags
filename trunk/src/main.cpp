@@ -85,7 +85,7 @@ int main(int argc, char** argv) {
     else if (!DEBUG && argc == 4)
         NodeS = atof(argv[3]);
     
-    bool penalized = false;
+    bool penalized = true;
     if(DEBUG && argc == 6)
         penalized = (strcmp(argv[5],"-p") == 0);
     else if (!DEBUG && argc == 5)

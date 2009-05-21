@@ -24,6 +24,7 @@ class AStarAlg : public SearchAlg {
     public:
         bool penalize;
         EnvironmentData *env;
+        vector<Position *> finalPath;
 
     private:
         GnuplotWriter* gw;
@@ -40,7 +41,7 @@ class AStarAlg : public SearchAlg {
         vector<Node *> GetBestPath();
 
     private:
-		  float GetRealDistance(Position start, Position end);
+        float GetRealDistance(Position start, Position end);
         void GetCenter(float *centerX, float *centerY, vector<Point> points);
         Position GetNode(float xloc, float yloc);
         string EnqueueNeighbors(Position* p, Position endNode);

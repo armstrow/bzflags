@@ -16,10 +16,18 @@ using namespace std;
 
 class Position{
     public:
-        int row, col, level;
+        int row, col, level, nodeSize;
         float heuristic;
         float distSoFar;
         Position* from;
+        Position() {
+            row = 0;
+            col = 0;
+            level = 0;
+            heuristic = 0;
+            distSoFar = 0;
+            from = NULL;
+        }
         Position(int r, int c) {
             row = r;
             col = c;

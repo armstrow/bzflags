@@ -374,7 +374,7 @@ class Command(object):
 
     def __init__(self, index, speed, angvel, shoot):
         self.index = index
-        self.speed = speed
+        self.speed = 0.0 #speed
         self.angvel = angvel
         self.shoot = shoot
 

@@ -3,6 +3,7 @@
 #include "Robot.h"
 #include "RobotController.h"
 #include "MyTank.h"
+#include "AStarAlg.h"
 
 #include <cmath>
 #include <math.h>
@@ -12,6 +13,7 @@
 #include <iostream>
 
 #define DECOY_DISTANCE 100
+#define NODE_SIZE 40
 
 using namespace std;
 
@@ -25,7 +27,7 @@ float PI = 4.0*atan(1.0);
 
 
 //------------------------------------------------------
-Robot::Robot(MyTank *meTank, BZFSCommunicator *bzfsComm, EnvironmentData *env) {
+Robot::Robot(MyTank *meTank, BZFSCommunicator *bzfsComm, EnvironmentData *env): gpw(env) {
     this->meTank = meTank;
     this->bzfsComm = bzfsComm;
     this->env = env;
@@ -33,6 +35,61 @@ Robot::Robot(MyTank *meTank, BZFSCommunicator *bzfsComm, EnvironmentData *env) {
     this->gotoX = 0;
     this->gotoY = 0;
     this->actionType = TRAVEL;
+}
+//------------------------------------------------------
+void Robot::DiscretizeWorld() {
+    int NodeSize = NODE_SIZE;
+
+    vector<Constant> constants = env->constants;
+    double worldSize;
+    for (int i = 0; i < constants.size(); i++) {
+        if (constants.at(i).name == "worldsize") {
+            worldSize = atof(constants.at(i).value.c_str());
+            break;
+        }
+    }
+    if ((int)worldSize % (int)NodeSize != 0) {
+        cout << "Could not divide world up evenly into node size." << endl;
+        exit(0);
+    }
+    
+    worldSize = worldSize / 2;
+    for (int x = 0 - worldSize; x < worldSize; x += NodeSize) {
+        vector<Node *> tmp;
+        for (int y = 0 - worldSize; y < worldSize; y += NodeSize) {
+            Node *n = new Node(x, y, NodeSize);
+    	    n->visitable = IsVisitable(n);
+            tmp.push_back(n);
+        }
+        WorldNodes.push_back(tmp);
+        //countR++;
+    }
+    //PrintVisitableNodes();
+    cout << "Created WorldNodes size: " << WorldNodes.size();
+    //*worldNodes = retBuff;
+}
+bool Robot::IsVisitable(Node* n) {
+    //Get Center
+    float testx = n->x + (n->length / 2);
+    float testy = n->y + (n->length / 2);
+    int nvert;
+    bool c = false;
+
+
+    for (int o = 0; o < env->obstacles.size(); o ++) {
+            Obstacle currObst = env->obstacles.at(o);
+            nvert = currObst.corners.size();
+            float verty[4] = {currObst.corners.at(0).y, currObst.corners.at(1).y, currObst.corners.at(2).y, currObst.corners.at(3).y};
+            float vertx[4] = {currObst.corners.at(0).x, currObst.corners.at(1).x, currObst.corners.at(2).x, currObst.corners.at(3).x};
+            for (int i = 0, j = nvert-1; i < nvert; j = i++) {
+                    if ( ((verty[i]>testy) != (verty[j]>testy)) &&
+                                    (testx < (vertx[j]-vertx[i]) * (testy-verty[i]) / (verty[j]-verty[i]) + vertx[i]) )
+                            c = !c;
+            }
+            if (c)
+                    return !c;
+    }
+    return true;
 }
 //------------------------------------------------------
 void Robot::BeAlive() {
@@ -197,10 +254,14 @@ void Robot::GenerateField(float x, float y, float *outX, float *outY, string col
 	}
     else {
 	    if(!haveFlag) {
-		SetEnemyBaseField(&xForce, &yForce);
-		SetEnemyField(&xForce, &yForce);
+            AStarAlg alg(&WorldNodes, &gpw, true, env);
+            Position startNode = GetStartNode();
+            Position endNode = GetEndNode();
+            alg.DoSearch(startNode, endNode);
+		    SetEnemyBaseField(&xForce, &yForce);
+            SetEnemyField(&xForce, &yForce);
 	    } else {
-		SetMyBaseField(&xForce, &yForce);
+		    SetMyBaseField(&xForce, &yForce);
 	    }
     }
     
@@ -210,6 +271,31 @@ void Robot::GenerateField(float x, float y, float *outX, float *outY, string col
     *outY = yForce;
 }
 //------------------------------------------------------
+Position Robot::GetEndNode() {
+    return GetNode(currGoal.x, currGoal.y);
+}
+//------------------------------------------------------
+Position Robot::GetStartNode() {
+    return GetNode(meTank->pos[0], meTank->pos[1]);
+}
+//------------------------------------------------------
+Position Robot::GetNode(float xloc, float yloc) {
+    int ret[2];
+    double length = WorldNodes.at(0).at(0)->length;
+    for (int c = 0; c < WorldNodes.size(); c++) {
+        if ((WorldNodes.at(0).at(c)->y - yloc) > (0 - length)) {
+            ret[1] = c;
+            break;
+        }
+    } for (int r = 0; r < WorldNodes.size(); r++) {
+        if ((WorldNodes.at(r).at(0)->x - xloc) > (0 - length)) {
+            ret[0] = r;
+            break;
+        }
+    }
+    Position p(ret[0], ret[1]);
+    return p;
+}
 //------------------------------------------------------
 void Robot::SetGotoField(float *forceX, float *forceY) {
     //iterate enemyflags

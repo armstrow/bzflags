@@ -35,9 +35,9 @@ using namespace std;
 //------------------------------------------------------
 AStarAlg::AStarAlg(vector<vector<Node *> > *map, GnuplotWriter* writer, bool penalized, EnvironmentData *env): SearchAlg(map, writer) {
     this->map = map;
-    this->gw = writer;
     this->penalize = penalized;
     this->env = env;
+    this->gw = new GnuplotWriter(env);
 }
 //------------------------------------------------------
 string AStarAlg::DoSearch(Position startNode, Position endNode) {
@@ -73,7 +73,7 @@ string AStarAlg::DoSearch(Position startNode, Position endNode) {
         //cout << "    tmp->row: " << tmp->row << ",  tmp->col: " << tmp->col << endl;
         map->at(q.top().row).at(q.top().col)->visited = true;
         //cout << "A* here we are" << endl;
-        //s += gw->PrintLine(map->at(pos->row).at(pos->col), map->at(q.top().row).at(q.top().col), ORANGE);
+        s += gw->PrintLine(map->at(pos->row).at(pos->col), map->at(q.top().row).at(q.top().col), ORANGE);
         //cout << "A* noch mals" << endl;
         //s += gw->PrintAniData(DELAY);
         pos = (Position *)&q.top();
@@ -243,8 +243,8 @@ string AStarAlg::EnQ(int row, int col, Position* from, Position endNode) {
         //cout << "Enqueued Node: (" << row << "," << col << "):" << n.heuristic << " = " << dist << " + " << GetHeuristic (row, col, endNode) << endl;
         q.push(n);
         //cout << "Enqueued Node: (" << row << "," << col << "):" << n.heuristic << " = " << dist << " + " << GetHeuristic (row, col, endNode) << endl;
-        //s += gw->PrintNode(map->at(row).at(col), BROWN);
-        //s += gw->PrintLine(map->at(from->row).at(from->col), map->at(row).at(col), BLACK);
+        s += gw->PrintNode(map->at(row).at(col), BROWN);
+        s += gw->PrintLine(map->at(from->row).at(from->col), map->at(row).at(col), BLACK);
         //s += gw->PrintAniData(DELAY);
     }
     return s;

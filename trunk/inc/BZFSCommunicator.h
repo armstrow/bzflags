@@ -45,6 +45,7 @@ class BZFSCommunicator {
 
     public:
         string myColor;
+        float worldSize;
 
 
     /*  +--------------+

@@ -48,6 +48,10 @@ class Position{
             this->row = r;
             this->col = c;
         }
+        string ToString() {
+            cout << "(" << col << ", " << row << ")";
+            return "";
+        }
 };
 
 class ComparePosition {

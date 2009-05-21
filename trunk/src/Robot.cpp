@@ -13,7 +13,7 @@
 #include <iostream>
 
 #define DECOY_DISTANCE 100
-#define NODE_SIZE 40
+#define NODE_SIZE 20
 #define TARGET_COLOR "green"
 
 using namespace std;
@@ -41,13 +41,8 @@ Robot::Robot(MyTank *meTank, BZFSCommunicator *bzfsComm, EnvironmentData *env): 
 void Robot::DiscretizeWorld() {
     int NodeSize = NODE_SIZE;
 
-    vector<Constant> constants = env->constants;
-    for (int i = 0; i < constants.size(); i++) {
-        if (constants.at(i).name == "worldsize") {
-            worldSize = atof(constants.at(i).value.c_str());
-            break;
-        }
-    }
+    worldSize = bzfsComm->worldSize;
+
     if ((int)worldSize % (int)NodeSize != 0) {
         cout << "Could not divide world up evenly into node size." << endl;
         exit(0);
@@ -58,7 +53,7 @@ void Robot::DiscretizeWorld() {
         vector<Node *> tmp;
         for (int y = 0 - worldSize; y < worldSize; y += NodeSize) {
             Node *n = new Node(x, y, NodeSize);
-    	    n->visitable = IsVisitable(n);
+            n->visitable = IsVisitable(n);
             tmp.push_back(n);
         }
         WorldNodes.push_back(tmp);
@@ -67,6 +62,7 @@ void Robot::DiscretizeWorld() {
     //PrintVisitableNodes();
     cout << "Created WorldNodes size: " << WorldNodes.size();
     //*worldNodes = retBuff;
+    alg = new AStarAlg(&WorldNodes, &gpw, true, env);
 }
 bool Robot::IsVisitable(Node* n) {
     //Get Center
@@ -75,25 +71,25 @@ bool Robot::IsVisitable(Node* n) {
     int nvert;
     bool c = false;
 
-
     for (int o = 0; o < env->obstacles.size(); o ++) {
-            Obstacle currObst = env->obstacles.at(o);
-            nvert = currObst.corners.size();
-            float verty[4] = {currObst.corners.at(0).y, currObst.corners.at(1).y, currObst.corners.at(2).y, currObst.corners.at(3).y};
-            float vertx[4] = {currObst.corners.at(0).x, currObst.corners.at(1).x, currObst.corners.at(2).x, currObst.corners.at(3).x};
-            for (int i = 0, j = nvert-1; i < nvert; j = i++) {
-                    if ( ((verty[i]>testy) != (verty[j]>testy)) &&
-                                    (testx < (vertx[j]-vertx[i]) * (testy-verty[i]) / (verty[j]-verty[i]) + vertx[i]) )
-                            c = !c;
-            }
-            if (c)
-                    return !c;
+        Obstacle currObst = env->obstacles.at(o);
+        nvert = currObst.corners.size();
+        float verty[4] = {currObst.corners.at(0).y, currObst.corners.at(1).y, currObst.corners.at(2).y, currObst.corners.at(3).y};
+        float vertx[4] = {currObst.corners.at(0).x, currObst.corners.at(1).x, currObst.corners.at(2).x, currObst.corners.at(3).x};
+        for (int i = 0, j = nvert-1; i < nvert; j = i++) {
+            if ( ((verty[i]>testy) != (verty[j]>testy)) &&
+                    (testx < (vertx[j]-vertx[i]) * (testy-verty[i]) / (verty[j]-verty[i]) + vertx[i]) )
+                c = !c;
+        }
+        if (c)
+            return !c;
     }
     return true;
 }
 //------------------------------------------------------
 void Robot::BeAlive(string actionType) {
     sleep(2);
+    DiscretizeWorld();
     this->actionType = actionType;
     cout << "I AM A " << actionType << endl;
 
@@ -127,6 +123,8 @@ void Robot::DoTravel() {
 
     GenerateField(meX, meY, &xForce, &yForce, bzfsComm->myColor, hasFlag);
 
+    cout << "DONE GENERating field" << endl;
+
     float finalAngle = Wrap(atan2(yForce,xForce), PI*2);//good
     float angleDiff = GetAngleDist(meTank->angle, finalAngle);//not good
     float angVel = (angleDiff/(2*PI))*0.8;
@@ -138,6 +136,9 @@ void Robot::DoTravel() {
 
     float speed = 1 - abs(angleDiff/PI);
     //cout << "anglediff: " << (angleDiff/PI) << ", speed: " << speed << endl;
+    
+    cout << "Going to update the tank's speed and angvel now" << endl;
+
     bzfsComm->speed(meTank->index, speed);
     bzfsComm->angvel(meTank->index, angVel);
 
@@ -255,25 +256,33 @@ void Robot::GenerateField(float x, float y, float *outX, float *outY, string col
     float xForce;
     float yForce;
 
-    if (gotoPoint) {
-		SetGotoField(&xForce, &yForce);
-	}
-    else {
+    //if (gotoPoint) {
+		//SetGotoField(&xForce, &yForce);
+	//}
+    //else {
 	    if(!haveFlag) {
 		    //SetEnemyBaseField(&xForce, &yForce);
             //SetEnemyField(&xForce, &yForce);
 
-            AStarAlg alg(&WorldNodes, &gpw, true, env);
             Position startNode = GetStartNode();
-            Position endNode = GetEndNode();
+            cout << "startNode: "; cout << startNode.ToString() << endl;
 
-            alg.DoSearch(startNode, endNode);
-            currentPath = alg.finalPath;
+            Position endNode = GetEndNode();
+            cout << "endNode: "; cout << endNode.ToString() << endl;
+
+            alg->DoSearch(startNode, endNode);
+            cout << "finished Search" << endl;
+            cout << "alg->finalPath.size(): " << alg->finalPath.size() << endl;
+            currentPath = alg->finalPath;
+            cout << "set currentPath to alg.finalPath" << endl;
             SetNextPathNodeField(&xForce, &yForce);
+            cout << "set next path node field" << endl;
+
+            cout << "Generating Path Field" << endl;
 	    } else {
 		    SetMyBaseField(&xForce, &yForce);
 	    }
-    }
+    //}
     
     //SetObstaclesField(&xForce, &yForce);
 
@@ -282,9 +291,12 @@ void Robot::GenerateField(float x, float y, float *outX, float *outY, string col
 }
 //------------------------------------------------------
 void Robot::SetNextPathNodeField(float *forceX, float *forceY) {
-    Position nextPosition = *currentPath.at(currentPath.size() - 1);
+    cout << "Setting next path node field" << endl;
+    Position nextPosition = *currentPath.at(0);//currentPath.size() - 1);
+    cout << "grabbed next position" << endl;
 
     float nodeSize = WorldNodes.at(0).at(0)->length;
+    cout << "grabbed the nodeSize" << endl;
     float xGoal = (worldSize/2*-1 + nextPosition.col*nodeSize) + nodeSize/2;
     float yGoal = (worldSize/2*-1 + nextPosition.row*nodeSize) + nodeSize/2;;
 
@@ -297,6 +309,9 @@ void Robot::SetNextPathNodeField(float *forceX, float *forceY) {
     float tempYForce = 0;
 
     SetPotentialFieldVals(&tempXForce, &tempYForce, meTank->pos[0], meTank->pos[1], xGoal, yGoal, true, RADIUS, SPREAD, ALPHA);
+
+    cout << "###tempXForce: " << tempXForce << endl;
+    cout << "###tempYForce: " << tempYForce << endl;
 
     *forceX += tempXForce;
     *forceY += tempYForce;
@@ -351,6 +366,9 @@ void Robot::SetEnemyField(float *forceX, float *forceY) {
 void Robot::UpdateCurrGoal() {
     bool hasFlag = (meTank->flag != "none");
 
+    cout << "ACTION TYPE: " << actionType << endl;
+    cout << "HAS FLAG:    " << (hasFlag ? "YES" : "NO") << endl;
+    SetCurrGoalToEnemyBase();
     if(actionType == TRAVEL && hasFlag) {
         SetCurrGoalToMyBase();
     } else if(actionType == TRAVEL && !hasFlag) {
@@ -359,6 +377,7 @@ void Robot::UpdateCurrGoal() {
 }
 //------------------------------------------------------
 void Robot::SetCurrGoalToEnemyBase() {
+    cout << "CURR GOAL = " << TARGET_COLOR << endl;
     Base *selectedBase;
     for(int i = 0; i < env->bases.size(); i++) {
         if(env->bases.at(i).color == TARGET_COLOR) {
@@ -384,6 +403,7 @@ void Robot::SetCurrGoalToEnemyBase() {
 }
 //------------------------------------------------------
 void Robot::SetCurrGoalToMyBase() {
+    cout << "CURR GOAL = MY BASE" << endl;
     Base *selectedBase;
     for(int i = 0; i < env->bases.size(); i++) {
         if(env->bases.at(i).color == bzfsComm->myColor) {

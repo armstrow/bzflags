@@ -395,6 +395,8 @@ bool BZFSCommunicator::get_constants(vector <Constant> *AllConstants) {
         Constant MyConstant(v);
         if(MyConstant.name == "team")
             this->myColor = MyConstant.value;
+        else if(MyConstant.name == "worldsize")
+            this->worldSize = atof(MyConstant.value.c_str());
 	    AllConstants->push_back(MyConstant);
     	v.clear();
     	v=ReadArr();

@@ -117,7 +117,7 @@ int main(int argc, char** argv) {
 
     //Print the Results
     gw->PrintState(s, WorldNodes->size() * WorldNodes->at(0).at(0)->length, "BFSPlot.gpi");
-
+    //exit(1);
     controller->PlayGame();
     cout << "DONE WITH GAME!!!" << endl;
 }
@@ -130,7 +130,7 @@ Position GetStartNode() {
 }
 Position GetEndNode() {
    //Flag redFlag = controller->env.flags.at(0);
-   Base redFlag = controller->env.bases.at(0);
+   Base redFlag = controller->env.bases.at(1);
    float xloc = redFlag.corners.at(0).x;
    float yloc = redFlag.corners.at(0).y;
    return GetNode(xloc, yloc);

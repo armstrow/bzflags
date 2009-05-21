@@ -4,6 +4,7 @@
 
 #include "MyTank.h"
 #include "SearchAlg.h"
+#include "AStarAlg.h"
 #include "Node.h"
 #include "BZFSCommunicator.h"
 #include "EnvironmentData.h"
@@ -30,6 +31,7 @@ class Robot {
         Point currGoal;
         vector<Position *> currentPath;
         float worldSize;
+        AStarAlg *alg;
 
     private:
         BZFSCommunicator *bzfsComm;

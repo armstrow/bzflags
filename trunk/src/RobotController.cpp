@@ -7,6 +7,8 @@
 
 #include <vector>
 
+vector<Robot *> robotList;
+
 void *MakeRobot(void *args);
 void *MakeSniper(void *args);
 void *MakeDecoy(void *args);
@@ -34,14 +36,13 @@ void RobotController::InitRobots() {
     for(int i = 0; i < env.myTanks.size(); i++) {
         pthread_t *newThread = new pthread_t();
         //robotThreads.push_back(newThread);
-
         MyTank *currTank = &env.myTanks.at(i);
         MakeRobotArgs args(this, currTank, &env);
-		  if(sniper) 
-		    pthread_create(newThread, NULL, &MakeSniper, (void *)&args);
-		  else
-		    pthread_create(newThread, NULL, &MakeDecoy, (void *)&args);
-		  sniper = true;
+        if(sniper) 
+            pthread_create(newThread, NULL, &MakeSniper, (void *)&args);
+        else
+            pthread_create(newThread, NULL, &MakeDecoy, (void *)&args);
+        sniper = true;
     }
 }
 //------------------------------------------------------
@@ -51,6 +52,7 @@ void* MakeRobot(void *passedArgs) {
     MakeRobotArgs *args = (MakeRobotArgs *)passedArgs;
     Robot currBot(args->meTank, &args->thisRC->bzfsComm, args->env);
     currBot.BeAlive();
+    robotList.push_back(&currBot);
 }
 void* MakeSniper(void *passedArgs) {
     //cout << "IN NEW THREAD: MAKE-ROBOT!!" << endl;
@@ -59,6 +61,7 @@ void* MakeSniper(void *passedArgs) {
     Robot currBot(args->meTank, &args->thisRC->bzfsComm, args->env);
     currBot.BeAlive();
     currBot.SwitchTo(SNIPER);
+    robotList.push_back(&currBot);
 }
 void* MakeDecoy(void *passedArgs) {
     //cout << "IN NEW THREAD: MAKE-ROBOT!!" << endl;
@@ -67,6 +70,7 @@ void* MakeDecoy(void *passedArgs) {
     Robot currBot(args->meTank, &args->thisRC->bzfsComm, args->env);
     currBot.BeAlive();
     currBot.SwitchTo(DECOY);
+    robotList.push_back(&currBot);
 }
 //------------------------------------------------------
 void RobotController::LoopAction() {
@@ -99,6 +103,30 @@ void RobotController::UpdateEnvironment() {
     bzfsComm.get_othertanks(&env.otherTanks);
     bzfsComm.get_mytanks(&env.myTanks);    
     bzfsComm.get_flags(&env.flags);
+
+    ControlRobots();
+}
+//------------------------------------------------------
+void RobotController::ControlRobots() {
+    //decoys/snipers will always be in pairs
+    bool enemyTanksDead = true;
+    for(int i = 0; i < env.otherTanks.size(); i++) {
+        OtherTank currTank = env.otherTanks.at(i);
+        if(currTank.status == "alive") {
+            enemyTanksDead = false;
+        } else
+            cout << currTank.status << endl;
+    }
+
+    for(int i = 0; i < robotList.size(); i++) {
+        Robot *currRobot = robotList.at(i);
+        if(enemyTanksDead)
+            currRobot->SwitchTo(TRAVEL);
+        else if(!enemyTanksDead && i % 2 == 0)
+            currRobot->SwitchTo(DECOY);
+        else if(!enemyTanksDead && i % 2 == 1)
+            currRobot->SwitchTo(SNIPER);
+    }
 }
 //------------------------------------------------------
 

@@ -28,6 +28,8 @@ class Robot {
         string actionType;
         vector<vector<Node *> > WorldNodes;
         Point currGoal;
+        vector<Position *> currentPath;
+        float worldSize;
 
     private:
         BZFSCommunicator *bzfsComm;
@@ -50,7 +52,8 @@ class Robot {
         void SwitchTo(string type);
 	
 
-    private:
+    private: 
+        void SetNextPathNodeField(float *xForce, float *yForce);
         void UpdateCurrGoal();
         void SetCurrGoalToEnemyBase();
         void SetCurrGoalToMyBase();

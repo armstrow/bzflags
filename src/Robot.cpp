@@ -42,7 +42,6 @@ void Robot::DiscretizeWorld() {
     int NodeSize = NODE_SIZE;
 
     vector<Constant> constants = env->constants;
-    double worldSize;
     for (int i = 0; i < constants.size(); i++) {
         if (constants.at(i).name == "worldsize") {
             worldSize = atof(constants.at(i).value.c_str());
@@ -269,15 +268,38 @@ void Robot::GenerateField(float x, float y, float *outX, float *outY, string col
             Position endNode = GetEndNode();
 
             alg.DoSearch(startNode, endNode);
+            currentPath = alg.finalPath;
+            SetNextPathNodeField(&xForce, &yForce);
 	    } else {
 		    SetMyBaseField(&xForce, &yForce);
 	    }
     }
     
-    SetObstaclesField(&xForce, &yForce);
+    //SetObstaclesField(&xForce, &yForce);
 
     *outX = xForce;
     *outY = yForce;
+}
+//------------------------------------------------------
+void Robot::SetNextPathNodeField(float *forceX, float *forceY) {
+    Position nextPosition = *currentPath.at(currentPath.size() - 1);
+
+    float nodeSize = WorldNodes.at(0).at(0)->length;
+    float xGoal = (worldSize/2*-1 + nextPosition.col*nodeSize) + nodeSize/2;
+    float yGoal = (worldSize/2*-1 + nextPosition.row*nodeSize) + nodeSize/2;;
+
+     //iterate enemyflags
+    float RADIUS = 5;
+    float SPREAD = 20;
+    float ALPHA = 100;
+
+    float tempXForce = 0;
+    float tempYForce = 0;
+
+    SetPotentialFieldVals(&tempXForce, &tempYForce, meTank->pos[0], meTank->pos[1], xGoal, yGoal, true, RADIUS, SPREAD, ALPHA);
+
+    *forceX += tempXForce;
+    *forceY += tempYForce;
 }
 //------------------------------------------------------
 Position Robot::GetEndNode() {

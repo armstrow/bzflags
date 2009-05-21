@@ -51,6 +51,9 @@ class Robot {
 	
 
     private:
+        void UpdateCurrGoal();
+        void SetCurrGoalToEnemyBase();
+        void SetCurrGoalToMyBase();
         Position GetEndNode();
         Position GetStartNode();
         Position GetNode(float x, float y);

@@ -14,6 +14,7 @@
 
 #define DECOY_DISTANCE 100
 #define NODE_SIZE 40
+#define TARGET_COLOR "green"
 
 using namespace std;
 
@@ -100,6 +101,7 @@ void Robot::BeAlive() {
     bool turnedOnce = false;
 
     while(1 == 1) {
+        UpdateCurrGoal();
         if(actionType == TRAVEL)
             DoTravel();
         else if(actionType == DECOY)
@@ -254,12 +256,14 @@ void Robot::GenerateField(float x, float y, float *outX, float *outY, string col
 	}
     else {
 	    if(!haveFlag) {
+		    //SetEnemyBaseField(&xForce, &yForce);
+            //SetEnemyField(&xForce, &yForce);
+
             AStarAlg alg(&WorldNodes, &gpw, true, env);
             Position startNode = GetStartNode();
             Position endNode = GetEndNode();
+
             alg.DoSearch(startNode, endNode);
-		    SetEnemyBaseField(&xForce, &yForce);
-            SetEnemyField(&xForce, &yForce);
 	    } else {
 		    SetMyBaseField(&xForce, &yForce);
 	    }
@@ -315,6 +319,66 @@ void Robot::SetGotoField(float *forceX, float *forceY) {
 //------------------------------------------------------
 void Robot::SetEnemyField(float *forceX, float *forceY) {
     
+}
+//------------------------------------------------------
+void Robot::SetCurrGoalToEnemyBase() {
+    Base *selectedBase;
+    for(int i = 0; i < env->bases.size(); i++) {
+        if(env->bases.at(i).color == TARGET_COLOR) {
+            selectedBase = &env->bases.at(i);
+            break;
+        }
+    }
+    
+    float tempx;
+    float tempy;
+
+    for(int i = 0; i < selectedBase->corners.size(); i++) {
+        Point currCorner = selectedBase->corners.at(i);
+        tempx += currCorner.x;
+        tempy += currCorner.y;
+    }
+
+    tempx *= 0.25;
+    tempy *= 0.25;
+
+    currGoal.x = tempx;
+    currGoal.y = tempy;
+}
+//------------------------------------------------------
+void Robot::SetCurrGoalToMyBase() {
+    Base *selectedBase;
+    for(int i = 0; i < env->bases.size(); i++) {
+        if(env->bases.at(i).color == bzfsComm->myColor) {
+            selectedBase = &env->bases.at(i);
+            break;
+        }
+    }
+    
+    float tempx;
+    float tempy;
+
+    for(int i = 0; i < selectedBase->corners.size(); i++) {
+        Point currCorner = selectedBase->corners.at(i);
+        tempx += currCorner.x;
+        tempy += currCorner.y;
+    }
+
+    tempx *= 0.25;
+    tempy *= 0.25;
+
+    currGoal.x = tempx;
+    currGoal.y = tempy;
+}
+//------------------------------------------------------
+void Robot::UpdateCurrGoal() {
+    bool hasFlag = (meTank->flag != "none");
+
+    if(actionType == TRAVEL && hasFlag) {
+        SetCurrGoalToMyBase();
+    } else if(actionType == TRAVEL && !hasFlag) {
+        SetCurrGoalToEnemyBase();
+    }
 }
 //------------------------------------------------------
 void Robot::SetEnemyBaseField(float *forceX, float *forceY) {

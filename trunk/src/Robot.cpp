@@ -13,7 +13,7 @@
 #include <iostream>
 
 #define DECOY_DISTANCE 100
-#define NODE_SIZE 20
+#define NODE_SIZE 10
 #define TARGET_COLOR "green"
 
 using namespace std;
@@ -48,7 +48,6 @@ void Robot::DiscretizeWorld() {
         cout << "Could not divide world up evenly into node size: " << NodeSize << endl;
         exit(0);
     }
-    
     worldSize = worldSize / 2;
     for (int x = 0 - worldSize; x < worldSize; x += NodeSize) {
         vector<Node *> tmp;
@@ -72,8 +71,9 @@ bool Robot::IsVisitable(Node* n) {
     int nvert;
     bool c = false;
 
-    for (int o = 0; o < env->obstacles.size(); o ++) {
-        Obstacle currObst = env->obstacles.at(o);
+    cout << "NUMBER OF OBSTACLES: " << env->getObstacles().size() << endl;
+    for (int o = 0; o < env->getObstacles().size(); o ++) {
+        Obstacle currObst = env->getObstacles().at(o);
         nvert = currObst.corners.size();
         float verty[4] = {currObst.corners.at(0).y, currObst.corners.at(1).y, currObst.corners.at(2).y, currObst.corners.at(3).y};
         float vertx[4] = {currObst.corners.at(0).x, currObst.corners.at(1).x, currObst.corners.at(2).x, currObst.corners.at(3).x};

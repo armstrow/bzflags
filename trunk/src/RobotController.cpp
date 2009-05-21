@@ -51,7 +51,7 @@ void* MakeRobot(void *passedArgs) {
     //sleep(2);
     MakeRobotArgs *args = (MakeRobotArgs *)passedArgs;
     Robot currBot(args->meTank, &args->thisRC->bzfsComm, args->env);
-    currBot.BeAlive();
+    currBot.BeAlive(TRAVEL);
     robotList.push_back(&currBot);
 }
 void* MakeSniper(void *passedArgs) {
@@ -59,8 +59,7 @@ void* MakeSniper(void *passedArgs) {
     //sleep(2);
     MakeRobotArgs *args = (MakeRobotArgs *)passedArgs;
     Robot currBot(args->meTank, &args->thisRC->bzfsComm, args->env);
-    currBot.BeAlive();
-    currBot.SwitchTo(SNIPER);
+    currBot.BeAlive(SNIPER);
     robotList.push_back(&currBot);
 }
 void* MakeDecoy(void *passedArgs) {
@@ -68,8 +67,7 @@ void* MakeDecoy(void *passedArgs) {
     //sleep(2);
     MakeRobotArgs *args = (MakeRobotArgs *)passedArgs;
     Robot currBot(args->meTank, &args->thisRC->bzfsComm, args->env);
-    currBot.BeAlive();
-    currBot.SwitchTo(DECOY);
+    currBot.BeAlive(DECOY);
     robotList.push_back(&currBot);
 }
 //------------------------------------------------------

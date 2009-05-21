@@ -93,8 +93,8 @@ int main(int argc, char** argv) {
 
     cout << "penalized: " << (penalized ? "YES" : "NO" ) << endl;
 
-    DiscretizeWorld(NodeS);
     controller = new RobotController(SERVER, PORT);
+    DiscretizeWorld(NodeS);
     //GnuplotTest();
 
     /* Searches */

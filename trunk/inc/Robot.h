@@ -46,7 +46,7 @@ class Robot {
         void AttackOthers(double aggression);
         void GetFlag(double agression);
         void SetPersonalData(string data);
-        void BeAlive();
+        void BeAlive(string actionType);
         void SwitchTo(string type);
 	
 

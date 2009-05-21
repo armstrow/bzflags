@@ -57,14 +57,16 @@ void* MakeSniper(void *passedArgs) {
     //sleep(2);
     MakeRobotArgs *args = (MakeRobotArgs *)passedArgs;
     Robot currBot(args->meTank, &args->thisRC->bzfsComm, args->env);
-    currBot.BeSniper();
+    currBot.BeAlive();
+    currBot.SwitchTo(SNIPER);
 }
 void* MakeDecoy(void *passedArgs) {
     //cout << "IN NEW THREAD: MAKE-ROBOT!!" << endl;
     //sleep(2);
     MakeRobotArgs *args = (MakeRobotArgs *)passedArgs;
     Robot currBot(args->meTank, &args->thisRC->bzfsComm, args->env);
-    currBot.BeDecoy();
+    currBot.BeAlive();
+    currBot.SwitchTo(DECOY);
 }
 //------------------------------------------------------
 void RobotController::LoopAction() {
@@ -77,11 +79,8 @@ void RobotController::LoopAction() {
 }
 //------------------------------------------------------
 void RobotController::InitEnvironment() {
-    cout << "RC --> INIT OBSTS" << endl;
     bzfsComm.get_obstacles(&env.obstacles);
-    cout << "RC --> INIT TEAMS" << endl;
     bzfsComm.get_teams(&env.teams);
-    cout << "RC --> INIT CONSTANTS" << endl;
     bzfsComm.get_constants(&env.constants);
     for(int i = 0; i < env.constants.size(); i++) {
         Constant currConstant = env.constants.at(i);
@@ -97,13 +96,9 @@ void RobotController::InitEnvironment() {
 //------------------------------------------------------
 void RobotController::UpdateEnvironment() {
     bzfsComm.get_shots(&env.shots);
-    //cout << "RC --> GOT SHOTS" << endl;
     bzfsComm.get_othertanks(&env.otherTanks);
-    //cout << "RC --> GOT OTHER TANKS" << endl;
     bzfsComm.get_mytanks(&env.myTanks);    
-    //cout << "RC --> GOT MY TANKS" << endl;
     bzfsComm.get_flags(&env.flags);
-    //cout << "RC --> GOT FLAGS" << endl;
 }
 //------------------------------------------------------
 

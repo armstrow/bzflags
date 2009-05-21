@@ -32,6 +32,7 @@ Robot::Robot(MyTank *meTank, BZFSCommunicator *bzfsComm, EnvironmentData *env) {
     this->gotoPoint = false;
     this->gotoX = 0;
     this->gotoY = 0;
+    this->actionType = TRAVEL;
 }
 //------------------------------------------------------
 void Robot::BeAlive() {
@@ -40,42 +41,133 @@ void Robot::BeAlive() {
 
     bzfsComm->speed(meTank->index, 0.7);
     bool turnedOnce = false;
-    //cout << "here we are" << endl;
-    //PrintGnuplotInfo();
-    //bool doYourWork = true;
+
     while(1 == 1) {
-        //cout << "tanks# -- " << meTank->index << endl;
-        bzfsComm->shoot(meTank->index);
-
-        float xForce = 0;
-        float yForce = 0;
-        float meX = meTank->pos[0];
-        float meY = meTank->pos[1];
-        bool hasFlag = (meTank->flag != "none");
-
-        GenerateField(meX, meY, &xForce, &yForce, bzfsComm->myColor, hasFlag);
-
-        float finalAngle = Wrap(atan2(yForce,xForce), PI*2);//good
-        float angleDiff = GetAngleDist(meTank->angle, finalAngle);//not good
-        float angVel = (angleDiff/(2*PI))*0.8;
-
-        if(angVel < 0)
-            angVel -= 0.2;
-        else
-            angVel += 0.2;
-
-        float speed = 1 - abs(angleDiff/PI);
-        //cout << "anglediff: " << (angleDiff/PI) << ", speed: " << speed << endl;
-        bzfsComm->speed(meTank->index, speed);
-        bzfsComm->angvel(meTank->index, angVel);
-
-        turnedOnce = true;
-        usleep(400);
+        if(actionType == TRAVEL)
+            DoTravel();
+        else if(actionType == DECOY)
+            DoDecoy();
+        else if(actionType == SNIPER)
+            DoSniper();
     }
 }
+//------------------------------------------------------
+void Robot::DoTravel() {
+    //cout << "tanks# -- " << meTank->index << endl;
+    bzfsComm->shoot(meTank->index);
+
+    float xForce = 0;
+    float yForce = 0;
+    float meX = meTank->pos[0];
+    float meY = meTank->pos[1];
+    bool hasFlag = (meTank->flag != "none");
+
+    GenerateField(meX, meY, &xForce, &yForce, bzfsComm->myColor, hasFlag);
+
+    float finalAngle = Wrap(atan2(yForce,xForce), PI*2);//good
+    float angleDiff = GetAngleDist(meTank->angle, finalAngle);//not good
+    float angVel = (angleDiff/(2*PI))*0.8;
+
+    if(angVel < 0)
+        angVel -= 0.2;
+    else
+        angVel += 0.2;
+
+    float speed = 1 - abs(angleDiff/PI);
+    //cout << "anglediff: " << (angleDiff/PI) << ", speed: " << speed << endl;
+    bzfsComm->speed(meTank->index, speed);
+    bzfsComm->angvel(meTank->index, angVel);
+
+    usleep(400);
+}
+//------------------------------------------------------
+void Robot::DoSniper() {
+    gotoPoint = false;
+    //cout << "tanks# -- " << meTank->index << endl;
+    bzfsComm->shoot(meTank->index);
+
+    float xForce = 0;
+    float yForce = 0;
+    float meX = meTank->pos[0];
+    float meY = meTank->pos[1];
+    if (env->otherTanks.size() == 0){
+        //break;
+        gotoX = 400;
+        gotoY = 0;
+    }
+    else {
+        int i = 0;
+        //while (env->otherTanks.at(i++).status.compare("dead") == 0); 
+        gotoX = env->otherTanks.at(i).x;
+        gotoY = env->otherTanks.at(i).y;
+    }
+
+    GenerateField(meX, meY, &xForce, &yForce, bzfsComm->myColor, false);
+
+    float finalAngle = Wrap(atan2(yForce,xForce), PI*2);//good
+    float angleDiff = GetAngleDist(meTank->angle, finalAngle);//not good
+    float angVel = (angleDiff/(2*PI))*0.8;
+
+    //if(angVel < 0)
+    //   angVel -= 0.2;
+    //else
+    //   angVel += 0.2;
+
+    //float speed = 1 - abs(angleDiff/PI);
+    //cout << "anglediff: " << (angleDiff/PI) << ", speed: " << speed << endl;
+    //bzfsComm->speed(meTank->index, speed);
+    bzfsComm->angvel(meTank->index, angVel);
+    usleep(400);
+}
+//------------------------------------------------------
+void Robot::DoDecoy() {
+    //cout << "tanks# -- " << meTank->index << endl;
+    //bzfsComm->shoot(meTank->index);
+    bool turnedOnce = false;
+    bool canChange = true;
+    gotoPoint = true;
+    gotoY = DECOY_DISTANCE;
+    float xForce = 0;
+    float yForce = 0;
+    float meX = meTank->pos[0];
+    float meY = meTank->pos[1];
+    gotoX = meX;
+    if (canChange) {
+        if ((meY - gotoY) < (DECOY_DISTANCE / 10)) {
+            bzfsComm->speed(meTank->index, 0);
+            gotoY = -gotoY;
+            canChange = false;
+        }
+    }
+    else
+        if ((meY - (-gotoY)) > (DECOY_DISTANCE / 10)) 
+            canChange = true;
 
 
+    GenerateField(meX, meY, &xForce, &yForce, bzfsComm->myColor, false);
 
+    float finalAngle = Wrap(atan2(yForce,xForce), PI*2);//good
+    float angleDiff = GetAngleDist(meTank->angle, finalAngle);//not good
+    float angVel = (angleDiff/(2*PI))*0.8;
+
+    if(angVel < 0)
+        angVel -= 0.2;
+    else
+        angVel += 0.2;
+
+    float speed = 1 - abs(angleDiff/PI);
+    //cout << "anglediff: " << (angleDiff/PI) << ", speed: " << speed << endl;
+    if(angleDiff < .1)
+        bzfsComm->speed(meTank->index, speed);
+
+    bzfsComm->angvel(meTank->index, angVel);
+
+    usleep(400);
+}
+//------------------------------------------------------
+void Robot::SwitchTo(string type) {
+    this->actionType = type;
+}
 //------------------------------------------------------
 void Robot::GuardBase(double aggression) {
 
@@ -87,114 +179,6 @@ void Robot::AttackOthers(double aggression) {
 //------------------------------------------------------
 void Robot::GetFlag(double aggression) {
 
-}
-//------------------------------------------------------
-
-void Robot::BeSniper(){
-    gotoPoint = true;
-    sleep(2);
-    cout << "I AM A Sniper!! (" << this->meTank->ToString() << ")" << endl;
-
-    //bzfsComm->speed(meTank->index, 0.7);
-    bool turnedOnce = false;
-    //cout << "here we are" << endl;
-    //PrintGnuplotInfo();
-    //bool doYourWork = true;
-    while(1 == 1) {
-        //cout << "tanks# -- " << meTank->index << endl;
-        bzfsComm->shoot(meTank->index);
-
-        float xForce = 0;
-        float yForce = 0;
-        float meX = meTank->pos[0];
-        float meY = meTank->pos[1];
-	if (env->otherTanks.size() == 0){
-	    //break;
-	    gotoX = 400;
-	    gotoY = 0;
-	    }
-	else {
-		int i = 0;
-		//while (env->otherTanks.at(i++).status.compare("dead") == 0); 
-	    gotoX = env->otherTanks.at(i).x;
-	    gotoY = env->otherTanks.at(i).y;
-	}
-
-        GenerateField(meX, meY, &xForce, &yForce, bzfsComm->myColor, false);
-
-        float finalAngle = Wrap(atan2(yForce,xForce), PI*2);//good
-        float angleDiff = GetAngleDist(meTank->angle, finalAngle);//not good
-        float angVel = (angleDiff/(2*PI))*0.8;
-
-        //if(angVel < 0)
-         //   angVel -= 0.2;
-        //else
-         //   angVel += 0.2;
-
-        //float speed = 1 - abs(angleDiff/PI);
-        //cout << "anglediff: " << (angleDiff/PI) << ", speed: " << speed << endl;
-        //bzfsComm->speed(meTank->index, speed);
-        bzfsComm->angvel(meTank->index, angVel);
-
-        turnedOnce = true;
-        usleep(400);
-    }
-}
-
-void Robot::BeDecoy(){
-    gotoPoint = true;
-    sleep(2);
-    cout << "I AM A DECOY!! (" << this->meTank->ToString() << ")" << endl;
-
-    bzfsComm->speed(meTank->index, 0.7);
-    bool turnedOnce = false;
-    bool canChange = true;
-    //cout << "here we are" << endl;
-    //PrintGnuplotInfo();
-    //bool doYourWork = true;
-    gotoY = DECOY_DISTANCE;
-    while(1 == 1) {
-        //cout << "tanks# -- " << meTank->index << endl;
-        //bzfsComm->shoot(meTank->index);
-
-        float xForce = 0;
-        float yForce = 0;
-        float meX = meTank->pos[0];
-        float meY = meTank->pos[1];
-	gotoX = meX;
-	if (canChange) {
-	    if ((meY - gotoY) < (DECOY_DISTANCE / 10)) {
-	        bzfsComm->speed(meTank->index, 0);
-	        gotoY = -gotoY;
-	        canChange = false;
-	    }
-	}
-	else
-		if ((meY - (-gotoY)) > (DECOY_DISTANCE / 10)) 
-			canChange = true;
-	
-
-        GenerateField(meX, meY, &xForce, &yForce, bzfsComm->myColor, false);
-
-        float finalAngle = Wrap(atan2(yForce,xForce), PI*2);//good
-        float angleDiff = GetAngleDist(meTank->angle, finalAngle);//not good
-        float angVel = (angleDiff/(2*PI))*0.8;
-
-        if(angVel < 0)
-            angVel -= 0.2;
-        else
-            angVel += 0.2;
-		  
-        float speed = 1 - abs(angleDiff/PI);
-        //cout << "anglediff: " << (angleDiff/PI) << ", speed: " << speed << endl;
-     	  if(angleDiff < .1)
-             bzfsComm->speed(meTank->index, speed);
-        
-        bzfsComm->angvel(meTank->index, angVel);
-
-        turnedOnce = true;
-        usleep(400);
-    }
 }
 
 /* +--------------------------------+

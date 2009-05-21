@@ -78,6 +78,7 @@ string AStarAlg::DoSearch(Position startNode, Position endNode) {
     int pathLength = 0;
     while(lastPos->col != startNode.col || lastPos->row != startNode.row) {
         cout << "in loop" << endl;
+        finalPath.push_back(lastPos);
         s += gw->PrintLine(map->at(lastPos->row).at(lastPos->col), map->at(lastPos->from->row).at(lastPos->from->col), GREEN);
         pathCost += lastPos->heuristic;
         lastPos = lastPos->from;

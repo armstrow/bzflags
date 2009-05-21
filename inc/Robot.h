@@ -3,8 +3,11 @@
 
 
 #include "MyTank.h"
+#include "SearchAlg.h"
+#include "Node.h"
 #include "BZFSCommunicator.h"
 #include "EnvironmentData.h"
+
 #include <vector>
 
 #define SNIPER "sniper"
@@ -23,11 +26,14 @@ class Robot {
         float gotoX;
         float gotoY;
         string actionType;
+        vector<vector<Node *> > WorldNodes;
+        Point currGoal;
 
     private:
         BZFSCommunicator *bzfsComm;
         MyTank *meTank;
         EnvironmentData *env;
+        GnuplotWriter gpw;
 
 
     /*  +--------------+
@@ -45,6 +51,11 @@ class Robot {
 	
 
     private:
+        Position GetEndNode();
+        Position GetStartNode();
+        Position GetNode(float x, float y);
+        bool IsVisitable(Node* n);
+        void DiscretizeWorld();
         void DoTravel();
         void DoSniper();
         void DoDecoy();

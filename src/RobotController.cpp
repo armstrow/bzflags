@@ -117,7 +117,6 @@ void RobotController::ControlRobots() {
         } else
             cout << currTank.status << endl;
     }
-
     for(int i = 0; i < robotList.size(); i++) {
         Robot *currRobot = robotList.at(i);
         if(enemyTanksDead)

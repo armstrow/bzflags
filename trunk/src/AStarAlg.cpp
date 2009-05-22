@@ -99,7 +99,7 @@ string AStarAlg::DoSearch(Position startNode, Position endNode, vector<Position>
     int pathLength = 0;
     while(lastPos->col != startNode.col || lastPos->row != startNode.row) {
         cout << "in loop" << endl;
-        //s += gw->PrintLine(map->at(lastPos->row).at(lastPos->col), map->at(lastPos->from->row).at(lastPos->from->col), GREEN);
+        s += gw->PrintLine(map->at(lastPos->row).at(lastPos->col), map->at(lastPos->from->row).at(lastPos->from->col), GREEN);
         Position tmpPos = *lastPos;
         finalPath->push_back(tmpPos);
         pathCost += lastPos->heuristic;
@@ -110,7 +110,10 @@ string AStarAlg::DoSearch(Position startNode, Position endNode, vector<Position>
     cout << "              PATH LENGTH: " << pathLength << endl;
 
     cout << "Goal found!!!" << endNode.row << "," << endNode.col << endl;
-    //s += gw->PrintAniData(0);
+    char buffer[100];
+    sprintf(buffer, "AStar%ld.gpi", (long int)syscall(224));
+    s += gw->PrintAniData(0);
+    gw->PrintState(s, 800, buffer);
     return s;
 }
 //------------------------------------------------------
@@ -254,8 +257,8 @@ string AStarAlg::EnQ(int row, int col, Position* from, Position endNode) {
         //cout << "Enqueued Node: (" << row << "," << col << "):" << n.heuristic << " = " << dist << " + " << GetHeuristic (row, col, endNode) << endl;
         q.push(n);
         //cout << "Enqueued Node: (" << row << "," << col << "):" << n.heuristic << " = " << dist << " + " << GetHeuristic (row, col, endNode) << endl;
-        //s += gw->PrintNode(map->at(row).at(col), BROWN);
-        //s += gw->PrintLine(map->at(from->row).at(from->col), map->at(row).at(col), BLACK);
+        s += gw->PrintNode(map->at(row).at(col), BROWN);
+        s += gw->PrintLine(map->at(from->row).at(from->col), map->at(row).at(col), BLACK);
         ////s += gw->PrintAniData(DELAY);
     }
     return s;

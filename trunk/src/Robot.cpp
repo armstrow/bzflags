@@ -118,16 +118,16 @@ void Robot::BeAlive(string actionType) {
         cout << "updating currgoal" << endl;
         UpdateCurrGoal();
         cout << "done updating currgoal" << endl;
-        DoTravel();
-        /*
-        if(actionType == TRAVEL)
+        //DoTravel();
+       cout << "AAAPerforming action: " << actionType << endl;
+        if(actionType.compare(TRAVEL) == 0)
             DoTravel();
-        else if(actionType == DECOY)
+        else if(actionType.compare(DECOY) == 0)
             DoDecoy();
-        else if(actionType == SNIPER)
+        else if(actionType.compare(SNIPER) == 0)
             DoSniper();
         cout << "done in first loop" << endl;
-        */
+       
     }
 }
 //------------------------------------------------------
@@ -200,6 +200,7 @@ void Robot::DoTravel() {
 void Robot::DoSniper() {
     gotoPoint = false;
     //cout << "tanks# -- " << meTank->index << endl;
+    bzfsComm->speed(meTank->index, 0);
     bzfsComm->shoot(meTank->index);
 
     float xForce = 0;
@@ -283,7 +284,9 @@ void Robot::DoDecoy() {
 }
 //------------------------------------------------------
 void Robot::SwitchTo(string type) {
+    cout << "AAAswitching types from" << this->actionType << "to " << type << endl;
     this->actionType = type;
+    cout << "AAAactiontype is now: " << this->actionType << endl;
 }
 //------------------------------------------------------
 void Robot::GuardBase(double aggression) {

@@ -24,7 +24,6 @@ class AStarAlg : public SearchAlg {
     public:
         bool penalize;
         EnvironmentData *env;
-        vector<Position *> finalPath;
 
     private:
         GnuplotWriter* gw;
@@ -37,6 +36,7 @@ class AStarAlg : public SearchAlg {
  
     public:
         AStarAlg(vector<vector<Node *> > *map, GnuplotWriter* writer, bool penalized, EnvironmentData *env);
+        string DoSearch(Position startNode, Position endNode, vector<Position> *finalPath);
         string DoSearch(Position startNode, Position endNode);
         vector<Node *> GetBestPath();
 

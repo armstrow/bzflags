@@ -13,7 +13,7 @@
 #include <iostream>
 
 #define DECOY_DISTANCE 100
-#define NODE_SIZE 10
+#define NODE_SIZE 20 
 #define TARGET_COLOR "green"
 
 using namespace std;
@@ -71,7 +71,7 @@ bool Robot::IsVisitable(Node* n) {
     int nvert;
     bool c = false;
 
-    cout << "NUMBER OF OBSTACLES: " << env->getObstacles().size() << endl;
+    //cout << "NUMBER OF OBSTACLES: " << env->getObstacles().size() << endl;
     for (int o = 0; o < env->getObstacles().size(); o ++) {
         Obstacle currObst = env->getObstacles().at(o);
         nvert = currObst.corners.size();
@@ -271,11 +271,8 @@ void Robot::GenerateField(float x, float y, float *outX, float *outY, string col
             Position endNode = GetEndNode();
             cout << "endNode: "; cout << endNode.ToString() << endl;
             //alg = new AStarAlg(&WorldNodes, &gpw, true, env);
-            alg->DoSearch(startNode, endNode);
+            alg->DoSearch(startNode, endNode, &currentPath);
             cout << "finished Search" << endl;
-            cout << "alg->finalPath.size(): " << alg->finalPath.size() << endl;
-            currentPath = alg->finalPath;
-            cout << "set currentPath to alg.finalPath" << endl;
             SetNextPathNodeField(&xForce, &yForce);
             cout << "set next path node field" << endl;
 
@@ -293,7 +290,10 @@ void Robot::GenerateField(float x, float y, float *outX, float *outY, string col
 //------------------------------------------------------
 void Robot::SetNextPathNodeField(float *forceX, float *forceY) {
     cout << "Setting next path node field" << endl;
-    Position nextPosition = *currentPath.at(0);//currentPath.size() - 1);
+    cout << "currentPath size: " << currentPath.size() << endl;
+    if(currentPath.size() == 0)
+        return;
+    Position nextPosition = currentPath.at(currentPath.size() - 1);//currentPath.size() - 1);
     cout << "grabbed next position" << endl;
 
     float nodeSize = WorldNodes.at(0).at(0)->length;

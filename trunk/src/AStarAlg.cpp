@@ -41,15 +41,20 @@ AStarAlg::AStarAlg(vector<vector<Node *> > *map, GnuplotWriter* writer, bool pen
 }
 //------------------------------------------------------
 string AStarAlg::DoSearch(Position startNode, Position endNode) {
+    string result = "";
+    return result;
+}
+//------------------------------------------------------
+string AStarAlg::DoSearch(Position startNode, Position endNode, vector<Position> *finalPath) {
     cout << "IN ASTAR* : DOSEARCH" << endl;
-	 //clear queue
-	 while (!q.empty()) {
-	 	q.pop();
-	 }    
+    cout << " START NODE: "; cout << startNode.ToString() << endl;
+    cout << " END NODE:   "; cout << endNode.ToString() << endl;
+	while (!q.empty()) {
+	    q.pop();
+	}    
     Position p = startNode;
     Position* pos = &p;
     map->at(pos->row).at(pos->col)->visited = true;
-    cout << "IN ASTAR* : a little below some stuff" << endl;
 
     string s = "";
 
@@ -58,14 +63,12 @@ string AStarAlg::DoSearch(Position startNode, Position endNode) {
     //s += gw->PrintAniData(DELAY);
 
     int nodesPopped = 0;
-    cout << "ASTAR* : starting loop" << endl;
     while (pos->row != endNode.row || pos->col != endNode.col) {
-        cout << "ASTAR* : in loop (nodesPopped: " << nodesPopped << " )" << endl;
-        //s += EnqueueNeighbors(pos, endNode);
+        s += EnqueueNeighbors(pos, endNode);
         if (q.empty()) {
-        	////s += EnqueueNeighbors(pos, endNode);
-            //return s;
-            break;
+        	s += EnqueueNeighbors(pos, endNode);
+            return s;
+            //break;
         }
         while (map->at(q.top().row).at(q.top().col)->visited == true) {
             q.pop();
@@ -77,23 +80,26 @@ string AStarAlg::DoSearch(Position startNode, Position endNode) {
         q.pop();
         nodesPopped++;
     }
-    cout << "              NODES POPPED: " << nodesPopped << endl;
+    //cout << "              NODES POPPED: " << nodesPopped << endl;
 
     Position *lastPos = pos;
     float pathCost = 0;
     int pathLength = 0;
+    finalPath->clear();
     while(lastPos->col != startNode.col || lastPos->row != startNode.row) {
         cout << "in loop" << endl;
-        finalPath.push_back(lastPos);
+        Position copy = *lastPos;
+        copy.from = NULL;
+        finalPath->push_back(copy);
         ////s += gw->PrintLine(map->at(lastPos->row).at(lastPos->col), map->at(lastPos->from->row).at(lastPos->from->col), GREEN);
         pathCost += lastPos->heuristic;
         lastPos = lastPos->from;
         pathLength++;
     }
-    cout << "              PATH COST  : " << pathCost << endl;
-    cout << "              PATH LENGTH: " << pathLength << endl;
+    //cout << "              PATH COST  : " << pathCost << endl;
+    //cout << "              PATH LENGTH: " << pathLength << endl;
 
-    cout << "Goal found!!!" << endNode.row << "," << endNode.col << endl;
+    //cout << "Goal found!!!" << endNode.row << "," << endNode.col << endl;
     ////s += gw->PrintAniData(0);
     return s;
 }

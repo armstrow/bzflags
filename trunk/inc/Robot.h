@@ -35,7 +35,7 @@ class Robot {
         MyTank *meTank;
 
     private:
-
+	bool isDecoy;
         EnvironmentData *env;
         GnuplotWriter gpw;
         AStarAlg *alg;

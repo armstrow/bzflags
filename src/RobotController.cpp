@@ -123,16 +123,15 @@ void RobotController::ControlRobots() {
     //if(robotList) {
         cout << "AAAControl robots: " << robotList.size() << endl;
         for(int i = 0; i < robotList.size(); i++) {
-	    Robot *currRobot = robotList.at(i);
+	        Robot *currRobot = robotList.at(i);
             //currRobot->SwitchTo(TRAVEL);
             cout << "AAATank #" << i << ": xpos: " << currRobot->meTank->pos[0] << endl; 
     	    if(enemyTanksDead)
         	    currRobot->SwitchTo(TRAVEL);
-	    else if(currRobot->meTank->pos[0] < -200 && !enemyTanksDead && i % 2 == 1)
+	        else if(currRobot->meTank->pos[0] < -200 && !enemyTanksDead && i % 2 == 1)
         	    currRobot->SwitchTo(SNIPER);
-	    else if(currRobot->meTank->pos[0] < -200 && !enemyTanksDead && i % 2 == 0)
-        	    currRobot->SwitchTo(SNIPER);
-       	
+	        else if(currRobot->meTank->pos[0] < -200 && !enemyTanksDead && i % 2 == 0)
+        	    currRobot->SwitchTo(DECOY);
     	}
     //}
 }

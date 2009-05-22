@@ -13,7 +13,7 @@
 #include <iostream>
 
 #define DECOY_DISTANCE 100
-#define NODE_SIZE 50 
+#define NODE_SIZE 20 
 #define TARGET_COLOR "green"
 #define SLEEP_AMT 100
 
@@ -36,7 +36,7 @@ Robot::Robot(MyTank *meTank, BZFSCommunicator *bzfsComm, EnvironmentData *env): 
     this->gotoPoint = false;
     this->gotoX = 0;
     this->gotoY = 0;
-    this->actionType = TRAVEL;
+    this->actionType = "BOGUSNESS";
     this->e0 = 0;
     //DiscretizeWorld();
 }
@@ -97,7 +97,6 @@ void Robot::BeAlive(string actionType) {
     cout << "I AM A " << actionType << endl;
     UpdateCurrGoal();
 
-    bzfsComm->speed(meTank->index, 0.7);
     cout << "set speed" << endl;
     bool turnedOnce = false;
 
@@ -112,6 +111,11 @@ void Robot::BeAlive(string actionType) {
         cout << meTank->index << ": backpath: ";
         currentPath.at(i).ToString();
         cout << endl;
+    }
+    if(currentPath.size() > 4) {
+        currentPath.pop_back();
+        currentPath.pop_back();
+        currentPath.pop_back();
     }
 
     while(1 == 1) {
@@ -132,21 +136,17 @@ void Robot::BeAlive(string actionType) {
 }
 //------------------------------------------------------
 float Robot::PDController(float goalAngle, float angleDiff, float currAngVel) {
-    float KP = 0.1;
-    float KD = 0.5;
+    angleDiff /= PI;
+    bool negDiff = angleDiff < 0;
+    float newAngVel = sqrt(abs(angleDiff));
+    if(negDiff)
+        newAngVel *= -1;
 
-    float dT = SLEEP_AMT/1000;
-    float dE = (angleDiff - e0)/dT;
-    e0 = angleDiff;
+    float newSpeed = 1 - sqrt(sqrt(abs(angleDiff)));
+    if(newSpeed > 0.8)
+        newSpeed = sqrt(newSpeed);
 
-    float force = KP*angleDiff + KD*dE;
-
-    float MASS = 25;//????
-
-    float oldSpeed = sqrt(meTank->velocity[0]*meTank->velocity[0] + meTank->velocity[0]*meTank->velocity[0]);
-    float newSpeed = oldSpeed + dT/MASS*force;
-
-    float newAngVel = currAngVel + dT/MASS*force;
+    cout << "PDC  angleDiff: " << angleDiff << ", " << "newSpeed: " << newSpeed << ", newAngVel " << newAngVel;
 
     bzfsComm->speed(meTank->index, newSpeed);
     bzfsComm->angvel(meTank->index, newAngVel);
@@ -353,13 +353,14 @@ void Robot::SetNextPathNodeField(float *forceX, float *forceY) {
     float currXGoal = (worldSize*-1 + currGoal.row*nodeSize) + nodeSize/2;
     float currYGoal = (worldSize*-1 + currGoal.col*nodeSize) + nodeSize/2;;
     float dist = (currXGoal - meTank->pos[0])*(currXGoal - meTank->pos[0]) + (currYGoal - meTank->pos[1])*(currYGoal - meTank->pos[1]);
+    //dist = sqrt(dist);
     cout << "MY POS:    DIST TO CURR GOAL: " << dist << endl;
     /*
     */
  
     Position myPos = GetStartNode();
     cout << "MY POS: "; cout << myPos.ToString(); cout << ", currPath.back().col: " << currentPath.back().col << ", currPath.back().row: " << currentPath.back().row << endl;
-    if(dist < nodeSize*nodeSize) {//GetStartNode().col == currentPath.back().col && GetStartNode().row == currentPath.back().row) {
+    if(dist < 1000) {//GetStartNode().col == currentPath.back().col && GetStartNode().row == currentPath.back().row) {
         currentPath.pop_back();
         cout << "    MY POS      THEY EQUAL!!!!!" << endl;
     }

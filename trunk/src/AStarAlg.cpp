@@ -54,6 +54,10 @@ void AStarAlg::ResetMap() {
 }
 //------------------------------------------------------
 string AStarAlg::DoSearch(Position startNode, Position endNode, vector<Position> *finalPath) {
+
+    cout << "start: " << startNode.ToString() << endl;
+    cout << "end:   " << endNode.ToString() << endl;;
+
     ResetMap();
     Position p = startNode;
     Position* pos = &p;
@@ -67,6 +71,7 @@ string AStarAlg::DoSearch(Position startNode, Position endNode, vector<Position>
 
     int nodesPopped = 0;
     while (pos->row != endNode.row || pos->col != endNode.col) {
+        cout << "A*: in main loop (beginning)" << endl;
         s += EnqueueNeighbors(pos, endNode);
         if (q.empty()) {
             cout << "Error, goal not found in BFS" << endl;
@@ -74,8 +79,10 @@ string AStarAlg::DoSearch(Position startNode, Position endNode, vector<Position>
         }
         Position *tmp = q.top();
         while (map->at(tmp->row).at(tmp->col)->visited == true) {
+            cout << "      A*: in inner main loop" << endl;
             q.pop();
             tmp = q.top();
+            cout << "      A*: tmp: " << tmp->row << ", " << tmp->col << endl; 
         }
         map->at(tmp->row).at(tmp->col)->visited = true;
         //s += gw->PrintLine(map->at(pos->row).at(pos->col), map->at(tmp->row).at(tmp->col), ORANGE);
@@ -197,7 +204,7 @@ float AStarAlg::GetHeuristic(int row, int col, Position endNode) {
             Position corner = GetNode(currObst.corners.at(0).x, currObst.corners.at(0).y);
             float radius = GetRealDistance(pos, corner) * OBST_PENALTY_SIZE;
             float offBy = (radius - dist < 0) ? 0 : radius - dist;
-            wallValue//s += offBy * OBST_PENALTY_FAC;
+            wallValues += offBy * OBST_PENALTY_FAC;
             //if (offBy > 0) cout << "Obstacle Penalty Added!!!!!!!" << offBy << endl;
         }
         /*

@@ -45,64 +45,65 @@ string AStarAlg::DoSearch(Position startNode, Position endNode) {
     return result;
 }
 //------------------------------------------------------
+void AStarAlg::ResetMap() {
+    for(int i = 0; i < map->size(); i++) {
+        for(int j = 0; j < map->at(i).size(); j++) {
+            map->at(i).at(j)->visited = false;
+        }
+    }
+}
+//------------------------------------------------------
 string AStarAlg::DoSearch(Position startNode, Position endNode, vector<Position> *finalPath) {
-    cout << "IN ASTAR* : DOSEARCH" << endl;
-    cout << " START NODE: "; cout << startNode.ToString() << endl;
-    cout << " END NODE:   "; cout << endNode.ToString() << endl;
-	while (!q.empty()) {
-	    q.pop();
-	}    
+    ResetMap();
     Position p = startNode;
     Position* pos = &p;
     map->at(pos->row).at(pos->col)->visited = true;
 
     string s = "";
 
-    //s += gw->PrintNode(map->at(pos->row).at(pos->col), GREEN);
-    //s += gw->PrintNode(map->at(endNode.row).at(endNode.col), RED);
-    //s += gw->PrintAniData(DELAY);
+    s += gw->PrintNode(map->at(pos->row).at(pos->col), GREEN);
+    s += gw->PrintNode(map->at(endNode.row).at(endNode.col), RED);
+    s += gw->PrintAniData(DELAY);
 
     int nodesPopped = 0;
     while (pos->row != endNode.row || pos->col != endNode.col) {
         s += EnqueueNeighbors(pos, endNode);
         if (q.empty()) {
-        	s += EnqueueNeighbors(pos, endNode);
+            cout << "Error, goal not found in BFS" << endl;
             return s;
-            //break;
         }
-        Position tmp = q.top();
-        while (map->at(tmp.row).at(tmp.col)->visited == true) {
-            if(!q.empty())
-                q.pop();
+        Position *tmp = q.top();
+        while (map->at(tmp->row).at(tmp->col)->visited == true) {
+            q.pop();
+            tmp = q.top();
         }
-        map->at(q.top().row).at(q.top().col)->visited = true;
-        //s += gw->PrintLine(map->at(pos->row).at(pos->col), map->at(q.top().row).at(q.top().col), ORANGE);
+        map->at(tmp->row).at(tmp->col)->visited = true;
+        //s += gw->PrintLine(map->at(pos->row).at(pos->col), map->at(tmp->row).at(tmp->col), ORANGE);
         //s += gw->PrintAniData(DELAY);
-        pos = (Position *)&q.top();
+        pos = tmp;
         q.pop();
         nodesPopped++;
+       // cout << "checking node at: " << pos->row << "," << pos->col << endl;
     }
-    //cout << "              NODES POPPED: " << nodesPopped << endl;
+    cout << "              NODES POPPED: " << nodesPopped << endl;
 
     Position *lastPos = pos;
     float pathCost = 0;
     int pathLength = 0;
-    finalPath->clear();
     while(lastPos->col != startNode.col || lastPos->row != startNode.row) {
         cout << "in loop" << endl;
-        Position copy = *lastPos;
-        copy.from = NULL;
-        finalPath->push_back(copy);
-        ////s += gw->PrintLine(map->at(lastPos->row).at(lastPos->col), map->at(lastPos->from->row).at(lastPos->from->col), GREEN);
+        //s += gw->PrintLine(map->at(lastPos->row).at(lastPos->col), map->at(lastPos->from->row).at(lastPos->from->col), GREEN);
+        Position tmpPos = *lastPos;
+        finalPath->push_back(tmpPos);
         pathCost += lastPos->heuristic;
         lastPos = lastPos->from;
         pathLength++;
     }
-    //cout << "              PATH COST  : " << pathCost << endl;
-    //cout << "              PATH LENGTH: " << pathLength << endl;
+    cout << "              PATH COST  : " << pathCost << endl;
+    cout << "              PATH LENGTH: " << pathLength << endl;
 
-    //cout << "Goal found!!!" << endNode.row << "," << endNode.col << endl;
-    ////s += gw->PrintAniData(0);
+    cout << "Goal found!!!" << endNode.row << "," << endNode.col << endl;
+    //s += gw->PrintAniData(0);
     return s;
 }
 //------------------------------------------------------
@@ -185,7 +186,6 @@ float AStarAlg::GetHeuristic(int row, int col, Position endNode) {
         */
 
         //check obstacles
-        /*
         vector<Obstacle> obstacles = env->getObstacles();
         for(int i = 0; i < obstacles.size(); i++) {
             Obstacle currObst = obstacles.at(i);
@@ -200,6 +200,7 @@ float AStarAlg::GetHeuristic(int row, int col, Position endNode) {
             wallValue//s += offBy * OBST_PENALTY_FAC;
             //if (offBy > 0) cout << "Obstacle Penalty Added!!!!!!!" << offBy << endl;
         }
+        /*
         */
     }
 
@@ -242,7 +243,7 @@ string AStarAlg::EnQ(int row, int col, Position* from, Position endNode) {
         float fromY = map->at(from->row).at(from->col)->y + ns;
         float dist = sqrt( (x - fromX)*(x - fromX) +
                 (y - fromY)*(y - fromY) ) + from->distSoFar;
-        Position n(row, col, dist + GetHeuristic(row, col, endNode), dist, from);
+        Position *n = new Position(row, col, dist + GetHeuristic(row, col, endNode), dist, from);
         //cout << "Enqueued Node: (" << row << "," << col << "):" << n.heuristic << " = " << dist << " + " << GetHeuristic (row, col, endNode) << endl;
         q.push(n);
         //cout << "Enqueued Node: (" << row << "," << col << "):" << n.heuristic << " = " << dist << " + " << GetHeuristic (row, col, endNode) << endl;

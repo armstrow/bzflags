@@ -110,19 +110,20 @@ void RobotController::ControlRobots() {
     bool enemyTanksDead = true;
     for(int i = 0; i < env.otherTanks.size(); i++) {
         OtherTank currTank = env.otherTanks.at(i);
-        if(currTank.status == "alive") {
+        if(currTank.status == "normal")
             enemyTanksDead = false;
-        } else
-            cout << currTank.status << endl;
     }
     for(int i = 0; i < robotList.size(); i++) {
         Robot *currRobot = robotList.at(i);
+        currRobot->SwitchTo(TRAVEL);
+        /*
         if(enemyTanksDead)
             currRobot->SwitchTo(TRAVEL);
         else if(!enemyTanksDead && i % 2 == 0)
             currRobot->SwitchTo(DECOY);
         else if(!enemyTanksDead && i % 2 == 1)
             currRobot->SwitchTo(SNIPER);
+        */
     }
 }
 //------------------------------------------------------

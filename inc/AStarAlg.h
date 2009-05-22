@@ -27,7 +27,7 @@ class AStarAlg : public SearchAlg {
 
     private:
         GnuplotWriter* gw;
-        priority_queue<Position, vector<Position>, ComparePosition> q;
+        priority_queue<Position *, vector<Position *>, ComparePosition> q;
 
   
     /*  +--------------+
@@ -41,6 +41,7 @@ class AStarAlg : public SearchAlg {
         vector<Node *> GetBestPath();
 
     private:
+        void ResetMap();
         float GetRealDistance(Position start, Position end);
         void GetCenter(float *centerX, float *centerY, vector<Point> points);
         Position GetNode(float xloc, float yloc);

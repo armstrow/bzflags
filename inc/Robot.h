@@ -31,11 +31,11 @@ class Robot {
         Point currGoal;
         vector<Position> currentPath;
         float worldSize;
-
-
-    private:
         BZFSCommunicator *bzfsComm;
         MyTank *meTank;
+
+    private:
+
         EnvironmentData *env;
         GnuplotWriter gpw;
         AStarAlg *alg;

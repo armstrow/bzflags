@@ -7,11 +7,13 @@
 
 #include <vector>
 
-vector<Robot *> robotList;
+//vector<Robot *> robotList;
 
 void *MakeRobot(void *args);
 void *MakeSniper(void *args);
 void *MakeDecoy(void *args);
+
+pthread_mutex_t botList_lock;
 
 //------------------------------------------------------
 RobotController::RobotController(string server, int port) {
@@ -19,7 +21,7 @@ RobotController::RobotController(string server, int port) {
         cout << "INITING ENV!" << endl;
 		InitEnvironment();
 	}
-	//pthread_mutex_init(&socket_lock, NULL);
+	//pthread_mutex_init(&botList_lock, NULL);
 }
 
 
@@ -37,12 +39,12 @@ void RobotController::InitRobots() {
         pthread_t *newThread = new pthread_t();
         //robotThreads.push_back(newThread);
         MyTank *currTank = &env.myTanks.at(i);
-        MakeRobotArgs args(this, currTank, &env);
-        if(sniper) 
-            pthread_create(newThread, NULL, &MakeSniper, (void *)&args);
-        else
-            pthread_create(newThread, NULL, &MakeDecoy, (void *)&args);
-        sniper = true;
+        MakeRobotArgs args(this, currTank, &env, &robotList);
+        //if(sniper) 
+            pthread_create(newThread, NULL, &MakeRobot, (void *)&args);
+        //else
+        //    pthread_create(newThread, NULL, &MakeRobot, (void *)&args);
+        //sniper = true;
     }
 }
 //------------------------------------------------------
@@ -51,24 +53,29 @@ void* MakeRobot(void *passedArgs) {
     //sleep(2);
     MakeRobotArgs *args = (MakeRobotArgs *)passedArgs;
     Robot currBot(args->meTank, &args->thisRC->bzfsComm, args->env);
+    //vector<Robot *> *roboList = args->robotList;
+    pthread_mutex_lock(&botList_lock);
+    args->robotList->push_back(&currBot);
+    pthread_mutex_unlock(&botList_lock);
     currBot.BeAlive(TRAVEL);
-    robotList.push_back(&currBot);
 }
 void* MakeSniper(void *passedArgs) {
     //cout << "IN NEW THREAD: MAKE-ROBOT!!" << endl;
     //sleep(2);
     MakeRobotArgs *args = (MakeRobotArgs *)passedArgs;
     Robot currBot(args->meTank, &args->thisRC->bzfsComm, args->env);
+    vector<Robot *> *roboList = args->robotList;
     currBot.BeAlive(SNIPER);
-    robotList.push_back(&currBot);
+    roboList->push_back(&currBot);
 }
 void* MakeDecoy(void *passedArgs) {
     //cout << "IN NEW THREAD: MAKE-ROBOT!!" << endl;
     //sleep(2);
     MakeRobotArgs *args = (MakeRobotArgs *)passedArgs;
     Robot currBot(args->meTank, &args->thisRC->bzfsComm, args->env);
+    vector<Robot *> *roboList = args->robotList;
     currBot.BeAlive(DECOY);
-    robotList.push_back(&currBot);
+    roboList->push_back(&currBot);
 }
 //------------------------------------------------------
 void RobotController::LoopAction() {
@@ -113,21 +120,23 @@ void RobotController::ControlRobots() {
         if(currTank.status == "normal")
             enemyTanksDead = false;
     }
-    for(int i = 0; i < robotList.size(); i++) {
-        Robot *currRobot = robotList.at(i);
-        currRobot->SwitchTo(TRAVEL);
-        /*
-        if(enemyTanksDead)
-            currRobot->SwitchTo(TRAVEL);
-        else if(!enemyTanksDead && i % 2 == 0)
-            currRobot->SwitchTo(DECOY);
-        else if(!enemyTanksDead && i % 2 == 1)
-            currRobot->SwitchTo(SNIPER);
-        */
-    }
+    //if(robotList) {
+        cout << "AAAControl robots: " << robotList.size() << endl;
+        for(int i = 0; i < robotList.size(); i++) {
+	    Robot *currRobot = robotList.at(i);
+            //currRobot->SwitchTo(TRAVEL);
+            cout << "AAATank #" << i << ": xpos: " << currRobot->meTank->pos[0] << endl; 
+    	    if(enemyTanksDead)
+        	    currRobot->SwitchTo(TRAVEL);
+	    else if(currRobot->meTank->pos[0] < -200 && !enemyTanksDead && i % 2 == 1)
+        	    currRobot->SwitchTo(SNIPER);
+	    else if(currRobot->meTank->pos[0] < -200 && !enemyTanksDead && i % 2 == 0)
+        	    currRobot->SwitchTo(SNIPER);
+       	
+    	}
+    //}
 }
 //------------------------------------------------------
-
 
 
 /****************************

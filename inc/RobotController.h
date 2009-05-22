@@ -19,7 +19,7 @@ class RobotController {
 
     private:
         vector<pthread_t> robotThreads;
-        //vector<Robot *> robotList; 
+        vector<Robot *> robotList; 
 	    pthread_mutex_t socket_lock;
     public:
         BZFSCommunicator bzfsComm;
@@ -63,8 +63,9 @@ class MakeRobotArgs {
         RobotController *thisRC;
         MyTank *meTank;
         EnvironmentData *env;
+	vector<Robot*> *robotList;
 
-        MakeRobotArgs(RobotController *thisRC, MyTank *meTank, EnvironmentData *env): thisRC(thisRC),meTank(meTank), env(env){}
+        MakeRobotArgs(RobotController *thisRC, MyTank *meTank, EnvironmentData *env, vector<Robot*> *rl): thisRC(thisRC),meTank(meTank), env(env), robotList(rl){}
 };
 
 

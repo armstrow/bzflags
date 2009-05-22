@@ -40,6 +40,9 @@ class Robot {
         GnuplotWriter gpw;
         AStarAlg *alg;
 
+        //PD CONTROLLER STUFF
+        float e0;
+
     /*  +--------------+
      *  |  FUNCTIONS   |
      *  +--------------+ */
@@ -55,6 +58,7 @@ class Robot {
 	
 
     private: 
+        float PDController(float goalAngle, float currAngle, float currAngVel);
         void SetNextPathNodeField(float *xForce, float *yForce);
         void UpdateCurrGoal();
         void SetCurrGoalToEnemyBase();

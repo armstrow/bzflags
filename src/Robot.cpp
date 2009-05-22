@@ -15,6 +15,7 @@
 #define DECOY_DISTANCE 100
 #define NODE_SIZE 50 
 #define TARGET_COLOR "green"
+#define SLEEP_AMT 100
 
 using namespace std;
 
@@ -36,6 +37,7 @@ Robot::Robot(MyTank *meTank, BZFSCommunicator *bzfsComm, EnvironmentData *env): 
     this->gotoX = 0;
     this->gotoY = 0;
     this->actionType = TRAVEL;
+    this->e0 = 0;
     //DiscretizeWorld();
 }
 //------------------------------------------------------
@@ -129,6 +131,31 @@ void Robot::BeAlive(string actionType) {
     }
 }
 //------------------------------------------------------
+float Robot::PDController(float goalAngle, float angleDiff, float currAngVel) {
+    float KP = 0.1;
+    float KD = 0.5;
+
+    float dT = SLEEP_AMT/1000;
+    float dE = (angleDiff - e0)/dT;
+    e0 = angleDiff;
+
+    float force = KP*angleDiff + KD*dE;
+
+    float MASS = 25;//????
+
+    float oldSpeed = sqrt(meTank->velocity[0]*meTank->velocity[0] + meTank->velocity[0]*meTank->velocity[0]);
+    float newSpeed = oldSpeed + dT/MASS*force;
+
+    float newAngVel = currAngVel + dT/MASS*force;
+
+    bzfsComm->speed(meTank->index, newSpeed);
+    bzfsComm->angvel(meTank->index, newAngVel);
+}
+//------------------------------------------------------
+//float Robot::PDSpeedController(float currSpeed, float goalDist) {
+//    
+//}
+//------------------------------------------------------
 void Robot::DoTravel() {
     //cout << "tanks# -- " << meTank->index << endl;
     //bzfsComm->shoot(meTank->index);
@@ -145,6 +172,10 @@ void Robot::DoTravel() {
 
     float finalAngle = Wrap(atan2(yForce,xForce), PI*2);//good
     float angleDiff = GetAngleDist(meTank->angle, finalAngle);//not good
+    float currAngVel = meTank->angvel;
+    PDController(finalAngle, angleDiff, currAngVel);
+
+    /*
     float angVel = (angleDiff/(2*PI))*0.8;
 
     if(angVel < 0)
@@ -161,8 +192,9 @@ void Robot::DoTravel() {
 
     bzfsComm->speed(meTank->index, speed);
     bzfsComm->angvel(meTank->index, angVel);
+    */
 
-    usleep(100);
+    usleep(SLEEP_AMT);
 }
 //------------------------------------------------------
 void Robot::DoSniper() {

@@ -123,12 +123,12 @@ void Robot::BeAlive(string actionType) {
         UpdateCurrGoal();
         cout << "done updating currgoal" << endl;
         //DoTravel();
-       cout << "AAAPerforming action: " << actionType << endl;
-        if(actionType.compare(TRAVEL) == 0)
+	cout << "AAAPerforming action: " << this->actionType << endl;
+        if(this->actionType.compare(TRAVEL) == 0)
             DoTravel();
-        else if(actionType.compare(DECOY) == 0)
+        else if(this->actionType.compare(DECOY) == 0)
             DoDecoy();
-        else if(actionType.compare(SNIPER) == 0)
+        else if(this->actionType.compare(SNIPER) == 0)
             DoSniper();
         cout << "done in first loop" << endl;
        
@@ -159,7 +159,7 @@ float Robot::PDController(float goalAngle, float angleDiff, float currAngVel) {
 void Robot::DoTravel() {
     //cout << "tanks# -- " << meTank->index << endl;
     //bzfsComm->shoot(meTank->index);
-
+    gotoPoint = false;
     float xForce = 0;
     float yForce = 0;
     float meX = meTank->pos[0];
@@ -203,10 +203,11 @@ void Robot::DoSniper() {
     bzfsComm->speed(meTank->index, 0);
     bzfsComm->shoot(meTank->index);
 
-    float xForce = 0;
-    float yForce = 0;
+    float xDiff = 0;
+    float yDiff = 0;
     float meX = meTank->pos[0];
     float meY = meTank->pos[1];
+    float themX, themY;
     if (env->otherTanks.size() == 0){
         //break;
         gotoX = 400;
@@ -214,21 +215,23 @@ void Robot::DoSniper() {
     }
     else {
         int i = 0;
-        //while (env->otherTanks.at(i++).status.compare("dead") == 0); 
-        gotoX = env->otherTanks.at(i).x;
-        gotoY = env->otherTanks.at(i).y;
+        while (env->otherTanks.at(i).status.compare("dead") == 0) i++; 
+        themX = env->otherTanks.at(i).x;
+        themY = env->otherTanks.at(i).y;
     }
 
-    GenerateField(meX, meY, &xForce, &yForce, bzfsComm->myColor, false);
+//    GenerateField(meX, meY, &xForce, &yForce, bzfsComm->myColor, false);
+    xDiff = themX - meX;
+    yDiff = themY - meY;
 
-    float finalAngle = Wrap(atan2(yForce,xForce), PI*2);//good
+    float finalAngle = Wrap(atan2(yDiff,xDiff), PI*2);//good
     float angleDiff = GetAngleDist(meTank->angle, finalAngle);//not good
     float angVel = (angleDiff/(2*PI))*0.8;
 
-    //if(angVel < 0)
-    //   angVel -= 0.2;
-    //else
-    //   angVel += 0.2;
+    if(angVel < 0)
+       angVel -= 0.2;
+    else
+       angVel += 0.2;
 
     //float speed = 1 - abs(angleDiff/PI);
     //cout << "anglediff: " << (angleDiff/PI) << ", speed: " << speed << endl;
@@ -240,26 +243,61 @@ void Robot::DoSniper() {
 void Robot::DoDecoy() {
     //cout << "tanks# -- " << meTank->index << endl;
     //bzfsComm->shoot(meTank->index);
+    //
+    //
+    int speed = 1;    
+    float angleDiff = 1;
+//  float angVel = 1;
+    while (angleDiff >= 0.1) {
+        angleDiff = GetAngleDist(meTank->angle, PI*1.5);//not good
+	bzfsComm->angvel(meTank->index, 1);
+    	usleep(100);
+    }
+    bzfsComm->angvel(meTank->index, 0);
+    while (actionType == "decoy") {
+	speed = -speed;
+	bzfsComm->speed(meTank->index, speed);
+	sleep(3);
+    }
+}
+/*
+
+  
+
+
     bool turnedOnce = false;
     bool canChange = true;
     gotoPoint = true;
-    gotoY = DECOY_DISTANCE;
+    if (gotoY == 0)
+	gotoY = DECOY_DISTANCE;
     float xForce = 0;
     float yForce = 0;
     float meX = meTank->pos[0];
     float meY = meTank->pos[1];
-    gotoX = meX;
-    if (canChange) {
-        if ((meY - gotoY) < (DECOY_DISTANCE / 10)) {
-            bzfsComm->speed(meTank->index, 0);
-            gotoY = -gotoY;
+    gotoX = -300;
+    float dist = (gotoX - meX)*(gotoX - meX) + (gotoY - meY)*(gotoY - meY);
+    //if (canChange) {
+        if (dist < ((DECOY_DISTANCE / 4)*(DECOY_DISTANCE / 4))) {
+            bzfsComm->speed(meTank->index, .3);
+            gotoY = 0-gotoY;
             canChange = false;
+		cout << "AAA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\nAAAGOAL REACHED\nAAA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
         }
-    }
-    else
-        if ((meY - (-gotoY)) > (DECOY_DISTANCE / 10)) 
-            canChange = true;
+    //}
+    //else
+    //    if ((meY - (-gotoY)) > (DECOY_DISTANCE / 2)) 
+    //        canChange = true;
 
+    cout << "AAADecoy going for: " << gotoX << "," << gotoY << endl;
+    cout << "AAADecoy at       : " << meX << "," << meY << endl;
+
+    if (abs(meTank->angle - (PI*.5)) < .05) {
+	bzfsComm->angvel(meTank->index, 0);
+	bzfsComm->speed(meTank->index, gotoY);
+	gotoY = -gotoY;
+	sleep(2);
+	return;
+    }
 
     GenerateField(meX, meY, &xForce, &yForce, bzfsComm->myColor, false);
 
@@ -268,9 +306,9 @@ void Robot::DoDecoy() {
     float angVel = (angleDiff/(2*PI))*0.8;
 
     if(angVel < 0)
-        angVel -= 0.2;
+        angVel -= 1;
     else
-        angVel += 0.2;
+        angVel += 1;
 
     float speed = 1 - abs(angleDiff/PI);
 
@@ -281,11 +319,11 @@ void Robot::DoDecoy() {
     bzfsComm->angvel(meTank->index, angVel);
 
     usleep(400);
-}
+}*/
 //------------------------------------------------------
 void Robot::SwitchTo(string type) {
     cout << "AAAswitching types from" << this->actionType << "to " << type << endl;
-    this->actionType = type;
+    actionType = type;
     cout << "AAAactiontype is now: " << this->actionType << endl;
 }
 //------------------------------------------------------
@@ -312,15 +350,15 @@ void Robot::GenerateField(float x, float y, float *outX, float *outY, string col
     float xForce;
     float yForce;
 
-    //if (gotoPoint) {
-		//SetGotoField(&xForce, &yForce);
-	//}
-    //else {
+    if (gotoPoint) {
+		SetGotoField(&xForce, &yForce);
+    }
+    else {
 	    if(!haveFlag) {
 		    //SetEnemyBaseField(&xForce, &yForce);
             //SetEnemyField(&xForce, &yForce);
 
-            cout << "finished Search" << endl;
+            //cout << "finished Search" << endl;
             SetNextPathNodeField(&xForce, &yForce);
             cout << "set next path node field" << endl;
 
@@ -328,7 +366,7 @@ void Robot::GenerateField(float x, float y, float *outX, float *outY, string col
 	    } else {
 		    SetMyBaseField(&xForce, &yForce);
 	    }
-    //}
+    }
     
     //SetObstaclesField(&xForce, &yForce);
 
@@ -418,8 +456,8 @@ Position Robot::GetNode(float xloc, float yloc) {
 void Robot::SetGotoField(float *forceX, float *forceY) {
     //iterate enemyflags
     float RADIUS = 5;
-    float SPREAD = 10;
-    float ALPHA = 100;
+    float SPREAD = 100;
+    float ALPHA = 1000;
 
     float tempXForce = 0;
     float tempYForce = 0;

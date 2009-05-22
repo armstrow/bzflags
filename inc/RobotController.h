@@ -20,7 +20,8 @@ class RobotController {
     private:
         vector<pthread_t> robotThreads;
         vector<Robot *> robotList; 
-	    pthread_mutex_t socket_lock;
+	int decoy;
+	pthread_mutex_t socket_lock;
     public:
         BZFSCommunicator bzfsComm;
         EnvironmentData env;

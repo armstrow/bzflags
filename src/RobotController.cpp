@@ -14,6 +14,7 @@ void *MakeSniper(void *args);
 void *MakeDecoy(void *args);
 
 pthread_mutex_t botList_lock;
+bool canEnter = true;
 
 //------------------------------------------------------
 RobotController::RobotController(string server, int port) {
@@ -22,6 +23,7 @@ RobotController::RobotController(string server, int port) {
 		InitEnvironment();
 	}
 	//pthread_mutex_init(&botList_lock, NULL);
+	decoy = -1;
 }
 
 
@@ -40,7 +42,11 @@ void RobotController::InitRobots() {
         //robotThreads.push_back(newThread);
         MyTank *currTank = &env.myTanks.at(i);
         MakeRobotArgs args(this, currTank, &env, &robotList);
-        //if(sniper) 
+	//	while(!canEnter) usleep(100);
+	pthread_mutex_lock(&botList_lock);
+	//canEnter = false;
+	
+	//if(sniper) 
             pthread_create(newThread, NULL, &MakeRobot, (void *)&args);
         //else
         //    pthread_create(newThread, NULL, &MakeRobot, (void *)&args);
@@ -54,9 +60,10 @@ void* MakeRobot(void *passedArgs) {
     MakeRobotArgs *args = (MakeRobotArgs *)passedArgs;
     Robot currBot(args->meTank, &args->thisRC->bzfsComm, args->env);
     //vector<Robot *> *roboList = args->robotList;
-    pthread_mutex_lock(&botList_lock);
+
     args->robotList->push_back(&currBot);
     pthread_mutex_unlock(&botList_lock);
+    canEnter = true;
     currBot.BeAlive(TRAVEL);
 }
 void* MakeSniper(void *passedArgs) {
@@ -115,10 +122,13 @@ void RobotController::UpdateEnvironment() {
 void RobotController::ControlRobots() {
     //decoys/snipers will always be in pairs
     bool enemyTanksDead = true;
+    float otherX;
     for(int i = 0; i < env.otherTanks.size(); i++) {
         OtherTank currTank = env.otherTanks.at(i);
-        if(currTank.status == "normal")
+        if(currTank.status == "normal"){
             enemyTanksDead = false;
+	    otherX = currTank.x;
+	}
     }
     //if(robotList) {
         cout << "AAAControl robots: " << robotList.size() << endl;
@@ -126,12 +136,21 @@ void RobotController::ControlRobots() {
 	        Robot *currRobot = robotList.at(i);
             //currRobot->SwitchTo(TRAVEL);
             cout << "AAATank #" << i << ": xpos: " << currRobot->meTank->pos[0] << endl; 
+	    //if (!hasDec) cout << "AAAHasDecoy is false" << endl;
     	    if(enemyTanksDead)
-        	    currRobot->SwitchTo(TRAVEL);
-	        else if(currRobot->meTank->pos[0] < -200 && !enemyTanksDead && i % 2 == 1)
-        	    currRobot->SwitchTo(SNIPER);
-	        else if(currRobot->meTank->pos[0] < -200 && !enemyTanksDead && i % 2 == 0)
-        	    currRobot->SwitchTo(DECOY);
+	      currRobot->SwitchTo(TRAVEL);
+	    else if(abs(otherX - currRobot->meTank->pos[0]) < 200 && !enemyTanksDead) {
+		if (decoy == -1 || decoy == i) {
+			currRobot->SwitchTo(DECOY);
+			decoy = i;
+		}
+		else {
+		      currRobot->SwitchTo(SNIPER);
+		}
+	    }
+	    //}
+	    //else if(abs(otherX - currRobot->meTank->pos[0]) < 200 && !enemyTanksDead)
+	     // currRobot->SwitchTo(SNIPER);
     	}
     //}
 }

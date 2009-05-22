@@ -106,14 +106,16 @@ int main(int argc, char** argv) {
     string s = "";
     GnuplotWriter* gw = new GnuplotWriter(&controller->env);
     
-    SearchAlg* alg;
+    //AStarAlg* alg;
     //alg = new BreadthFirstAlg(WorldNodes, gw); //BT--DONE
     //alg = new DepthFirstAlg(WorldNodes, gw); //BT--DONE
     //alg = new IterativeDeepeningAlg(WorldNodes, gw);
     //alg = new GreedyBestFirstAlg(WorldNodes, gw, penalized, &controller->env); //BT--DONE
     //alg = new AStarAlg(WorldNodes, gw, penalized, &controller->env); //BT--DONE
     //cout << "first search done" << endl;
-    //s += alg->DoSearch(startNode, endNode);
+    //vector<Position> cpath;
+    //s += alg->DoSearch(startNode, endNode, &cpath);
+    //cout << "Search done!!" << endl;
 
     //Remember to clear the "visited" boolean in the Nodes between each search
 

@@ -70,12 +70,14 @@ string AStarAlg::DoSearch(Position startNode, Position endNode, vector<Position>
             return s;
             //break;
         }
-        while (map->at(q.top().row).at(q.top().col)->visited == true) {
-            q.pop();
+        Position tmp = q.top();
+        while (map->at(tmp.row).at(tmp.col)->visited == true) {
+            if(!q.empty())
+                q.pop();
         }
         map->at(q.top().row).at(q.top().col)->visited = true;
         //s += gw->PrintLine(map->at(pos->row).at(pos->col), map->at(q.top().row).at(q.top().col), ORANGE);
-        ////s += gw->PrintAniData(DELAY);
+        //s += gw->PrintAniData(DELAY);
         pos = (Position *)&q.top();
         q.pop();
         nodesPopped++;
@@ -215,14 +217,14 @@ vector<Node *> AStarAlg::GetBestPath() {
 //------------------------------------------------------
 string AStarAlg::EnqueueNeighbors(Position* p, Position endNode) {
     string s = "";
-    //s += EnQ(p->row - 1, p->col - 1, p, endNode);
-    //s += EnQ(p->row - 1, p->col, p, endNode);
-    //s += EnQ(p->row - 1, p->col + 1, p, endNode);
-    //s += EnQ(p->row, p->col + 1, p, endNode);
-    //s += EnQ(p->row + 1, p->col + 1, p, endNode);
-    //s += EnQ(p->row + 1, p->col, p, endNode);
-    //s += EnQ(p->row + 1, p->col - 1, p, endNode);
-    //s += EnQ(p->row, p->col - 1, p, endNode);
+    s += EnQ(p->row - 1, p->col - 1, p, endNode);
+    s += EnQ(p->row - 1, p->col, p, endNode);
+    s += EnQ(p->row - 1, p->col + 1, p, endNode);
+    s += EnQ(p->row, p->col + 1, p, endNode);
+    s += EnQ(p->row + 1, p->col + 1, p, endNode);
+    s += EnQ(p->row + 1, p->col, p, endNode);
+    s += EnQ(p->row + 1, p->col - 1, p, endNode);
+    s += EnQ(p->row, p->col - 1, p, endNode);
     return s;
 }
 //------------------------------------------------------

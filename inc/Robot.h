@@ -29,7 +29,7 @@ class Robot {
         string actionType;
         vector<vector<Node *> > WorldNodes;
         Point currGoal;
-        vector<Position *> currentPath;
+        vector<Position> currentPath;
         float worldSize;
 
 

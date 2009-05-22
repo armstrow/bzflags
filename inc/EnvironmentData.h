@@ -52,7 +52,11 @@ class EnvironmentData {
         EnvironmentData();
         vector<Obstacle> getObstacles() {
         		pthread_mutex_lock(&obstacles_lock);
-        		vector<Obstacle> obst = obstacles;
+        		vector<Obstacle> obst;
+                for(int i = 0; i < obstacles.size(); i++) {
+                    Obstacle newObst = obstacles.at(i);
+                    obst.push_back(newObst);
+                }
         		pthread_mutex_unlock(&obstacles_lock);
         		return obst;
         };

@@ -55,9 +55,6 @@ void AStarAlg::ResetMap() {
 //------------------------------------------------------
 string AStarAlg::DoSearch(Position startNode, Position endNode, vector<Position> *finalPath) {
 
-    cout << "start: " << startNode.ToString() << endl;
-    cout << "end:   " << endNode.ToString() << endl;;
-
     ResetMap();
     Position p = startNode;
     Position* pos = &p;
@@ -72,17 +69,19 @@ string AStarAlg::DoSearch(Position startNode, Position endNode, vector<Position>
     int nodesPopped = 0;
     while (pos->row != endNode.row || pos->col != endNode.col) {
         cout << "A*: in main loop (beginning)" << endl;
+        endNode.ToString();
+        cout << endl;
         s += EnqueueNeighbors(pos, endNode);
         if (q.empty()) {
-            cout << "Error, goal not found in BFS" << endl;
+            //cout << "Error, goal not found in BFS" << endl;
             return s;
         }
         Position *tmp = q.top();
         while (map->at(tmp->row).at(tmp->col)->visited == true) {
-            cout << "      A*: in inner main loop" << endl;
+            //cout << "      A*: in inner main loop" << endl;
             q.pop();
             tmp = q.top();
-            cout << "      A*: tmp: " << tmp->row << ", " << tmp->col << endl; 
+            //cout << "      A*: tmp: " << tmp->row << ", " << tmp->col << endl; 
         }
         map->at(tmp->row).at(tmp->col)->visited = true;
         //s += gw->PrintLine(map->at(pos->row).at(pos->col), map->at(tmp->row).at(tmp->col), ORANGE);
@@ -90,15 +89,16 @@ string AStarAlg::DoSearch(Position startNode, Position endNode, vector<Position>
         pos = tmp;
         q.pop();
         nodesPopped++;
-       // cout << "checking node at: " << pos->row << "," << pos->col << endl;
+       // //cout << "checking node at: " << pos->row << "," << pos->col << endl;
     }
-    cout << "              NODES POPPED: " << nodesPopped << endl;
+    //cout << "              NODES POPPED: " << nodesPopped << endl;
 
     Position *lastPos = pos;
     float pathCost = 0;
     int pathLength = 0;
+
     while(lastPos->col != startNode.col || lastPos->row != startNode.row) {
-        cout << "in loop" << endl;
+        //cout << "in loop" << endl;
         s += gw->PrintLine(map->at(lastPos->row).at(lastPos->col), map->at(lastPos->from->row).at(lastPos->from->col), GREEN);
         Position tmpPos = *lastPos;
         finalPath->push_back(tmpPos);
@@ -106,10 +106,10 @@ string AStarAlg::DoSearch(Position startNode, Position endNode, vector<Position>
         lastPos = lastPos->from;
         pathLength++;
     }
-    cout << "              PATH COST  : " << pathCost << endl;
-    cout << "              PATH LENGTH: " << pathLength << endl;
+    //cout << "              PATH COST  : " << pathCost << endl;
+    //cout << "              PATH LENGTH: " << pathLength << endl;
 
-    cout << "Goal found!!!" << endNode.row << "," << endNode.col << endl;
+    //cout << "Goal found!!!" << endNode.row << "," << endNode.col << endl;
     char buffer[100];
     sprintf(buffer, "AStar%ld.gpi", (long int)syscall(224));
     s += gw->PrintAniData(0);

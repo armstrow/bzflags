@@ -20,6 +20,7 @@ class RobotController {
     private:
         vector<Robot *> robotList; 
         int decoy;
+        int loopCount;
 
     public:
         BZFSCommunicator bzfsComm;

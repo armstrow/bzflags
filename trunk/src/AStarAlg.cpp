@@ -22,9 +22,9 @@
 #define DELAY   0.1
 
 #define TANK_PENALTY_SIZE 2
-#define OBST_PENALTY_SIZE 1.5
+#define OBST_PENALTY_SIZE 1.1
 #define TANK_PENALTY_FAC 5
-#define OBST_PENALTY_FAC 5
+#define OBST_PENALTY_FAC 1
 
 
 /* +--------------------------------+

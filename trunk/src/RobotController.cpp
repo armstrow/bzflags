@@ -18,6 +18,7 @@ bool canEnter = true;
 //------------------------------------------------------
 RobotController::RobotController(string server, int port) {
     decoy = -1;
+    loopCount = 0;
 	if (bzfsComm.Connect(server, port) == 0) {
         cout << "INITING ENV!" << endl;
 		InitEnvironment();
@@ -44,6 +45,7 @@ void RobotController::LoopAction() {
     while(1 == 1) {
         UpdateEnvironment();
         ControlRobots();
+        loopCount++;
     }
 }
 //------------------------------------------------------
@@ -66,29 +68,34 @@ void RobotController::UpdateEnvironment() {
 //------------------------------------------------------
 void RobotController::ControlRobots() {
     bool enemyTanksDead = true;
+    int numDead = 0;
     float otherX;
     float otherY;
-    float dist = 9999999;
     for(int i = 0; i < env.otherTanks.size(); i++) {
         OtherTank currTank = env.otherTanks.at(i);
         if(currTank.status == "normal"){
-            enemyTanksDead = false;
             otherX = currTank.x;
             otherY = currTank.y;
+        } else if(currTank.status == "dead") {
+            numDead++;
         }
     }
 
-    int switchDist = 390;
+    enemyTanksDead = numDead == env.otherTanks.size();
+
+    int switchDist = 410;
 
     for(int i = 0; i < robotList.size(); i++) {
         cout << i << "  ---------------------------------------------------" << endl;
         Robot *currRobot = robotList.at(i);
         float meX = currRobot->meTank->pos[0];
         float meY = currRobot->meTank->pos[1];
-        float dist = sqrt((meX - otherX)*(meX - otherX) - (meY - otherY)*(meY - otherY));
+        float dist = sqrt((meX - otherX)*(meX - otherX) + (meY - otherY)*(meY - otherY));
         if(enemyTanksDead)
             currRobot->SwitchTo(TRAVEL);
-        else if(dist < 150 && !enemyTanksDead) {
+        else if(dist < switchDist && !enemyTanksDead) {
+            switchDist = 350;
+            cout << "SHOULD HAVE SWITCHED!! dist: " << dist << endl;
             if (decoy == -1 || decoy == i) {
                 currRobot->SwitchTo(DECOY);
                 decoy = i;
@@ -96,7 +103,8 @@ void RobotController::ControlRobots() {
                 currRobot->SwitchTo(SNIPER);
             }
         }
-        currRobot->Update();
+        if((i % 2 == 0) || (i % 2 == 1 && loopCount > 100))
+            currRobot->Update();
     }
 }
 //------------------------------------------------------

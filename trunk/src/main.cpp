@@ -93,7 +93,6 @@ int main(int argc, char** argv) {
 
     cout << "penalized: " << (penalized ? "YES" : "NO" ) << endl;
 
-
     controller = new RobotController(SERVER, PORT);
     DiscretizeWorld(NodeS); 
     
@@ -122,6 +121,7 @@ int main(int argc, char** argv) {
     //Print the Results
     //gw->PrintState(s, WorldNodes->size() * WorldNodes->at(0).at(0)->length, "BFSPlot.gpi");
     //exit(1);
+
     controller->PlayGame();
     cout << "DONE WITH GAME!!!" << endl;
 }
@@ -262,48 +262,6 @@ void PrintVisitableNodes(){
     return true;
 */
 
-bool IsBelowLine(Point testPoint, Point linePt1, Point linePt2) {
-    float m = GetSlope(linePt1, linePt2);
-    float yVal = testPoint.x*m + GetB(linePt1, m);
-    float yDist = testPoint.y - yVal;
-    if(yDist <= 0)
-        return true;
-    else
-        return false;
-}
-bool IsAboveLine(Point testPoint, Point linePt1, Point linePt2) {
-    float m = GetSlope(linePt1, linePt2);
-    float yVal = testPoint.x*m + GetB(linePt1, m);
-    float yDist = testPoint.y - yVal;
-    if(yDist >= 0)
-        return true;
-    else
-        return false;
-}
-bool IsLeftOfLine(Point testPoint, Point linePt1, Point linePt2) {
-    float m = GetSlope(linePt1, linePt2);
-    float xVal = (testPoint.y - GetB(linePt1, m))/m;
-    float xDist = testPoint.x - xVal;
-    if(xDist <= 0)
-        return true;
-    else
-        return false;
-}
-bool IsRightOfLine(Point testPoint, Point linePt1, Point linePt2) {
-    float m = GetSlope(linePt1, linePt2);
-    float xVal = (testPoint.y - GetB(linePt1, m))/m;
-    float xDist = testPoint.x - xVal;
-    if(xDist >= 0)
-        return true;
-    else
-        return false;
-}
-float GetSlope(Point p1, Point p2) {
-    return (p1.y - p2.y)/(p1.x - p2.x);
-}
-float GetB(Point p, float slope) {
-    return p.y - (slope*p.x);
-}
 void GnuplotTest() {
 /*	cout << "\nPrinting Gnuplot...\n";
 	string s = "\n";

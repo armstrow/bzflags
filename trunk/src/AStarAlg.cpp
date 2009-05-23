@@ -62,15 +62,21 @@ string AStarAlg::DoSearch(Position startNode, Position endNode, vector<Position>
 
     string s = "";
 
+    cout << "        A*: endNode: ";
+    endNode.ToString();
+    cout << endl;
+
+    /*
     s += gw->PrintNode(map->at(pos->row).at(pos->col), GREEN);
     s += gw->PrintNode(map->at(endNode.row).at(endNode.col), RED);
     s += gw->PrintAniData(DELAY);
+    */
 
     int nodesPopped = 0;
     while (pos->row != endNode.row || pos->col != endNode.col) {
-        cout << "A*: in main loop (beginning)" << endl;
-        endNode.ToString();
-        cout << endl;
+        //cout << "A*: in main loop (beginning)" << endl;
+        //endNode.ToString();
+        //cout << endl;
         s += EnqueueNeighbors(pos, endNode);
         if (q.empty()) {
             //cout << "Error, goal not found in BFS" << endl;

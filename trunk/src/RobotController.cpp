@@ -3,6 +3,7 @@
 #include "Team.h"
 #include "RobotController.h"
 #include "Constant.h"
+#include <math.h>
 #include <pthread.h>
 
 #include <vector>
@@ -16,11 +17,11 @@ bool canEnter = true;
 
 //------------------------------------------------------
 RobotController::RobotController(string server, int port) {
+    decoy = -1;
 	if (bzfsComm.Connect(server, port) == 0) {
         cout << "INITING ENV!" << endl;
 		InitEnvironment();
 	}
-	decoy = -1;
 }
 //------------------------------------------------------
 void RobotController::PlayGame() {
@@ -29,13 +30,13 @@ void RobotController::PlayGame() {
 }
 //------------------------------------------------------
 void RobotController::InitRobots() {
-    cout << "number of mytanks: " << env.myTanks.size() << endl;
-    bool sniper = false;
     for(int i = 0; i < env.myTanks.size(); i++) {
+        cout << i << "   -------------------------------" << endl;
         MyTank *currTank = &env.myTanks.at(i);
         Robot *currBot = new Robot(currTank, &bzfsComm, &env);
         currBot->SwitchTo(TRAVEL);
         robotList.push_back(currBot);
+        cout << "add bot #" << i << endl;
     }
 }
 //------------------------------------------------------
@@ -50,12 +51,6 @@ void RobotController::InitEnvironment() {
     bzfsComm.get_obstacles(&env.obstacles);
     bzfsComm.get_teams(&env.teams);
     bzfsComm.get_constants(&env.constants);
-    for(int i = 0; i < env.constants.size(); i++) {
-        Constant currConstant = env.constants.at(i);
-        if(currConstant.name == "team") {
-            this->myColor = currConstant.value;
-        }
-    }
     bzfsComm.get_bases(&env.bases);
     bzfsComm.get_mytanks(&env.myTanks);
     bzfsComm.get_flags(&env.flags);
@@ -70,34 +65,39 @@ void RobotController::UpdateEnvironment() {
 }
 //------------------------------------------------------
 void RobotController::ControlRobots() {
-        bool enemyTanksDead = true;
-        float otherX;
-        for(int i = 0; i < env.otherTanks.size(); i++) {
-                OtherTank currTank = env.otherTanks.at(i);
-                if(currTank.status == "normal"){
-                        enemyTanksDead = false;
-                        otherX = currTank.x;
-                }
+    bool enemyTanksDead = true;
+    float otherX;
+    float otherY;
+    float dist = 9999999;
+    for(int i = 0; i < env.otherTanks.size(); i++) {
+        OtherTank currTank = env.otherTanks.at(i);
+        if(currTank.status == "normal"){
+            enemyTanksDead = false;
+            otherX = currTank.x;
+            otherY = currTank.y;
         }
-        cout << "AAAControl robots: " << robotList.size() << endl;
-        for(int i = 0; i < robotList.size(); i++) {
-                Robot *currRobot = robotList.at(i);
-                //currRobot->SwitchTo(TRAVEL);
-                cout << "AAATank #" << i << ": xpos: " << currRobot->meTank->pos[0] << endl; 
-                //if (!hasDec) cout << "AAAHasDecoy is false" << endl;
-                if(enemyTanksDead)
-                        currRobot->SwitchTo(TRAVEL);
-                else if(abs(otherX - currRobot->meTank->pos[0]) < 200 && !enemyTanksDead) {
-                        if (decoy == -1 || decoy == i) {
-                                currRobot->SwitchTo(DECOY);
-                                decoy = i;
-                        }
-                        else {
-                                currRobot->SwitchTo(SNIPER);
-                        }
-                }
-                currRobot->Update();
+    }
+
+    int switchDist = 390;
+
+    for(int i = 0; i < robotList.size(); i++) {
+        cout << i << "  ---------------------------------------------------" << endl;
+        Robot *currRobot = robotList.at(i);
+        float meX = currRobot->meTank->pos[0];
+        float meY = currRobot->meTank->pos[1];
+        float dist = sqrt((meX - otherX)*(meX - otherX) - (meY - otherY)*(meY - otherY));
+        if(enemyTanksDead)
+            currRobot->SwitchTo(TRAVEL);
+        else if(dist < 150 && !enemyTanksDead) {
+            if (decoy == -1 || decoy == i) {
+                currRobot->SwitchTo(DECOY);
+                decoy = i;
+            } else {
+                currRobot->SwitchTo(SNIPER);
+            }
         }
+        currRobot->Update();
+    }
 }
 //------------------------------------------------------
 

@@ -74,13 +74,8 @@ bool BZFSCommunicator::SendBoolMessage(string msg) {
 		return false;
 	}
 }
-float BZFSCommunicator::get_worldSize() {
-	float retVal = worldSize;
-	return retVal;
-}
 //--------------------------------------------------------------------
 bool BZFSCommunicator::shoot(int index) {
-// Perform a shoot request.
 	char char_buff[20];
 	sprintf(char_buff, " %d", index);	
 	string str_buff="shoot";

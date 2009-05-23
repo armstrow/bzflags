@@ -29,10 +29,13 @@ class Robot {
         string actionType;
         vector<vector<Node *> > WorldNodes;
         Point currGoal;
-        vector<Position> currentPath;
+        vector<Position> *currentPath;
+        vector<Position> forwardsPath;
+        vector<Position> backPath;
         float worldSize;
         BZFSCommunicator *bzfsComm;
         MyTank *meTank;
+        float prevDecoyX;
 
     private:
 	bool isDecoy;
@@ -40,8 +43,6 @@ class Robot {
         GnuplotWriter gpw;
         AStarAlg *alg;
 
-        //PD CONTROLLER STUFF
-        float e0;
 
     /*  +--------------+
      *  |  FUNCTIONS   |

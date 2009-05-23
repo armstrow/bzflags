@@ -43,10 +43,10 @@ class BZFSCommunicator {
 	    pthread_mutex_t socket_lock;
 	    pthread_mutex_t variable_lock;
         int s;
-        float worldSize;
 
     public:
         string myColor;
+        float worldSize;
 
 
 

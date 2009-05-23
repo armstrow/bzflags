@@ -19,12 +19,11 @@ class RobotController {
 
     private:
         vector<Robot *> robotList; 
-	    int decoy;
+        int decoy;
+
     public:
         BZFSCommunicator bzfsComm;
         EnvironmentData env;
-        string myColor;
-
 
 
     /*  +--------------+

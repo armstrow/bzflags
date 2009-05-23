@@ -53,8 +53,8 @@ class Robot {
         void AttackOthers(double aggression);
         void GetFlag(double agression);
         void SetPersonalData(string data);
-        void BeAlive(string actionType);
         void SwitchTo(string type);
+        void Update();
 	
 
     private: 

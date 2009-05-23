@@ -18,10 +18,8 @@ class RobotController {
 
 
     private:
-        vector<pthread_t> robotThreads;
         vector<Robot *> robotList; 
-	int decoy;
-	pthread_mutex_t socket_lock;
+	    int decoy;
     public:
         BZFSCommunicator bzfsComm;
         EnvironmentData env;
@@ -36,13 +34,7 @@ class RobotController {
 
     public:
         RobotController(string server, int port);
-	    void DummyRobot(int index);
         void PlayGame();
-        bool shoot(int tankIndex);
-        bool speed(int tankIndex, double speed);
-        bool angvel(int tankIndex, double angVel);
-        bool accelx(int tankIndex, double accelX);
-        bool accely(int tankIndex, double accelY);
 
 	    //Information Requests
         //  +---> these are now found in the BZFSCommunicator

@@ -38,7 +38,20 @@ Robot::Robot(MyTank *meTank, BZFSCommunicator *bzfsComm, EnvironmentData *env): 
     this->gotoY = 0;
     this->actionType = "BOGUSNESS";
     this->e0 = 0;
-    //DiscretizeWorld();
+
+    DiscretizeWorld();
+
+    Position startNode = GetStartNode();
+    Position endNode = GetEndNode();
+
+    alg = new AStarAlg(&WorldNodes, &gpw, true, env);
+    alg->DoSearch(startNode, endNode, &currentPath);
+
+    if(currentPath.size() > 4) {
+        currentPath.pop_back();
+        currentPath.pop_back();
+        currentPath.pop_back();
+    }
 }
 //------------------------------------------------------
 void Robot::DiscretizeWorld() {
@@ -59,13 +72,11 @@ void Robot::DiscretizeWorld() {
             tmp.push_back(n);
         }
         WorldNodes.push_back(tmp);
-        //countR++;
     }
-    //PrintVisitableNodes();
     cout << "Created WorldNodes size: " << WorldNodes.size();
-    //*worldNodes = retBuff;
-    alg = new AStarAlg(&WorldNodes, &gpw, true, env);
+    exit(0);
 }
+//------------------------------------------------------
 bool Robot::IsVisitable(Node* n) {
     //Get Center
     float testx = n->x + (n->length / 2);
@@ -90,49 +101,16 @@ bool Robot::IsVisitable(Node* n) {
     return true;
 }
 //------------------------------------------------------
-void Robot::BeAlive(string actionType) {
-    sleep(2);
-    DiscretizeWorld();
-    this->actionType = actionType;
-    cout << "I AM A " << actionType << endl;
+void Robot::Update() {
+    cout << "UPDATE CALLED: " << meTank->index << endl;
     UpdateCurrGoal();
 
-    cout << "set speed" << endl;
-    bool turnedOnce = false;
-
-    Position startNode = GetStartNode();
-    cout << "startNode: "; cout << startNode.ToString() << endl;
-
-    Position endNode = GetEndNode();
-    cout << "endNode: "; cout << endNode.ToString() << endl;
-
-    alg->DoSearch(startNode, endNode, &currentPath);
-    for(int i = 0; i < currentPath.size(); i++) {
-        cout << meTank->index << ": backpath: ";
-        currentPath.at(i).ToString();
-        cout << endl;
-    }
-    if(currentPath.size() > 4) {
-        currentPath.pop_back();
-        currentPath.pop_back();
-        currentPath.pop_back();
-    }
-
-    while(1 == 1) {
-        cout << "updating currgoal" << endl;
-        UpdateCurrGoal();
-        cout << "done updating currgoal" << endl;
-        //DoTravel();
-	cout << "AAAPerforming action: " << this->actionType << endl;
-        if(this->actionType.compare(TRAVEL) == 0)
-            DoTravel();
-        else if(this->actionType.compare(DECOY) == 0)
-            DoDecoy();
-        else if(this->actionType.compare(SNIPER) == 0)
-            DoSniper();
-        cout << "done in first loop" << endl;
-       
-    }
+    if(this->actionType.compare(TRAVEL) == 0)
+        DoTravel();
+    else if(this->actionType.compare(DECOY) == 0)
+        DoDecoy();
+    else if(this->actionType.compare(SNIPER) == 0)
+        DoSniper();
 }
 //------------------------------------------------------
 float Robot::PDController(float goalAngle, float angleDiff, float currAngVel) {
@@ -152,13 +130,7 @@ float Robot::PDController(float goalAngle, float angleDiff, float currAngVel) {
     bzfsComm->angvel(meTank->index, newAngVel);
 }
 //------------------------------------------------------
-//float Robot::PDSpeedController(float currSpeed, float goalDist) {
-//    
-//}
-//------------------------------------------------------
 void Robot::DoTravel() {
-    //cout << "tanks# -- " << meTank->index << endl;
-    //bzfsComm->shoot(meTank->index);
     gotoPoint = false;
     float xForce = 0;
     float yForce = 0;
@@ -174,32 +146,10 @@ void Robot::DoTravel() {
     float angleDiff = GetAngleDist(meTank->angle, finalAngle);//not good
     float currAngVel = meTank->angvel;
     PDController(finalAngle, angleDiff, currAngVel);
-
-    /*
-    float angVel = (angleDiff/(2*PI))*0.8;
-
-    if(angVel < 0)
-        //angVel -= 0.2;
-        angVel = -1;
-    else
-        //angVel += 0.2;
-        angVel = 1;
-
-    float speed = 1 - abs(angleDiff/PI);
-    //cout << "anglediff: " << (angleDiff/PI) << ", speed: " << speed << endl;
-    
-    cout << "Going to update the tank's speed and angvel now" << endl;
-
-    bzfsComm->speed(meTank->index, speed);
-    bzfsComm->angvel(meTank->index, angVel);
-    */
-
-    usleep(SLEEP_AMT);
 }
 //------------------------------------------------------
 void Robot::DoSniper() {
     gotoPoint = false;
-    //cout << "tanks# -- " << meTank->index << endl;
     bzfsComm->speed(meTank->index, 0);
     bzfsComm->shoot(meTank->index);
 
@@ -220,7 +170,6 @@ void Robot::DoSniper() {
         themY = env->otherTanks.at(i).y;
     }
 
-//    GenerateField(meX, meY, &xForce, &yForce, bzfsComm->myColor, false);
     xDiff = themX - meX;
     yDiff = themY - meY;
 
@@ -233,93 +182,26 @@ void Robot::DoSniper() {
     else
        angVel += 0.2;
 
-    //float speed = 1 - abs(angleDiff/PI);
-    //cout << "anglediff: " << (angleDiff/PI) << ", speed: " << speed << endl;
-    //bzfsComm->speed(meTank->index, speed);
     bzfsComm->angvel(meTank->index, angVel);
-    usleep(400);
 }
 //------------------------------------------------------
 void Robot::DoDecoy() {
-    //cout << "tanks# -- " << meTank->index << endl;
-    //bzfsComm->shoot(meTank->index);
-    //
-    //
     int speed = 1;    
     float angleDiff = 1;
-//  float angVel = 1;
+    bzfsComm->angvel(meTank->index, 1);
+
+    /*
     while (angleDiff >= 0.1) {
         angleDiff = GetAngleDist(meTank->angle, PI*1.5);//not good
-	bzfsComm->angvel(meTank->index, 1);
-    	usleep(100);
+	    bzfsComm->angvel(meTank->index, 1);
     }
     bzfsComm->angvel(meTank->index, 0);
     while (actionType == "decoy") {
-	speed = -speed;
-	bzfsComm->speed(meTank->index, speed);
-	sleep(3);
+	    speed = -speed;
+	    bzfsComm->speed(meTank->index, speed);
     }
+    */
 }
-/*
-
-  
-
-
-    bool turnedOnce = false;
-    bool canChange = true;
-    gotoPoint = true;
-    if (gotoY == 0)
-	gotoY = DECOY_DISTANCE;
-    float xForce = 0;
-    float yForce = 0;
-    float meX = meTank->pos[0];
-    float meY = meTank->pos[1];
-    gotoX = -300;
-    float dist = (gotoX - meX)*(gotoX - meX) + (gotoY - meY)*(gotoY - meY);
-    //if (canChange) {
-        if (dist < ((DECOY_DISTANCE / 4)*(DECOY_DISTANCE / 4))) {
-            bzfsComm->speed(meTank->index, .3);
-            gotoY = 0-gotoY;
-            canChange = false;
-		cout << "AAA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\nAAAGOAL REACHED\nAAA!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
-        }
-    //}
-    //else
-    //    if ((meY - (-gotoY)) > (DECOY_DISTANCE / 2)) 
-    //        canChange = true;
-
-    cout << "AAADecoy going for: " << gotoX << "," << gotoY << endl;
-    cout << "AAADecoy at       : " << meX << "," << meY << endl;
-
-    if (abs(meTank->angle - (PI*.5)) < .05) {
-	bzfsComm->angvel(meTank->index, 0);
-	bzfsComm->speed(meTank->index, gotoY);
-	gotoY = -gotoY;
-	sleep(2);
-	return;
-    }
-
-    GenerateField(meX, meY, &xForce, &yForce, bzfsComm->myColor, false);
-
-    float finalAngle = Wrap(atan2(yForce,xForce), PI*2);//good
-    float angleDiff = GetAngleDist(meTank->angle, finalAngle);//not good
-    float angVel = (angleDiff/(2*PI))*0.8;
-
-    if(angVel < 0)
-        angVel -= 1;
-    else
-        angVel += 1;
-
-    float speed = 1 - abs(angleDiff/PI);
-
-    //cout << "anglediff: " << (angleDiff/PI) << ", speed: " << speed << endl;
-    if(angleDiff < .1)
-        bzfsComm->speed(meTank->index, speed);
-
-    bzfsComm->angvel(meTank->index, angVel);
-
-    usleep(400);
-}*/
 //------------------------------------------------------
 void Robot::SwitchTo(string type) {
     cout << "AAAswitching types from" << this->actionType << "to " << type << endl;
@@ -734,10 +616,6 @@ float Robot::Wrap(float original, float max) {
         original += max;
     }
     return original;
-}
-//------------------------------------------------------
-void Robot::UpdatePosition() {
-    
 }
 //------------------------------------------------------
 

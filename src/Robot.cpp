@@ -13,7 +13,7 @@
 #include <iostream>
 
 #define DECOY_DISTANCE 100
-#define NODE_SIZE 20 
+#define NODE_SIZE 10 
 #define TARGET_COLOR "green"
 #define SLEEP_AMT 100
 
@@ -54,7 +54,7 @@ Robot::Robot(MyTank *meTank, BZFSCommunicator *bzfsComm, EnvironmentData *env): 
 
     cout << "FINISHED INITIAL SEARCH!!! " << meTank->index << ",  path size: " << forwardsPath.size() << endl;
 
-    for(int i = 0; i < forwardsPath.size(); i++) {
+    for(int i = forwardsPath.size() - 1; i >= 0; i--) {
         backPath.push_back(forwardsPath.at(i));
     }
 
@@ -123,7 +123,7 @@ bool Robot::IsVisitable(Node* n) {
 }
 //------------------------------------------------------
 void Robot::Update() {
-    UpdateCurrGoal();
+    //UpdateCurrGoal();
 
     if(this->actionType.compare(TRAVEL) == 0)
         DoTravel();
@@ -136,9 +136,13 @@ void Robot::Update() {
 float Robot::PDController(float goalAngle, float angleDiff, float currAngVel) {
     angleDiff /= PI;
     bool negDiff = angleDiff < 0;
-    float newAngVel = sqrt(abs(angleDiff));
-    if(negDiff)
+    float newAngVel = sqrt(abs(angleDiff))*0.9;
+    if(negDiff) {
         newAngVel *= -1;
+        newAngVel -= 0.1;
+    } else {
+        newAngVel += 0.2;
+    }
 
     float newSpeed = 1 - sqrt(sqrt(abs(angleDiff)));
     if(newSpeed > 0.8)
@@ -157,6 +161,8 @@ void Robot::DoTravel() {
     float meX = meTank->pos[0];
     float meY = meTank->pos[1];
     bool hasFlag = (meTank->flag != "none");
+    if(hasFlag)
+        SetCurrGoalToMyBase();
 
     GenerateField(meX, meY, &xForce, &yForce, bzfsComm->myColor, hasFlag);
 
@@ -178,29 +184,18 @@ void Robot::DoSniper() {
     float meX = meTank->pos[0];
     float meY = meTank->pos[1];
     float themX, themY;
-    if (env->otherTanks.size() == 0){
-        //break;
-        gotoX = 400;
-        gotoY = 0;
-    }
-    else {
-        int i = 0;
-        while (env->otherTanks.at(i).status.compare("dead") == 0) i++; 
-        themX = env->otherTanks.at(i).x;
-        themY = env->otherTanks.at(i).y;
-    }
+
+    int i = 0;
+    while (env->otherTanks.at(i).status.compare("dead") == 0) i++; 
+    themX = env->otherTanks.at(i).x;
+    themY = env->otherTanks.at(i).y;
 
     xDiff = themX - meX;
     yDiff = themY - meY;
 
     float finalAngle = Wrap(atan2(yDiff,xDiff), PI*2);//good
     float angleDiff = GetAngleDist(meTank->angle, finalAngle);//not good
-    float angVel = (angleDiff/(2*PI))*0.8;
-
-    if(angVel < 0)
-       angVel -= 0.2;
-    else
-       angVel += 0.2;
+    float angVel = (angleDiff/(2*PI));
 
     bzfsComm->angvel(meTank->index, angVel);
 }
@@ -210,20 +205,19 @@ void Robot::DoDecoy() {
 
     //keep him perpindicular to the base
     float angleDiff = GetAngleDist(meTank->angle, PI*.5);
+    float angVel = (angleDiff/(2*PI));
     if(abs(angleDiff) >= 0.1) {
         if(angleDiff < 0)
-            bzfsComm->angvel(meTank->index, -0.8);
+            bzfsComm->angvel(meTank->index, -0.7);
         else
-            bzfsComm->angvel(meTank->index, 0.8);
+            bzfsComm->angvel(meTank->index, 0.7);
     }
 
-    float meX = meTank->pos[0];
-    if(meX > 200)
+    float meY = meTank->pos[1];
+    if(meY < -200)
         bzfsComm->speed(meTank->index, 1);
-    else if(meX < -200)
+    else if(meY > 200)
         bzfsComm->speed(meTank->index, -1);
-    else
-        bzfsComm->speed(meTank->index, 1);
 
     /*
     */
@@ -258,24 +252,16 @@ void Robot::GenerateField(float x, float y, float *outX, float *outY, string col
     float xForce;
     float yForce;
 
-    if (gotoPoint) {
-		SetGotoField(&xForce, &yForce);
+    SetNextPathNodeField(&xForce, &yForce);
+    /*
+    if(!haveFlag) {
+        //SetEnemyBaseField(&xForce, &yForce);
+        //SetEnemyField(&xForce, &yForce);
+    } else {
+        SetMyBaseField(&xForce, &yForce);
     }
-    else {
-	    if(!haveFlag) {
-		    //SetEnemyBaseField(&xForce, &yForce);
-            //SetEnemyField(&xForce, &yForce);
+    */
 
-            //cout << "finished Search" << endl;
-            SetNextPathNodeField(&xForce, &yForce);
-            //cout << "set next path node field" << endl;
-
-            //cout << "Generating Path Field" << endl;
-	    } else {
-		    SetMyBaseField(&xForce, &yForce);
-	    }
-    }
-    
     //SetObstaclesField(&xForce, &yForce);
 
     *outX = xForce;
@@ -283,42 +269,29 @@ void Robot::GenerateField(float x, float y, float *outX, float *outY, string col
 }
 //------------------------------------------------------
 void Robot::SetNextPathNodeField(float *forceX, float *forceY) {
-    //cout << "Setting next path node field" << endl;
-    //cout << "currentPath size: " << currentPath.size() << endl;
 
     if(currentPath->size() == 0) {
         //done!
         bzfsComm->speed(meTank->index, 0);
-        //cout << "                                     TANK SPEED = 0" << endl;
+        bzfsComm->angvel(meTank->index, 0);
+        cout << "DONE FOLLOWING PATH!" << endl;
         return;
     }
 
-    Position currGoal = currentPath->back();
+    Position currentGoal = currentPath->back();
 
     float nodeSize = WorldNodes.at(0).at(0)->length;
-    float currXGoal = (worldSize*-1 + currGoal.row*nodeSize) + nodeSize/2;
-    float currYGoal = (worldSize*-1 + currGoal.col*nodeSize) + nodeSize/2;;
+    float currXGoal = (worldSize*-1 + currentGoal.row*nodeSize) + nodeSize/2;
+    float currYGoal = (worldSize*-1 + currentGoal.col*nodeSize) + nodeSize/2;;
     float dist = (currXGoal - meTank->pos[0])*(currXGoal - meTank->pos[0]) + (currYGoal - meTank->pos[1])*(currYGoal - meTank->pos[1]);
-    //dist = sqrt(dist);
-    //cout << "MY POS:    DIST TO CURR GOAL: " << dist << endl;
-    /*
-    */
  
     Position myPos = GetStartNode();
-    //cout << "MY POS: "; cout << myPos.ToString(); cout << ", currPath.back().col: " << currentPath.back().col << ", currPath.back().row: " << currentPath.back().row << endl;
-    if(dist < 1000) {//GetStartNode().col == currentPath.back().col && GetStartNode().row == currentPath.back().row) {
+    if((dist < 1000 && currentPath->size() != 1) || (dist < 1 && currentPath->size() == 1)) {
         currentPath->pop_back();
-        //cout << "    MY POS      THEY EQUAL!!!!!" << endl;
     }
     Position nextPosition = currentPath->back();
-    //cout << "XXX " << meTank->index;
-    //nextPosition.ToString();
-    //cout << "  ";
     float xGoal = (worldSize*-1 + nextPosition.row*nodeSize) + nodeSize/2;
     float yGoal = (worldSize*-1 + nextPosition.col*nodeSize) + nodeSize/2;
-    //cout << "xGoal: " << xGoal << ", yGoal: " << yGoal << endl;
-
-    //cout << "worldSize: " << worldSize << ", " << "nodeSize: " << nodeSize << ", xGoal: " << xGoal << ", yGoal: " << yGoal << " | nextPos.row: " << nextPosition.row << ", nextPos.col: " << nextPosition.col << endl;
 
     float RADIUS = 0;//they will never be there until they are there
     float SPREAD = NODE_SIZE*10;
@@ -328,9 +301,6 @@ void Robot::SetNextPathNodeField(float *forceX, float *forceY) {
     float tempYForce = 0;
 
     SetPotentialFieldVals(&tempXForce, &tempYForce, meTank->pos[0], meTank->pos[1], xGoal, yGoal, true, RADIUS, SPREAD, ALPHA);
-
-    //cout << "###tempXForce: " << tempXForce << endl;
-    //cout << "###tempYForce: " << tempYForce << endl;
 
     *forceX += tempXForce;
     *forceY += tempYForce;
@@ -420,31 +390,8 @@ void Robot::SetCurrGoalToEnemyBase() {
 }
 //------------------------------------------------------
 void Robot::SetCurrGoalToMyBase() {
-    //cout << "CURR GOAL = MY BASE" << endl;
-    Base *selectedBase;
-    for(int i = 0; i < env->bases.size(); i++) {
-        if(env->bases.at(i).color == bzfsComm->myColor) {
-            selectedBase = &env->bases.at(i);
-            break;
-        }
-    }
-    
-    float tempx;
-    float tempy;
-
-    for(int i = 0; i < selectedBase->corners.size(); i++) {
-        Point currCorner = selectedBase->corners.at(i);
-        tempx += currCorner.x;
-        tempy += currCorner.y;
-    }
-
-    tempx *= 0.25;
-    tempy *= 0.25;
-
-    currGoal.x = tempx;
-    currGoal.y = tempy;
-
     currentPath = &backPath;
+    cout << "GOAL SET TO BACK PATH (setcurrgoaltomybase)" << endl;
 }
 //------------------------------------------------------
 void Robot::SetEnemyBaseField(float *forceX, float *forceY) {

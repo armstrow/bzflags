@@ -37,33 +37,56 @@ Robot::Robot(MyTank *meTank, BZFSCommunicator *bzfsComm, EnvironmentData *env): 
     this->gotoX = 0;
     this->gotoY = 0;
     this->actionType = "BOGUSNESS";
-    this->e0 = 0;
 
     DiscretizeWorld();
+
+    SetCurrGoalToEnemyBase();
 
     Position startNode = GetStartNode();
     Position endNode = GetEndNode();
 
-    alg = new AStarAlg(&WorldNodes, &gpw, true, env);
-    alg->DoSearch(startNode, endNode, &currentPath);
+    cout << "   endNode for A*: ";
+    endNode.ToString();
+    cout << endl;
 
-    if(currentPath.size() > 4) {
-        currentPath.pop_back();
-        currentPath.pop_back();
-        currentPath.pop_back();
+    alg = new AStarAlg(&WorldNodes, &gpw, true, env);
+    alg->DoSearch(startNode, endNode, &forwardsPath);
+
+    cout << "FINISHED INITIAL SEARCH!!! " << meTank->index << ",  path size: " << forwardsPath.size() << endl;
+
+    for(int i = 0; i < forwardsPath.size(); i++) {
+        backPath.push_back(forwardsPath.at(i));
     }
+
+    if(backPath.size() > 4) {
+        backPath.pop_back();
+        backPath.pop_back();
+        backPath.pop_back();
+        backPath.pop_back();
+    }
+
+    //give the tank some room to get started with
+    if(forwardsPath.size() > 4) {
+        forwardsPath.pop_back();
+        forwardsPath.pop_back();
+        forwardsPath.pop_back();
+        forwardsPath.pop_back();
+    }
+
+    currentPath = &forwardsPath;
 }
 //------------------------------------------------------
 void Robot::DiscretizeWorld() {
     int NodeSize = NODE_SIZE;
 
-    worldSize = bzfsComm->get_worldSize();
-	cout << "World Size: " << worldSize;
+    worldSize = bzfsComm->worldSize;
+    //cout << "world size: " << worldSize << endl;
     if ((int)worldSize % (int)NodeSize != 0) {
-        cout << "Could not divide world up evenly into node size: " << NodeSize << endl;
+        //cout << "NODE_SIZE does not divide evenly" << endl;
         exit(0);
     }
     worldSize = worldSize / 2;
+
     for (int x = 0 - worldSize; x < worldSize; x += NodeSize) {
         vector<Node *> tmp;
         for (int y = 0 - worldSize; y < worldSize; y += NodeSize) {
@@ -73,8 +96,7 @@ void Robot::DiscretizeWorld() {
         }
         WorldNodes.push_back(tmp);
     }
-    cout << "Created WorldNodes size: " << WorldNodes.size();
-    exit(0);
+    //cout << "Created WorldNodes size: " << WorldNodes.size() << endl;
 }
 //------------------------------------------------------
 bool Robot::IsVisitable(Node* n) {
@@ -84,7 +106,6 @@ bool Robot::IsVisitable(Node* n) {
     int nvert;
     bool c = false;
 
-    //cout << "NUMBER OF OBSTACLES: " << env->getObstacles().size() << endl;
     for (int o = 0; o < env->getObstacles().size(); o ++) {
         Obstacle currObst = env->getObstacles().at(o);
         nvert = currObst.corners.size();
@@ -102,7 +123,6 @@ bool Robot::IsVisitable(Node* n) {
 }
 //------------------------------------------------------
 void Robot::Update() {
-    cout << "UPDATE CALLED: " << meTank->index << endl;
     UpdateCurrGoal();
 
     if(this->actionType.compare(TRAVEL) == 0)
@@ -124,7 +144,7 @@ float Robot::PDController(float goalAngle, float angleDiff, float currAngVel) {
     if(newSpeed > 0.8)
         newSpeed = sqrt(newSpeed);
 
-    cout << "PDC  angleDiff: " << angleDiff << ", " << "newSpeed: " << newSpeed << ", newAngVel " << newAngVel;
+    //cout << "PDC  angleDiff: " << angleDiff << ", " << "newSpeed: " << newSpeed << ", newAngVel " << newAngVel << endl;
 
     bzfsComm->speed(meTank->index, newSpeed);
     bzfsComm->angvel(meTank->index, newAngVel);
@@ -140,7 +160,7 @@ void Robot::DoTravel() {
 
     GenerateField(meX, meY, &xForce, &yForce, bzfsComm->myColor, hasFlag);
 
-    cout << "DONE GENERating field" << endl;
+    //cout << "DONE GENERating field" << endl;
 
     float finalAngle = Wrap(atan2(yForce,xForce), PI*2);//good
     float angleDiff = GetAngleDist(meTank->angle, finalAngle);//not good
@@ -186,27 +206,33 @@ void Robot::DoSniper() {
 }
 //------------------------------------------------------
 void Robot::DoDecoy() {
-    int speed = 1;    
-    float angleDiff = 1;
-    bzfsComm->angvel(meTank->index, 1);
+    int speed = 1;
+
+    //keep him perpindicular to the base
+    float angleDiff = GetAngleDist(meTank->angle, PI*.5);
+    if(abs(angleDiff) >= 0.1) {
+        if(angleDiff < 0)
+            bzfsComm->angvel(meTank->index, -0.8);
+        else
+            bzfsComm->angvel(meTank->index, 0.8);
+    }
+
+    float meX = meTank->pos[0];
+    if(meX > 200)
+        bzfsComm->speed(meTank->index, 1);
+    else if(meX < -200)
+        bzfsComm->speed(meTank->index, -1);
+    else
+        bzfsComm->speed(meTank->index, 1);
 
     /*
-    while (angleDiff >= 0.1) {
-        angleDiff = GetAngleDist(meTank->angle, PI*1.5);//not good
-	    bzfsComm->angvel(meTank->index, 1);
-    }
-    bzfsComm->angvel(meTank->index, 0);
-    while (actionType == "decoy") {
-	    speed = -speed;
-	    bzfsComm->speed(meTank->index, speed);
-    }
     */
 }
 //------------------------------------------------------
 void Robot::SwitchTo(string type) {
-    cout << "AAAswitching types from" << this->actionType << "to " << type << endl;
+    cout << "switching types from" << this->actionType << "to " << type << endl;
     actionType = type;
-    cout << "AAAactiontype is now: " << this->actionType << endl;
+    cout << "actiontype is now: " << this->actionType << endl;
 }
 //------------------------------------------------------
 void Robot::GuardBase(double aggression) {
@@ -242,9 +268,9 @@ void Robot::GenerateField(float x, float y, float *outX, float *outY, string col
 
             //cout << "finished Search" << endl;
             SetNextPathNodeField(&xForce, &yForce);
-            cout << "set next path node field" << endl;
+            //cout << "set next path node field" << endl;
 
-            cout << "Generating Path Field" << endl;
+            //cout << "Generating Path Field" << endl;
 	    } else {
 		    SetMyBaseField(&xForce, &yForce);
 	    }
@@ -257,42 +283,42 @@ void Robot::GenerateField(float x, float y, float *outX, float *outY, string col
 }
 //------------------------------------------------------
 void Robot::SetNextPathNodeField(float *forceX, float *forceY) {
-    cout << "Setting next path node field" << endl;
-    cout << "currentPath size: " << currentPath.size() << endl;
+    //cout << "Setting next path node field" << endl;
+    //cout << "currentPath size: " << currentPath.size() << endl;
 
-    if(currentPath.size() == 0) {
+    if(currentPath->size() == 0) {
         //done!
         bzfsComm->speed(meTank->index, 0);
-        cout << "                                     TANK SPEED = 0" << endl;
+        //cout << "                                     TANK SPEED = 0" << endl;
         return;
     }
 
-    Position currGoal = currentPath.back();
+    Position currGoal = currentPath->back();
 
     float nodeSize = WorldNodes.at(0).at(0)->length;
     float currXGoal = (worldSize*-1 + currGoal.row*nodeSize) + nodeSize/2;
     float currYGoal = (worldSize*-1 + currGoal.col*nodeSize) + nodeSize/2;;
     float dist = (currXGoal - meTank->pos[0])*(currXGoal - meTank->pos[0]) + (currYGoal - meTank->pos[1])*(currYGoal - meTank->pos[1]);
     //dist = sqrt(dist);
-    cout << "MY POS:    DIST TO CURR GOAL: " << dist << endl;
+    //cout << "MY POS:    DIST TO CURR GOAL: " << dist << endl;
     /*
     */
  
     Position myPos = GetStartNode();
-    cout << "MY POS: "; cout << myPos.ToString(); cout << ", currPath.back().col: " << currentPath.back().col << ", currPath.back().row: " << currentPath.back().row << endl;
+    //cout << "MY POS: "; cout << myPos.ToString(); cout << ", currPath.back().col: " << currentPath.back().col << ", currPath.back().row: " << currentPath.back().row << endl;
     if(dist < 1000) {//GetStartNode().col == currentPath.back().col && GetStartNode().row == currentPath.back().row) {
-        currentPath.pop_back();
-        cout << "    MY POS      THEY EQUAL!!!!!" << endl;
+        currentPath->pop_back();
+        //cout << "    MY POS      THEY EQUAL!!!!!" << endl;
     }
-    Position nextPosition = currentPath.back();
-    cout << "XXX " << meTank->index;
-    nextPosition.ToString();
-    cout << "  ";
+    Position nextPosition = currentPath->back();
+    //cout << "XXX " << meTank->index;
+    //nextPosition.ToString();
+    //cout << "  ";
     float xGoal = (worldSize*-1 + nextPosition.row*nodeSize) + nodeSize/2;
     float yGoal = (worldSize*-1 + nextPosition.col*nodeSize) + nodeSize/2;
-    cout << "xGoal: " << xGoal << ", yGoal: " << yGoal << endl;
+    //cout << "xGoal: " << xGoal << ", yGoal: " << yGoal << endl;
 
-    cout << "worldSize: " << worldSize << ", " << "nodeSize: " << nodeSize << ", xGoal: " << xGoal << ", yGoal: " << yGoal << " | nextPos.row: " << nextPosition.row << ", nextPos.col: " << nextPosition.col << endl;
+    //cout << "worldSize: " << worldSize << ", " << "nodeSize: " << nodeSize << ", xGoal: " << xGoal << ", yGoal: " << yGoal << " | nextPos.row: " << nextPosition.row << ", nextPos.col: " << nextPosition.col << endl;
 
     float RADIUS = 0;//they will never be there until they are there
     float SPREAD = NODE_SIZE*10;
@@ -303,8 +329,8 @@ void Robot::SetNextPathNodeField(float *forceX, float *forceY) {
 
     SetPotentialFieldVals(&tempXForce, &tempYForce, meTank->pos[0], meTank->pos[1], xGoal, yGoal, true, RADIUS, SPREAD, ALPHA);
 
-    cout << "###tempXForce: " << tempXForce << endl;
-    cout << "###tempYForce: " << tempYForce << endl;
+    //cout << "###tempXForce: " << tempXForce << endl;
+    //cout << "###tempYForce: " << tempYForce << endl;
 
     *forceX += tempXForce;
     *forceY += tempYForce;
@@ -358,8 +384,8 @@ void Robot::SetEnemyField(float *forceX, float *forceY) {
 void Robot::UpdateCurrGoal() {
     bool hasFlag = (meTank->flag != "none");
 
-    cout << "ACTION TYPE: " << actionType << endl;
-    cout << "HAS FLAG:    " << (hasFlag ? "YES" : "NO") << endl;
+    //cout << "ACTION TYPE: " << actionType << endl;
+    //cout << "HAS FLAG:    " << (hasFlag ? "YES" : "NO") << endl;
     SetCurrGoalToEnemyBase();
     if(actionType == TRAVEL && hasFlag) {
         SetCurrGoalToMyBase();
@@ -369,7 +395,6 @@ void Robot::UpdateCurrGoal() {
 }
 //------------------------------------------------------
 void Robot::SetCurrGoalToEnemyBase() {
-    cout << "CURR GOAL = " << TARGET_COLOR << endl;
     Base *selectedBase;
     for(int i = 0; i < env->bases.size(); i++) {
         if(env->bases.at(i).color == TARGET_COLOR) {
@@ -395,7 +420,7 @@ void Robot::SetCurrGoalToEnemyBase() {
 }
 //------------------------------------------------------
 void Robot::SetCurrGoalToMyBase() {
-    cout << "CURR GOAL = MY BASE" << endl;
+    //cout << "CURR GOAL = MY BASE" << endl;
     Base *selectedBase;
     for(int i = 0; i < env->bases.size(); i++) {
         if(env->bases.at(i).color == bzfsComm->myColor) {
@@ -418,6 +443,8 @@ void Robot::SetCurrGoalToMyBase() {
 
     currGoal.x = tempx;
     currGoal.y = tempy;
+
+    currentPath = &backPath;
 }
 //------------------------------------------------------
 void Robot::SetEnemyBaseField(float *forceX, float *forceY) {

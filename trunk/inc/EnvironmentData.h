@@ -27,7 +27,7 @@ class EnvironmentData {
      *  +--------------+ */
 
     private:
-    	 pthread_mutex_t otherTanks_lock;
+    	pthread_mutex_t otherTanks_lock;
 	    pthread_mutex_t obstacles_lock;
     
     public:

@@ -4,6 +4,7 @@
 #include "RobotController.h"
 #include "MyTank.h"
 #include "AStarAlg.h"
+#include "boxmuller.c"
 
 #include <cmath>
 #include <math.h>
@@ -48,6 +49,8 @@ Robot::Robot(MyTank *meTank, BZFSCommunicator *bzfsComm, EnvironmentData *env): 
     cout << "   endNode for A*: ";
     endNode.ToString();
     cout << endl;
+
+    float answer = box_muller(0.5, 0.5);
 
     alg = new AStarAlg(&WorldNodes, &gpw, true, env);
     alg->DoSearch(startNode, endNode, &forwardsPath);

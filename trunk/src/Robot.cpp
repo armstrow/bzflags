@@ -131,6 +131,16 @@ void Robot::Update() {
         DoDecoy();
     else if(this->actionType.compare(SNIPER) == 0)
         DoSniper();
+    else if(this->actionType.compare(CP_DUCK) == 0)
+        DoCPDuck();
+    else if(this->actionType.compare(CP_CONST_XY_VEL) == 0)
+        DoCPConstXYVel();
+    else if(this->actionType.compare(CP_CONST_XY_ACC) == 0)
+        DoCPConstXYAcc();
+    else if(this->actionType.compare(CP_GAUSS) == 0)
+        DoCPGauss();
+    else if(this->actionType.compare(CP_WILD) == 0)
+        DoCPWild();
 }
 //------------------------------------------------------
 float Robot::PDController(float goalAngle, float angleDiff, float currAngVel) {
@@ -152,6 +162,32 @@ float Robot::PDController(float goalAngle, float angleDiff, float currAngVel) {
 
     bzfsComm->speed(meTank->index, newSpeed);
     bzfsComm->angvel(meTank->index, newAngVel);
+}
+//------------------------------------------------------
+void Robot::DoCPDuck() {
+    //be a sitting duck :)
+    bzfsComm->speed(meTank->index, 0);
+    bzfsComm->angvel(meTank->index, 0);
+}
+//------------------------------------------------------
+void Robot::DoCPConstXYVel() {
+    //keep the angvel at 0 and keep the speed at something
+    bzfsComm->speed(meTank->index, 0.5);
+    bzfsComm->angvel(meTank->index, 0);
+}
+//------------------------------------------------------
+void Robot::DoCPConstXYAcc() {
+    float currSpeed = sqrt(meTank->velocity[0]*meTank->velocity[0] + meTank->velocity[1]*meTank->velocity[1]);
+    if(currSpeed < 1)
+        bzfsComm->speed(meTank->index, currSpeed + 0.0001); //this will give us 10,000 cycles until he is up to speed
+}
+//------------------------------------------------------
+void Robot::DoCPGauss() {
+    //http://www.boost.org/doc/libs/1_35_0/libs/math/doc/sf_and_dist/html/math_toolkit/dist/dist_ref/dists/normal_dist.html
+}
+//------------------------------------------------------
+void Robot::DoCPWild() {
+    
 }
 //------------------------------------------------------
 void Robot::DoTravel() {

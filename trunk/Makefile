@@ -3,7 +3,7 @@
 
 
 CC= g++
-FLAGS= -Wall -ggdb -Iinc -lpthread -lm
+FLAGS= -Wall -ggdb -Iinc -lpthread -lm -llibboost
 EXENAME= robotter
 OBJECTS= obj/RobotController.o obj/BZFSCommunicator.o obj/Robot.o obj/EnvironmentData.o obj/PersonalData.o obj/MyTank.o obj/OtherTank.o obj/Shot.o obj/Obstacle.o obj/Flag.o obj/Team.o obj/Constant.o obj/Base.o obj/GnuplotWriter.o obj/BreadthFirstAlg.o obj/DepthFirstAlg.o obj/IterativeDeepeningAlg.o obj/GreedyBestFirstAlg.o obj/AStarAlg.o
 

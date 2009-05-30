@@ -15,6 +15,12 @@
 #define DECOY "decoy"
 #define TRAVEL "travel"
 
+#define CP_DUCK "clayPidgeonDuck"
+#define CP_CONST_XY_VEL "clayPidgeonConstXYVel"
+#define CP_CONST_XY_ACC "clayPidgeonConstXYAcc"
+#define CP_GAUSS "clayPidgeonGauss"
+#define CP_WILD "clayPidgeonWild"
+
 
 class Robot {
 
@@ -69,9 +75,16 @@ class Robot {
         Position GetNode(float x, float y);
         bool IsVisitable(Node* n);
         void DiscretizeWorld();
+
         void DoTravel();
         void DoSniper();
         void DoDecoy();
+        void DoCPDuck();
+        void DoCPConstXYVel();
+        void DoCPConstXYAcc();
+        void DoCPGauss();
+        void DoCPWild();
+
         void UpdatePosition();
         float Wrap(float original, float max);
         void GenerateField(float x, float y, float *outX, float *outY, string color, bool HAVE_FLAG);

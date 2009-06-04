@@ -1,6 +1,8 @@
 #ifndef KALMEN_FILTER
 #define KALMEN_FILTER
 
+#include "matrix.h"
+
 class KalmenFilter {
 
 	/******************

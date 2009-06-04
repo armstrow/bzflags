@@ -95,5 +95,5 @@ obj/GreedyBestFirstAlg.o: inc/GreedyBestFirstAlg.h src/GreedyBestFirstAlg.cpp
 obj/AStarAlg.o: inc/AStarAlg.h src/AStarAlg.cpp inc/SearchAlg.h
 	$(CC) $(FLAGS) -c src/AStarAlg.cpp -o obj/AStarAlg.o
 
-obj/KalmenFilter.o: inc/KalmenFilter.h src/KalmenFilter.cpp 
+obj/KalmenFilter.o: inc/KalmenFilter.h src/KalmenFilter.cpp inc/matrix.h
 	$(CC) $(FLAGS) -c src/KalmenFilter.cpp -o obj/KalmenFilter.o

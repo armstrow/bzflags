@@ -48,6 +48,7 @@ class Robot {
         EnvironmentData *env;
         GnuplotWriter gpw;
         AStarAlg *alg;
+		int WildCounter;
 
 
     /*  +--------------+

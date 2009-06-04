@@ -4,7 +4,7 @@
 #include "RobotController.h"
 #include "MyTank.h"
 #include "AStarAlg.h"
-#include "boxmuller.c"
+//#include "boxmuller.c"
 
 #include <cmath>
 #include <math.h>
@@ -50,7 +50,7 @@ Robot::Robot(MyTank *meTank, BZFSCommunicator *bzfsComm, EnvironmentData *env): 
     endNode.ToString();
     cout << endl;
 
-    float answer = box_muller(0.5, 0.5);
+    //float answer = box_muller(0.5, 0.5);
 
     alg = new AStarAlg(&WorldNodes, &gpw, true, env);
     alg->DoSearch(startNode, endNode, &forwardsPath);
@@ -77,6 +77,7 @@ Robot::Robot(MyTank *meTank, BZFSCommunicator *bzfsComm, EnvironmentData *env): 
     }
 
     currentPath = &forwardsPath;
+	WildCounter = 0;
 }
 //------------------------------------------------------
 void Robot::DiscretizeWorld() {
@@ -190,6 +191,13 @@ void Robot::DoCPGauss() {
 }
 //------------------------------------------------------
 void Robot::DoCPWild() {
+	WildCounter++;
+	if (WildCounter >= 20) WildCounter = 0;
+	float offset = WildCounter / 10;
+	bzfsComm->speed(meTank->index, ((-1-1)*((float)rand()/RAND_MAX))+1 + offset);
+	sleep(1);
+	bzfsComm->angvel(meTank->index, ((-1-1)*((float)rand()/RAND_MAX))+1 + offset);
+	sleep(1);
     
 }
 //------------------------------------------------------

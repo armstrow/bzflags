@@ -21,6 +21,8 @@
 #include "GreedyBestFirstAlg.h"
 #include "AStarAlg.h"
 
+#include "KalmenFilter.h"
+
 
 using namespace std;
 
@@ -92,6 +94,9 @@ int main(int argc, char** argv) {
         penalized = (strcmp(argv[4],"-p") == 0);
 
     cout << "penalized: " << (penalized ? "YES" : "NO" ) << endl;
+
+
+	KalmenFilter kf;
 
     controller = new RobotController(SERVER, PORT);
     DiscretizeWorld(NodeS); 

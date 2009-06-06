@@ -149,8 +149,8 @@ typedef int bool;
 #endif
 
 #ifndef __MINMAX_DEFINED
-#  define max(a,b)    (((a) > (b)) ? (a) : (b))
-#  define min(a,b)    (((a) < (b)) ? (a) : (b))
+#  define myMax(a,b)    (((a) > (b)) ? (a) : (b))
+#  define myMin(a,b)    (((a) < (b)) ? (a) : (b))
 #endif
 
 #if defined(_MSC_VER)
@@ -371,8 +371,8 @@ matrixT::realloc (size_t row, size_t col)
    }
 
    base_mat *m1 = new base_mat( row, col, NULL);
-   size_t colSize = min(_m->Col,col) * sizeof(T);
-   size_t minRow = min(_m->Row,row);
+   size_t colSize = myMin(_m->Col,col) * sizeof(T);
+   size_t minRow = myMin(_m->Row,row);
 
    for (size_t i=0; i < minRow; i++)
       memcpy( m1->Val[i], _m->Val[i], colSize);
@@ -812,7 +812,7 @@ MAT_TEMPLATE inline void
 matrixT::Unit () _NO_THROW
 {
     if (_m->Refcnt > 1) clone();   
-    size_t row = min(_m->Row,_m->Col);
+    size_t row = myMin(_m->Row,_m->Col);
     _m->Row = _m->Col = row;
 
     for (size_t i=0; i < _m->Row; i++)

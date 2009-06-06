@@ -6,7 +6,10 @@
 
 using namespace std;
 
-KalmenFilter::KalmenFilter() {
+KalmenFilter::KalmenFilter(EnvironmentData *env) {
+	this->gw = new GnuplotWriter(env);
+	gnuplotString = "";
+
 //Initialize constant matrices
 
 ////////
@@ -29,10 +32,10 @@ KalmenFilter::KalmenFilter() {
 ////////////
 	float vals2[36] ={0.1, 0,   0,   0,   0,   0,
 					  0,   0.1, 0,   0,   0,   0,
-					  0,   0,   100, 0,   0,   0,
+					  0,   0,   25, 0,   0,   0,
 					  0,   0,   0,   0.1, 0,   0,
 					  0,   0,   0,   0,   0.1, 0,
-					  0,   0,   0,   0,   0,   100};      
+					  0,   0,   0,   0,   0,   25};      
 	xSize = 6, ySize = 6;
 	SigmaX.SetSize(xSize, ySize);
 	for (int i = 0; i < xSize; i++)
@@ -93,10 +96,10 @@ KalmenFilter::KalmenFilter() {
 			Mu(i, j) = valsM[(i*ySize)+j];
 
 // SigmaK
-	float valsK[36] ={100, 0,   0,   0,   0,   0,
+	float valsK[36] ={25,  0,   0,   0,   0,   0,
 					  0,   0.1, 0,   0,   0,   0,
 					  0,   0,   0.1, 0,   0,   0,
-					  0,   0,   0,   100, 0,   0,
+					  0,   0,   0,   25,  0,   0,
 					  0,   0,   0,   0,   0.1, 0,
 					  0,   0,   0,   0,   0,   0.1};      
 	xSize = 6, ySize = 6;
@@ -116,8 +119,30 @@ KalmenFilter::KalmenFilter() {
 float* KalmenFilter::update(float ObsX, float ObsY) {
 	float* rtrn;
 	float tmp[2];
-	tmp[0] = 1.0;
-	tmp[1] = 1.0;
+	
+	gnuplotString += gw->DrawObserved(ObsX, ObsY);
+
+//Z[k+1]
+	Matrix Z;
+	float xSize = 2, ySize = 1;
+	Z.SetSize(xSize, ySize);
+	Z(0,0) = ObsX;
+	Z(1,0) = ObsY;	
+//F*Σk*Ft + Σx
+	Temp = ((F * SigmaK) * Ft) + SigmaX;
+//K[t+1]
+	K = (Temp * (Ht * !((H * (Temp * Ht)) + SigmaZ)));
+//Mu[t+1]
+	cout << Mu << endl;
+	Mu = F * Mu + K * (Z - H * F * Mu);
+//SigmaK[t+1]
+	SigmaK = (I - (K * H)) * Temp;
+
+	tmp[0] = Mu(0,0);
+	tmp[1] = Mu(3,0);
+	cout << "KALMEN::update: observed " << ObsX << "," << ObsY << endl;
+	cout << "KALMEN::        predicted" << tmp[0] << "," << tmp[1] << endl;
+
 	rtrn = tmp;
 	return rtrn;
 }
@@ -125,8 +150,22 @@ float* KalmenFilter::update(float ObsX, float ObsY) {
 float* KalmenFilter::predict(int numTimeSteps){
 	float* rtrn;
 	float tmp[2];
-	tmp[0] = 1.0;
-	tmp[1] = 1.0;
+	Matrix NuMu = Mu;
+	for (int i = 0; i < numTimeSteps; i++) {
+		NuMu = F * NuMu; //μ[t+1] = F * μ[t]
+	}
+	tmp[0] = NuMu(0,0);
+	tmp[1] = NuMu(3,0);
+	float ObsX = tmp[0];
+	float ObsY = tmp[1];
+	cout << "KALMEN::        predicted" << tmp[0] << "," << tmp[1] << endl;
+	gnuplotString += gw->DrawObserved(ObsX, ObsY);
+	gnuplotString += gw->DrawObserved(ObsX + 5, ObsY);
+	gnuplotString += gw->DrawObserved(ObsX + 5, ObsY + 5);
+	gnuplotString += gw->DrawObserved(ObsX, ObsY+5);
+	gnuplotString += gw->PrintAniData(0);
+	//gnuplotString += gw->DrawPredicted(tmp[0], tmp[1], 0.3);  	////////////////////////////////////////////////////////FIX THIS!!!!!!!!!!!!!!!!
+	gw->PrintState(gnuplotString, 800, "KalmenFilter.gpi");
 	rtrn = tmp;
 	return rtrn;
 }

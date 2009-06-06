@@ -51,6 +51,9 @@ class GnuplotWriter{
 	   PrintState(output, "AStar.gpi");
 	   ...
 	*/
+	string DrawObserved(float x, float y);
+	string DrawPredicted(float sigma_x, float sigma_y, float rho);
+
 	void PrintState(string s, double size, char * filename);
     string ClearScreen();
 };

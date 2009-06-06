@@ -8,6 +8,7 @@
 #include "Node.h"
 #include "BZFSCommunicator.h"
 #include "EnvironmentData.h"
+#include "KalmenFilter.h"
 
 #include <vector>
 
@@ -49,6 +50,9 @@ class Robot {
         GnuplotWriter gpw;
         AStarAlg *alg;
 		int WildCounter;
+		KalmenFilter * kf;
+		KalmenFilter * myKF;
+		int kfCount;
 
 
     /*  +--------------+

@@ -4,7 +4,8 @@
 #include "RobotController.h"
 #include "MyTank.h"
 #include "AStarAlg.h"
-//#include "boxmuller.c"
+#include "boxmuller.c"
+
 
 #include <cmath>
 #include <math.h>
@@ -17,6 +18,9 @@
 #define NODE_SIZE 10 
 #define TARGET_COLOR "green"
 #define SLEEP_AMT 100
+
+#define NUM_OBSERVATIONS 10
+#define PREDICTION_TIME 100
 
 using namespace std;
 
@@ -78,6 +82,9 @@ Robot::Robot(MyTank *meTank, BZFSCommunicator *bzfsComm, EnvironmentData *env): 
 
     currentPath = &forwardsPath;
 	WildCounter = 0;
+	kf = new KalmenFilter(env);
+	myKF = new KalmenFilter(env);
+	kfCount = 0;
 }
 //------------------------------------------------------
 void Robot::DiscretizeWorld() {
@@ -221,6 +228,12 @@ void Robot::DoTravel() {
     PDController(finalAngle, angleDiff, currAngVel);
 }
 //------------------------------------------------------
+float GetDistance(float startX, float startY, float endX, float endY) {
+    float dist = sqrt( (startX - endX)*(startX - endX) +
+            (startY - endY)*(startY - endY) );
+    return dist;
+}
+
 void Robot::DoSniper() {
     gotoPoint = false;
     bzfsComm->speed(meTank->index, 0);
@@ -230,6 +243,11 @@ void Robot::DoSniper() {
     float yDiff = 0;
     float meX = meTank->pos[0];
     float meY = meTank->pos[1];
+	float* myRslt = myKF->update(meX, meY);
+	meX = myRslt[0];
+	meY = myRslt[1];
+	//TODO: Add Prediction of my position.
+
     float themX, themY;
 
     int i = 0;
@@ -237,14 +255,35 @@ void Robot::DoSniper() {
     themX = env->otherTanks.at(i).x;
     themY = env->otherTanks.at(i).y;
 
-    xDiff = themX - meX;
-    yDiff = themY - meY;
+	float* rslt = kf->update(themX, themY);
+	themX = rslt[0];
+	themY = rslt[1];
+	if (++kfCount > NUM_OBSERVATIONS) {
+		kfCount = NUM_OBSERVATIONS+1;
+		float* rslt = kf->predict(int(GetDistance(meX, meY, themX, themY)/PREDICTION_TIME/2));
+		themX = rslt[0];
+		themY = rslt[1];
+	}
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    float finalAngle = Wrap(atan2(yDiff,xDiff), PI*2);//good
-    float angleDiff = GetAngleDist(meTank->angle, finalAngle);//not good
-    float angVel = (angleDiff/(2*PI));
+	xDiff = themX - meX;
+	yDiff = themY - meY;
+	float finalAngle = Wrap(atan2(yDiff,xDiff), PI*2);//good
+	float angleDiff = GetAngleDist(meTank->angle, finalAngle);//not good
+	//float angVel = (angleDiff/(2*PI));
 
-    bzfsComm->angvel(meTank->index, angVel);
+	angleDiff /= PI;
+    bool negDiff = angleDiff < 0;
+    float newAngVel = sqrt(abs(angleDiff))*0.9;
+    if(negDiff) {
+        newAngVel *= -1;
+        newAngVel -= 0.1;
+    } else {
+        newAngVel += 0.2;
+    }
+	
+	bzfsComm->angvel(meTank->index, newAngVel);
+	//bzfsComm->shoot(meTank->index);
 }
 //------------------------------------------------------
 void Robot::DoDecoy() {

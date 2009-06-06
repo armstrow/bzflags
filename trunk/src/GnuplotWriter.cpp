@@ -93,6 +93,28 @@ void GnuplotWriter::PrintState(string s, double size, char * filename) {
 }
 
 
+string GnuplotWriter::DrawObserved(float x, float y) {
+	float edgeSize = 5;
+	string s =	PrintLine(x, y, x + edgeSize, y, 1);
+    s += PrintLine(x+edgeSize, y, x+edgeSize, y+edgeSize, 1);
+    s += PrintLine(x+edgeSize, y+edgeSize, x, y+edgeSize, 1);
+    s += PrintLine(x, y+edgeSize, x, y, 1);
+	return s;
+}
+
+string GnuplotWriter::DrawPredicted(float sigma_x, float sigma_y, float rho) {
+	string s = "";
+
+	s += "set palette model RGB functions 1-gray, 1-gray, 1-gray\n";
+	s += "set isosamples 100\n";
+    char buff[100];
+    sprintf(buff, "sigma_x = %f\nsigma_y = %f\nrho = %f\n", sigma_x,sigma_y,rho);
+    s+=buff;
+	s += "\nsplot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) )* exp(-1.0/2.0 * (x**2 / sigma_x**2 + y**2 / sigma_y**2 - 2.0*rho*x*y/(sigma_x*sigma_y) ) ) with pm3d\n";
+
+	return s;
+}
+
 
 
 

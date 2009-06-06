@@ -96,7 +96,7 @@ int main(int argc, char** argv) {
     cout << "penalized: " << (penalized ? "YES" : "NO" ) << endl;
 
 
-	KalmenFilter kf;
+	//KalmenFilter kf;
 
     controller = new RobotController(SERVER, PORT);
     DiscretizeWorld(NodeS); 

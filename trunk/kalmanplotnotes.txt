@@ -1,0 +1,27 @@
+
+
+sigma-x
+    this represents how much we trust the predicted x value
+sigma-y
+    this represents how much we trust the predicted y value
+rho
+    this represents (as per the course wiki: "rho(p) is the correlation btwn X and Y") ????
+
+
+
+------------
+
+graphically speaking:
+    -sigma-x is how wide the oval should be
+    -sigma-y is how tall the oval should be
+    -rho determines how much the oval is stretched
+
+    might think of it like sigma-x and y are telling you how wide and tall to make the oval,
+    as well as what the slope of the line should be (sigma-y/sigma-x).
+    Rho tells you how much to stretch the oval along the slope.
+
+
+
+
+
+

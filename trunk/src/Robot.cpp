@@ -27,6 +27,8 @@ using namespace std;
 
 float PI = 4.0*atan(1.0);
 
+float sleepCount = 0;
+
 
 /* +--------------------------------+
  * |             PUBLIC             |
@@ -195,6 +197,10 @@ void Robot::DoCPConstXYAcc() {
 //------------------------------------------------------
 void Robot::DoCPGauss() {
     //http://www.boost.org/doc/libs/1_35_0/libs/math/doc/sf_and_dist/html/math_toolkit/dist/dist_ref/dists/normal_dist.html
+    float mean = 0;
+    float stanDev = 1;
+    float nextVal = box_muller(mean, stanDev);
+    bzfsComm->speed(meTank->index, nextVal);
 }
 //------------------------------------------------------
 void Robot::DoCPWild() {
@@ -202,10 +208,9 @@ void Robot::DoCPWild() {
 	if (WildCounter >= 20) WildCounter = 0;
 	float offset = WildCounter / 10;
 	bzfsComm->speed(meTank->index, ((-1-1)*((float)rand()/RAND_MAX))+1 + offset);
-	sleep(1);
+	sleep(1);//this will throw everything off, it's al in one thread now
 	bzfsComm->angvel(meTank->index, ((-1-1)*((float)rand()/RAND_MAX))+1 + offset);
 	sleep(1);
-    
 }
 //------------------------------------------------------
 void Robot::DoTravel() {
@@ -268,8 +273,8 @@ void Robot::DoSniper() {
 
 	xDiff = themX - meX;
 	yDiff = themY - meY;
-	float finalAngle = Wrap(atan2(yDiff,xDiff), PI*2);//good
-	float angleDiff = GetAngleDist(meTank->angle, finalAngle);//not good
+	float finalAngle = Wrap(atan2(yDiff,xDiff), PI*2);
+	float angleDiff = GetAngleDist(meTank->angle, finalAngle);
 	//float angVel = (angleDiff/(2*PI));
 
 	angleDiff /= PI;

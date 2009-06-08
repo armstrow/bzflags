@@ -28,11 +28,11 @@ KalmenFilter::KalmenFilter(EnvironmentData *env) {
 		for (int j = 0; j < ySize; j++)
 			F(i, j) = vals[(i*ySize)+j];	
 ////////////
-// SigmaX
+// SigmaX -- how wrong everything might be
 ////////////
 	float vals2[36] ={0.1, 0,   0,   0,   0,   0,
 					  0,   0.1, 0,   0,   0,   0,
-					  0,   0,   25, 0,   0,   0,
+					  0,   0,   25,  0,   0,   0,
 					  0,   0,   0,   0.1, 0,   0,
 					  0,   0,   0,   0,   0.1, 0,
 					  0,   0,   0,   0,   0,   25};      
@@ -127,7 +127,7 @@ float* KalmenFilter::update(float ObsX, float ObsY) {
 	float xSize = 2, ySize = 1;
 	Z.SetSize(xSize, ySize);
 	Z(0,0) = ObsX;
-	Z(1,0) = ObsY;	
+	Z(1,0) = ObsY;
 //F*Σk*Ft + Σx
 	Temp = ((F * SigmaK) * Ft) + SigmaX;
 //K[t+1]
@@ -140,8 +140,15 @@ float* KalmenFilter::update(float ObsX, float ObsY) {
 
 	tmp[0] = Mu(0,0);
 	tmp[1] = Mu(3,0);
-	cout << "KALMEN::update: observed " << ObsX << "," << ObsY << endl;
-	cout << "KALMEN::        predicted" << tmp[0] << "," << tmp[1] << endl;
+	cout << "KALMAN::update: observed " << ObsX << "," << ObsY << endl;
+	cout << "KALMAN::        predicted" << tmp[0] << "," << tmp[1] << endl;
+   
+    //get how much we trust the position in the x direction
+    //float sigmaX = SigmaK
+    //get how much we trust the position in the y direction
+    //float sigmaY = SigmaK
+    //get how much we need to stretch the oval along the slope (the correlation btwn sigmaX and Y)
+    //float rho = ???//not sure where to get this one from
 
 	rtrn = tmp;
 	return rtrn;

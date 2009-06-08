@@ -144,11 +144,11 @@ float* KalmenFilter::update(float ObsX, float ObsY) {
 	cout << "KALMAN::        predicted" << tmp[0] << "," << tmp[1] << endl;
    
     //get how much we trust the position in the x direction
-    //float sigmaX = SigmaK
+    float sigmaX = SigmaK(0,0);
     //get how much we trust the position in the y direction
-    //float sigmaY = SigmaK
+    float sigmaY = SigmaK(3, 3);
     //get how much we need to stretch the oval along the slope (the correlation btwn sigmaX and Y)
-    //float rho = ???//not sure where to get this one from
+    //float rho = ???//not sure where to get this one from, maybe from SigmaK, but the x and y velocities?
 
 	rtrn = tmp;
 	return rtrn;

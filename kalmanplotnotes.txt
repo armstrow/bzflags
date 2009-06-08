@@ -1,11 +1,12 @@
 
 
 sigma-x
-    this represents how much we trust the predicted x value
+    this represents how much we trust the predicted x value (get the SigmaK value for the x POSITION)
 sigma-y
-    this represents how much we trust the predicted y value
+    this represents how much we trust the predicted y value (get the SigmaK value for the y POSITION)
 rho
     this represents (as per the course wiki: "rho(p) is the correlation btwn X and Y") ????
+    need to ask in class exactly what to get this from, I'm not sure
 
 
 

@@ -36,7 +36,7 @@ void RobotController::InitRobots() {
         cout << i << "   -------------------------------" << endl;
         MyTank *currTank = &env.myTanks.at(i);
         Robot *currBot = new Robot(currTank, &bzfsComm, &env);
-        currBot->SwitchTo(SNIPER);
+        currBot->SwitchTo(SNIPER);//CP_CONST_XY_VEL);
         robotList.push_back(currBot);
         cout << "add bot #" << i << endl;
     }

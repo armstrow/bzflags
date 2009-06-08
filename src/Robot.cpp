@@ -265,7 +265,7 @@ void Robot::DoSniper() {
 	themY = rslt[1];
 	if (++kfCount > NUM_OBSERVATIONS) {
 		kfCount = NUM_OBSERVATIONS+1;
-		float* rslt = kf->predict(int(GetDistance(meX, meY, themX, themY)/PREDICTION_TIME/2));
+		float* rslt = kf->predict(int(GetDistance(meX, meY, themX, themY)/PREDICTION_TIME/20));
 		themX = rslt[0];
 		themY = rslt[1];
 	}
@@ -279,13 +279,26 @@ void Robot::DoSniper() {
 
 	angleDiff /= PI;
     bool negDiff = angleDiff < 0;
-    float newAngVel = sqrt(abs(angleDiff))*0.9;
-    if(negDiff) {
+    float newAngVel = 1;
+    if(abs(angleDiff) <= 0.05)
+        newAngVel = sqrt(abs(angleDiff));
+    else if(abs(angleDiff) <= 0.1)
+        newAngVel = sqrt(sqrt(abs(angleDiff)));
+    else if(abs(angleDiff) <= 0.2)
+        newAngVel = sqrt(sqrt(sqrt(abs(angleDiff))));
+    else if(abs(angleDiff) <= 0.3)
+        newAngVel= sqrt(sqrt(sqrt(sqrt(abs(angleDiff)))));//*0.9;
+    else
+        newAngVel = 1;
+    //}
+    if(negDiff && newAngVel > 0)// {
         newAngVel *= -1;
-        newAngVel -= 0.1;
+        
+   /*     newAngVel -= 0.1;
     } else {
         newAngVel += 0.2;
     }
+    */
 	
 	bzfsComm->angvel(meTank->index, newAngVel);
 	//bzfsComm->shoot(meTank->index);

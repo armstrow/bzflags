@@ -1,8 +1,8 @@
 #include "KalmenFilter.h"
 #include <stdio.h>
-#define DELTA_T 0.5
+#define DELTA_T .1
 #define VARIANCE 5
-#define NEG_C -0.8
+#define NEG_C 0.0
 
 using namespace std;
 
@@ -30,12 +30,12 @@ KalmenFilter::KalmenFilter(EnvironmentData *env) {
 ////////////
 // SigmaX -- how wrong everything might be
 ////////////
-	float vals2[36] ={0.1,   0,   0,   0,   0,   0,
-					  0,   0.1, 0,   0,   0,   0,
-					  0,   0,   0.3,  0,   0,   0,
-					  0,   0,   0,   0.1,   0,   0,
-					  0,   0,   0,   0,   0.1, 0,
-					  0,   0,   0,   0,   0,   0.3};      
+	float vals2[36] ={5, 0,   0,   0,   0,   0,
+					  0,   5, 0,   0,   0,   0,
+					  0,   0,   1,  0,   0,   0,
+					  0,   0,   0,   5, 0,   0,
+					  0,   0,   0,   0,   5, 0,
+					  0,   0,   0,   0,   0,   1};      
 	xSize = 6, ySize = 6;
 	SigmaX.SetSize(xSize, ySize);
 	for (int i = 0; i < xSize; i++)
@@ -120,7 +120,7 @@ float* KalmenFilter::update(float ObsX, float ObsY) {
 	float* rtrn;
 	float tmp[2];
 	
-	//gnuplotString += gw->DrawObserved(ObsX, ObsY);
+	gnuplotString += gw->DrawObserved(ObsX, ObsY);
 
 //Z[k+1]
 	Matrix Z;
@@ -132,9 +132,12 @@ float* KalmenFilter::update(float ObsX, float ObsY) {
 	Temp = ((F * SigmaK) * Ft) + SigmaX;
 //K[t+1]
 	K = (Temp * (Ht * !((H * (Temp * Ht)) + SigmaZ)));
+    cout << "KALMAN::update: K: " << K << endl;
 //Mu[t+1]
 	cout << Mu << endl;
+    cout << "KALMAN::update: K-term: " << K * (Z - H * F * Mu) << endl;
 	Mu = F * Mu + K * (Z - H * F * Mu);
+    cout << "KALMAN::update: F: " << F << endl;
 //SigmaK[t+1]
 	SigmaK = (I - (K * H)) * Temp;
     
@@ -142,13 +145,6 @@ float* KalmenFilter::update(float ObsX, float ObsY) {
 	tmp[1] = Mu(3,0);
 	cout << "KALMAN::update: observed " << ObsX << "," << ObsY << endl;
 	cout << "KALMAN::        predicted" << tmp[0] << "," << tmp[1] << endl;
-   
-    //get how much we trust the position in the x direction
-    float sigmaX = SigmaK(0,0);
-    //get how much we trust the position in the y direction
-    float sigmaY = SigmaK(3, 3);
-    //get how much we need to stretch the oval along the slope (the correlation btwn sigmaX and Y)
-    //float rho = ???//not sure where to get this one from, maybe from SigmaK, but the x and y velocities?
 
 	rtrn = tmp;
 	return rtrn;
@@ -172,7 +168,21 @@ float* KalmenFilter::predict(int numTimeSteps){
 	//gnuplotString += gw->DrawObserved(ObsX, ObsY+5);
 	//gnuplotString += gw->PrintAniData(0);
 	//gnuplotString += gw->DrawPredicted(tmp[0], tmp[1], 0.3);  	////////////////////////////////////////////////////////FIX THIS!!!!!!!!!!!!!!!!
-	//gw->PrintState(gnuplotString, 800, "KalmenFilter.gpi");
+	   
+    //get how much we trust the position in the x direction
+    float sigmaX = SigmaK(0,0);
+    //get how much we trust the position in the y direction
+    float sigmaY = SigmaK(3, 3);
+    //get how much we need to stretch the oval along the slope (the correlation btwn sigmaX and Y)
+    float rho = (SigmaK(0, 3)/sigmaX)/sigmaY;
+    //float rho = ???//not sure where to get this one from, maybe from SigmaK, but the x and y velocities?
+    string randStr = "";
+    char buff[1000];
+    sprintf(buff, "KalmenFilter%d.gpi", rand());
+
+    gnuplotString += gw->DrawPredicted(sigmaX, sigmaY, rho);
+    
+    gw->PrintState(gnuplotString, 800, buff);
 	rtrn = tmp;
 	return rtrn;
 }

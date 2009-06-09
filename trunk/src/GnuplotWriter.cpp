@@ -7,7 +7,7 @@ string GnuplotWriter::PrintHeaderData(double size) {
    char buff[1000];;
    string s;
    double sz = size / 2;
-   sprintf (buff, "set title \"Plot\"\nset xrange [-%f: %f]\nset yrange [-%f: %f]\nunset key\nset size square\n", sz, sz, sz, sz);
+   sprintf (buff, "set title \"Plot\"\nset xrange [-%f: %f]\nset yrange [-%f: %f]\nset pm3d\nset view map\nunset key\nunset arrow\nset size square\n", sz, sz, sz, sz);
    s += buff;
    return s;
 }
@@ -30,7 +30,7 @@ string GnuplotWriter::PrintObstacleData(vector<Obstacle> obstacles) {
           y1 = o.corners.at(j).y;
           x2 = o.corners.at((j+1)%4).x;
           y2 = o.corners.at((j+1)%4).y;
-          sprintf(buff, "set arrow from %f, %f to %f, %f nohead lt 3\n", x1,y1,x2,y2);
+          sprintf(buff, "set arrow from %f, %f to %f, %f nohead front lt 3\n", x1,y1,x2,y2);
           s+=buff;
       }
    }
@@ -40,7 +40,7 @@ string GnuplotWriter::PrintObstacleData(vector<Obstacle> obstacles) {
 string GnuplotWriter::PrintLine(double startX, double startY, double endX, double endY, int color) {
     char buff[100];
     string s;
-    sprintf(buff, "set arrow from %f, %f to %f, %f nohead lt %d\n", startX,startY,endX,endY, color);
+    sprintf(buff, "set arrow from %f, %f to %f, %f nohead front lt %d\n", startX,startY,endX,endY, color);
     s+=buff;
     return s;
 }

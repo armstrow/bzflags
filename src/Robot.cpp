@@ -159,17 +159,19 @@ void Robot::Update() {
 float Robot::PDController(float goalAngle, float angleDiff, float currAngVel) {
     angleDiff /= PI;
     bool negDiff = angleDiff < 0;
-    float newAngVel = sqrt(abs(angleDiff))*0.9;
-    if(negDiff) {
+    float newAngVel;
+    if(abs(angleDiff) > 0.09)
+        newAngVel = 1;
+    else
+        newAngVel = sqrt(abs(angleDiff));
+    if(negDiff)
         newAngVel *= -1;
-        newAngVel -= 0.1;
-    } else {
-        newAngVel += 0.2;
-    }
 
-    float newSpeed = 1 - sqrt(sqrt(abs(angleDiff)));
-    if(newSpeed > 0.8)
-        newSpeed = sqrt(newSpeed);
+    float newSpeed;
+    if(angleDiff < 0.3)
+        newSpeed = 1;
+    else
+        newSpeed = 1 - sqrt(abs(angleDiff));
 
     //cout << "PDC  angleDiff: " << angleDiff << ", " << "newSpeed: " << newSpeed << ", newAngVel " << newAngVel << endl;
 
@@ -276,9 +278,10 @@ void Robot::DoSniper() {
 	float* rslt = kf->update(themX, themY);
 	themX = rslt[0];
 	themY = rslt[1];
+    float result8;
 	if (++kfCount > NUM_OBSERVATIONS) {
 		kfCount = NUM_OBSERVATIONS+1;
-        float result8 = GetDistance(meX, meY, themX, themY)/PREDICTION_TIME;
+        result8 = GetDistance(meX, meY, themX, themY)/PREDICTION_TIME;
         cout << "WHAT IS THIS NUMBER???? ::> " << result8 << endl;
 		float* rslt = kf->predict(3+int(3*result8));
 		themX = rslt[0];
@@ -290,14 +293,24 @@ void Robot::DoSniper() {
 	yDiff = themY - meY;
 	float finalAngle = Wrap(atan2(yDiff,xDiff), PI*2);
 	float angleDiff = GetAngleDist(meTank->angle, finalAngle);
-    if(abs(angleDiff) < 0.1)
+
+    float accuracyRequirement = sqrt(0.08*(1/result8))/2.0;
+    cout << "ACC REQ: " << accuracyRequirement << endl;
+    if(abs(angleDiff) < accuracyRequirement)
         bzfsComm->shoot(meTank->index);
 	//float angVel = (angleDiff/(2*PI));
 
 	angleDiff /= PI;
     bool negDiff = angleDiff < 0;
     float newAngVel = 1;
-    newAngVel = sqrt(abs(angleDiff));
+
+    if(abs(angleDiff) > 0.09)
+        newAngVel = 1;
+    else
+        newAngVel = sqrt(abs(angleDiff));
+    if(newAngVel < 0.05)
+        newAngVel = 0.05;
+
     if(negDiff && newAngVel > 0)// {
         newAngVel *= -1;
 
@@ -307,6 +320,7 @@ void Robot::DoSniper() {
     }
     */
 
+    cout << "NEW ANGVEL: " << newAngVel << endl;
 	bzfsComm->angvel(meTank->index, newAngVel);
 	//bzfsComm->shoot(meTank->index);
 }

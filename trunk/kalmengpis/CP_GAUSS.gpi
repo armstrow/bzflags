@@ -6,50 +6,50 @@ set view map
 unset key
 unset arrow
 set size square
-set arrow from -52.217285, 191.051727 to -47.217285, 191.051727 nohead front lt 1
-set arrow from -47.217285, 191.051727 to -47.217285, 196.051727 nohead front lt 1
-set arrow from -47.217285, 196.051727 to -52.217285, 196.051727 nohead front lt 1
-set arrow from -52.217285, 196.051727 to -52.217285, 191.051727 nohead front lt 1
-set arrow from -98.317238, 81.316605 to -93.317238, 81.316605 nohead front lt 1
-set arrow from -93.317238, 81.316605 to -93.317238, 86.316605 nohead front lt 1
-set arrow from -93.317238, 86.316605 to -98.317238, 86.316605 nohead front lt 1
-set arrow from -98.317238, 86.316605 to -98.317238, 81.316605 nohead front lt 1
-set arrow from -95.291412, 82.757233 to -90.291412, 82.757233 nohead front lt 1
-set arrow from -90.291412, 82.757233 to -90.291412, 87.757233 nohead front lt 1
-set arrow from -90.291412, 87.757233 to -95.291412, 87.757233 nohead front lt 1
-set arrow from -95.291412, 87.757233 to -95.291412, 82.757233 nohead front lt 1
-set arrow from -92.359825, 89.008644 to -87.359825, 89.008644 nohead front lt 1
-set arrow from -87.359825, 89.008644 to -87.359825, 94.008644 nohead front lt 1
-set arrow from -87.359825, 94.008644 to -92.359825, 94.008644 nohead front lt 1
-set arrow from -92.359825, 94.008644 to -92.359825, 89.008644 nohead front lt 1
-set arrow from -90.753899, 78.654495 to -85.753899, 78.654495 nohead front lt 1
-set arrow from -85.753899, 78.654495 to -85.753899, 83.654495 nohead front lt 1
-set arrow from -85.753899, 83.654495 to -90.753899, 83.654495 nohead front lt 1
-set arrow from -90.753899, 83.654495 to -90.753899, 78.654495 nohead front lt 1
-set arrow from -93.692833, 83.844460 to -88.692833, 83.844460 nohead front lt 1
-set arrow from -88.692833, 83.844460 to -88.692833, 88.844460 nohead front lt 1
-set arrow from -88.692833, 88.844460 to -93.692833, 88.844460 nohead front lt 1
-set arrow from -93.692833, 88.844460 to -93.692833, 83.844460 nohead front lt 1
-set arrow from -81.611275, 71.067963 to -76.611275, 71.067963 nohead front lt 1
-set arrow from -76.611275, 71.067963 to -76.611275, 76.067963 nohead front lt 1
-set arrow from -76.611275, 76.067963 to -81.611275, 76.067963 nohead front lt 1
-set arrow from -81.611275, 76.067963 to -81.611275, 71.067963 nohead front lt 1
-set arrow from -94.526299, 61.513901 to -89.526299, 61.513901 nohead front lt 1
-set arrow from -89.526299, 61.513901 to -89.526299, 66.513901 nohead front lt 1
-set arrow from -89.526299, 66.513901 to -94.526299, 66.513901 nohead front lt 1
-set arrow from -94.526299, 66.513901 to -94.526299, 61.513901 nohead front lt 1
-set arrow from -91.208176, 63.504505 to -86.208176, 63.504505 nohead front lt 1
-set arrow from -86.208176, 63.504505 to -86.208176, 68.504505 nohead front lt 1
-set arrow from -86.208176, 68.504505 to -91.208176, 68.504505 nohead front lt 1
-set arrow from -91.208176, 68.504505 to -91.208176, 63.504505 nohead front lt 1
-set arrow from -89.180046, 49.507504 to -84.180046, 49.507504 nohead front lt 1
-set arrow from -84.180046, 49.507504 to -84.180046, 54.507504 nohead front lt 1
-set arrow from -84.180046, 54.507504 to -89.180046, 54.507504 nohead front lt 1
-set arrow from -89.180046, 54.507504 to -89.180046, 49.507504 nohead front lt 1
-set arrow from -86.499931, 57.244656 to -81.499931, 57.244656 nohead front lt 1
-set arrow from -81.499931, 57.244656 to -81.499931, 62.244656 nohead front lt 1
-set arrow from -81.499931, 62.244656 to -86.499931, 62.244656 nohead front lt 1
-set arrow from -86.499931, 62.244656 to -86.499931, 57.244656 nohead front lt 1
+set arrow from 80.056412, 31.147528 to 85.056412, 31.147528 nohead front lt 1
+set arrow from 85.056412, 31.147528 to 85.056412, 36.147528 nohead front lt 1
+set arrow from 85.056412, 36.147528 to 80.056412, 36.147528 nohead front lt 1
+set arrow from 80.056412, 36.147528 to 80.056412, 31.147528 nohead front lt 1
+set arrow from 119.137833, 53.142662 to 124.137833, 53.142662 nohead front lt 1
+set arrow from 124.137833, 53.142662 to 124.137833, 58.142662 nohead front lt 1
+set arrow from 124.137833, 58.142662 to 119.137833, 58.142662 nohead front lt 1
+set arrow from 119.137833, 58.142662 to 119.137833, 53.142662 nohead front lt 1
+set arrow from 140.196960, 64.326187 to 145.196960, 64.326187 nohead front lt 1
+set arrow from 145.196960, 64.326187 to 145.196960, 69.326187 nohead front lt 1
+set arrow from 145.196960, 69.326187 to 140.196960, 69.326187 nohead front lt 1
+set arrow from 140.196960, 69.326187 to 140.196960, 64.326187 nohead front lt 1
+set arrow from 152.919098, 68.823982 to 157.919098, 68.823982 nohead front lt 1
+set arrow from 157.919098, 68.823982 to 157.919098, 73.823982 nohead front lt 1
+set arrow from 157.919098, 73.823982 to 152.919098, 73.823982 nohead front lt 1
+set arrow from 152.919098, 73.823982 to 152.919098, 68.823982 nohead front lt 1
+set arrow from 154.392227, 68.022758 to 159.392227, 68.022758 nohead front lt 1
+set arrow from 159.392227, 68.022758 to 159.392227, 73.022758 nohead front lt 1
+set arrow from 159.392227, 73.022758 to 154.392227, 73.022758 nohead front lt 1
+set arrow from 154.392227, 73.022758 to 154.392227, 68.022758 nohead front lt 1
+set arrow from 157.356781, 68.140472 to 162.356781, 68.140472 nohead front lt 1
+set arrow from 162.356781, 68.140472 to 162.356781, 73.140472 nohead front lt 1
+set arrow from 162.356781, 73.140472 to 157.356781, 73.140472 nohead front lt 1
+set arrow from 157.356781, 73.140472 to 157.356781, 68.140472 nohead front lt 1
+set arrow from 155.473495, 72.345413 to 160.473495, 72.345413 nohead front lt 1
+set arrow from 160.473495, 72.345413 to 160.473495, 77.345413 nohead front lt 1
+set arrow from 160.473495, 77.345413 to 155.473495, 77.345413 nohead front lt 1
+set arrow from 155.473495, 77.345413 to 155.473495, 72.345413 nohead front lt 1
+set arrow from 151.431519, 75.907303 to 156.431519, 75.907303 nohead front lt 1
+set arrow from 156.431519, 75.907303 to 156.431519, 80.907303 nohead front lt 1
+set arrow from 156.431519, 80.907303 to 151.431519, 80.907303 nohead front lt 1
+set arrow from 151.431519, 80.907303 to 151.431519, 75.907303 nohead front lt 1
+set arrow from 150.393890, 77.054550 to 155.393890, 77.054550 nohead front lt 1
+set arrow from 155.393890, 77.054550 to 155.393890, 82.054550 nohead front lt 1
+set arrow from 155.393890, 82.054550 to 150.393890, 82.054550 nohead front lt 1
+set arrow from 150.393890, 82.054550 to 150.393890, 77.054550 nohead front lt 1
+set arrow from 146.474808, 78.681541 to 151.474808, 78.681541 nohead front lt 1
+set arrow from 151.474808, 78.681541 to 151.474808, 83.681541 nohead front lt 1
+set arrow from 151.474808, 83.681541 to 146.474808, 83.681541 nohead front lt 1
+set arrow from 146.474808, 83.681541 to 146.474808, 78.681541 nohead front lt 1
+set arrow from 147.035431, 77.187447 to 152.035431, 77.187447 nohead front lt 1
+set arrow from 152.035431, 77.187447 to 152.035431, 82.187447 nohead front lt 1
+set arrow from 152.035431, 82.187447 to 147.035431, 82.187447 nohead front lt 1
+set arrow from 147.035431, 82.187447 to 147.035431, 77.187447 nohead front lt 1
 set palette model RGB functions 1-gray, 1-gray, 1-gray
 set isosamples 100
 sigma_x = 10.002169
@@ -57,10 +57,10 @@ sigma_y = 10.002169
 rho = 0.000000
 
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) )* exp(-1.0/2.0 * (x**2 / sigma_x**2 + y**2 / sigma_y**2 - 2.0*rho*x*y/(sigma_x*sigma_y) ) ) with pm3d
-set arrow from -91.601257, 55.604500 to -86.601257, 55.604500 nohead front lt 1
-set arrow from -86.601257, 55.604500 to -86.601257, 60.604500 nohead front lt 1
-set arrow from -86.601257, 60.604500 to -91.601257, 60.604500 nohead front lt 1
-set arrow from -91.601257, 60.604500 to -91.601257, 55.604500 nohead front lt 1
+set arrow from 147.827362, 79.381943 to 152.827362, 79.381943 nohead front lt 1
+set arrow from 152.827362, 79.381943 to 152.827362, 84.381943 nohead front lt 1
+set arrow from 152.827362, 84.381943 to 147.827362, 84.381943 nohead front lt 1
+set arrow from 147.827362, 84.381943 to 147.827362, 79.381943 nohead front lt 1
 set palette model RGB functions 1-gray, 1-gray, 1-gray
 set isosamples 100
 sigma_x = 10.082927
@@ -68,10 +68,10 @@ sigma_y = 10.082927
 rho = 0.000000
 
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) )* exp(-1.0/2.0 * (x**2 / sigma_x**2 + y**2 / sigma_y**2 - 2.0*rho*x*y/(sigma_x*sigma_y) ) ) with pm3d
-set arrow from -82.822021, 53.401577 to -77.822021, 53.401577 nohead front lt 1
-set arrow from -77.822021, 53.401577 to -77.822021, 58.401577 nohead front lt 1
-set arrow from -77.822021, 58.401577 to -82.822021, 58.401577 nohead front lt 1
-set arrow from -82.822021, 58.401577 to -82.822021, 53.401577 nohead front lt 1
+set arrow from 137.834366, 81.033768 to 142.834366, 81.033768 nohead front lt 1
+set arrow from 142.834366, 81.033768 to 142.834366, 86.033768 nohead front lt 1
+set arrow from 142.834366, 86.033768 to 137.834366, 86.033768 nohead front lt 1
+set arrow from 137.834366, 86.033768 to 137.834366, 81.033768 nohead front lt 1
 set palette model RGB functions 1-gray, 1-gray, 1-gray
 set isosamples 100
 sigma_x = 10.154868
@@ -79,10 +79,10 @@ sigma_y = 10.154868
 rho = 0.000000
 
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) )* exp(-1.0/2.0 * (x**2 / sigma_x**2 + y**2 / sigma_y**2 - 2.0*rho*x*y/(sigma_x*sigma_y) ) ) with pm3d
-set arrow from -92.951660, 45.170670 to -87.951660, 45.170670 nohead front lt 1
-set arrow from -87.951660, 45.170670 to -87.951660, 50.170670 nohead front lt 1
-set arrow from -87.951660, 50.170670 to -92.951660, 50.170670 nohead front lt 1
-set arrow from -92.951660, 50.170670 to -92.951660, 45.170670 nohead front lt 1
+set arrow from 131.644653, 80.903008 to 136.644653, 80.903008 nohead front lt 1
+set arrow from 136.644653, 80.903008 to 136.644653, 85.903008 nohead front lt 1
+set arrow from 136.644653, 85.903008 to 131.644653, 85.903008 nohead front lt 1
+set arrow from 131.644653, 85.903008 to 131.644653, 80.903008 nohead front lt 1
 set palette model RGB functions 1-gray, 1-gray, 1-gray
 set isosamples 100
 sigma_x = 10.218757
@@ -90,10 +90,10 @@ sigma_y = 10.218757
 rho = 0.000000
 
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) )* exp(-1.0/2.0 * (x**2 / sigma_x**2 + y**2 / sigma_y**2 - 2.0*rho*x*y/(sigma_x*sigma_y) ) ) with pm3d
-set arrow from -76.648445, 50.632805 to -71.648445, 50.632805 nohead front lt 1
-set arrow from -71.648445, 50.632805 to -71.648445, 55.632805 nohead front lt 1
-set arrow from -71.648445, 55.632805 to -76.648445, 55.632805 nohead front lt 1
-set arrow from -76.648445, 55.632805 to -76.648445, 50.632805 nohead front lt 1
+set arrow from 124.967522, 74.519859 to 129.967522, 74.519859 nohead front lt 1
+set arrow from 129.967522, 74.519859 to 129.967522, 79.519859 nohead front lt 1
+set arrow from 129.967522, 79.519859 to 124.967522, 79.519859 nohead front lt 1
+set arrow from 124.967522, 79.519859 to 124.967522, 74.519859 nohead front lt 1
 set palette model RGB functions 1-gray, 1-gray, 1-gray
 set isosamples 100
 sigma_x = 10.275453
@@ -101,10 +101,10 @@ sigma_y = 10.275453
 rho = 0.000000
 
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) )* exp(-1.0/2.0 * (x**2 / sigma_x**2 + y**2 / sigma_y**2 - 2.0*rho*x*y/(sigma_x*sigma_y) ) ) with pm3d
-set arrow from -88.591957, 36.647560 to -83.591957, 36.647560 nohead front lt 1
-set arrow from -83.591957, 36.647560 to -83.591957, 41.647560 nohead front lt 1
-set arrow from -83.591957, 41.647560 to -88.591957, 41.647560 nohead front lt 1
-set arrow from -88.591957, 41.647560 to -88.591957, 36.647560 nohead front lt 1
+set arrow from 124.867325, 76.371101 to 129.867325, 76.371101 nohead front lt 1
+set arrow from 129.867325, 76.371101 to 129.867325, 81.371101 nohead front lt 1
+set arrow from 129.867325, 81.371101 to 124.867325, 81.371101 nohead front lt 1
+set arrow from 124.867325, 81.371101 to 124.867325, 76.371101 nohead front lt 1
 set palette model RGB functions 1-gray, 1-gray, 1-gray
 set isosamples 100
 sigma_x = 10.325821
@@ -112,10 +112,10 @@ sigma_y = 10.325821
 rho = 0.000000
 
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) )* exp(-1.0/2.0 * (x**2 / sigma_x**2 + y**2 / sigma_y**2 - 2.0*rho*x*y/(sigma_x*sigma_y) ) ) with pm3d
-set arrow from -90.526489, 33.762821 to -85.526489, 33.762821 nohead front lt 1
-set arrow from -85.526489, 33.762821 to -85.526489, 38.762821 nohead front lt 1
-set arrow from -85.526489, 38.762821 to -90.526489, 38.762821 nohead front lt 1
-set arrow from -90.526489, 38.762821 to -90.526489, 33.762821 nohead front lt 1
+set arrow from 116.364540, 75.825348 to 121.364540, 75.825348 nohead front lt 1
+set arrow from 121.364540, 75.825348 to 121.364540, 80.825348 nohead front lt 1
+set arrow from 121.364540, 80.825348 to 116.364540, 80.825348 nohead front lt 1
+set arrow from 116.364540, 80.825348 to 116.364540, 75.825348 nohead front lt 1
 set palette model RGB functions 1-gray, 1-gray, 1-gray
 set isosamples 100
 sigma_x = 10.370688
@@ -123,10 +123,10 @@ sigma_y = 10.370688
 rho = 0.000000
 
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) )* exp(-1.0/2.0 * (x**2 / sigma_x**2 + y**2 / sigma_y**2 - 2.0*rho*x*y/(sigma_x*sigma_y) ) ) with pm3d
-set arrow from -94.571861, 32.876976 to -89.571861, 32.876976 nohead front lt 1
-set arrow from -89.571861, 32.876976 to -89.571861, 37.876976 nohead front lt 1
-set arrow from -89.571861, 37.876976 to -94.571861, 37.876976 nohead front lt 1
-set arrow from -94.571861, 37.876976 to -94.571861, 32.876976 nohead front lt 1
+set arrow from 110.775406, 78.987160 to 115.775406, 78.987160 nohead front lt 1
+set arrow from 115.775406, 78.987160 to 115.775406, 83.987160 nohead front lt 1
+set arrow from 115.775406, 83.987160 to 110.775406, 83.987160 nohead front lt 1
+set arrow from 110.775406, 83.987160 to 110.775406, 78.987160 nohead front lt 1
 set palette model RGB functions 1-gray, 1-gray, 1-gray
 set isosamples 100
 sigma_x = 10.410808
@@ -134,10 +134,10 @@ sigma_y = 10.410808
 rho = 0.000000
 
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) )* exp(-1.0/2.0 * (x**2 / sigma_x**2 + y**2 / sigma_y**2 - 2.0*rho*x*y/(sigma_x*sigma_y) ) ) with pm3d
-set arrow from -84.525452, 24.905291 to -79.525452, 24.905291 nohead front lt 1
-set arrow from -79.525452, 24.905291 to -79.525452, 29.905291 nohead front lt 1
-set arrow from -79.525452, 29.905291 to -84.525452, 29.905291 nohead front lt 1
-set arrow from -84.525452, 29.905291 to -84.525452, 24.905291 nohead front lt 1
+set arrow from 103.597252, 78.234711 to 108.597252, 78.234711 nohead front lt 1
+set arrow from 108.597252, 78.234711 to 108.597252, 83.234711 nohead front lt 1
+set arrow from 108.597252, 83.234711 to 103.597252, 83.234711 nohead front lt 1
+set arrow from 103.597252, 83.234711 to 103.597252, 78.234711 nohead front lt 1
 set palette model RGB functions 1-gray, 1-gray, 1-gray
 set isosamples 100
 sigma_x = 10.446848
@@ -145,10 +145,10 @@ sigma_y = 10.446848
 rho = 0.000000
 
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) )* exp(-1.0/2.0 * (x**2 / sigma_x**2 + y**2 / sigma_y**2 - 2.0*rho*x*y/(sigma_x*sigma_y) ) ) with pm3d
-set arrow from -87.712532, 25.050062 to -82.712532, 25.050062 nohead front lt 1
-set arrow from -82.712532, 25.050062 to -82.712532, 30.050062 nohead front lt 1
-set arrow from -82.712532, 30.050062 to -87.712532, 30.050062 nohead front lt 1
-set arrow from -87.712532, 30.050062 to -87.712532, 25.050062 nohead front lt 1
+set arrow from 97.085724, 81.875992 to 102.085724, 81.875992 nohead front lt 1
+set arrow from 102.085724, 81.875992 to 102.085724, 86.875992 nohead front lt 1
+set arrow from 102.085724, 86.875992 to 97.085724, 86.875992 nohead front lt 1
+set arrow from 97.085724, 86.875992 to 97.085724, 81.875992 nohead front lt 1
 set palette model RGB functions 1-gray, 1-gray, 1-gray
 set isosamples 100
 sigma_x = 10.479393
@@ -156,10 +156,10 @@ sigma_y = 10.479393
 rho = 0.000000
 
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) )* exp(-1.0/2.0 * (x**2 / sigma_x**2 + y**2 / sigma_y**2 - 2.0*rho*x*y/(sigma_x*sigma_y) ) ) with pm3d
-set arrow from -83.728966, 24.833305 to -78.728966, 24.833305 nohead front lt 1
-set arrow from -78.728966, 24.833305 to -78.728966, 29.833305 nohead front lt 1
-set arrow from -78.728966, 29.833305 to -83.728966, 29.833305 nohead front lt 1
-set arrow from -83.728966, 29.833305 to -83.728966, 24.833305 nohead front lt 1
+set arrow from 88.172203, 84.177673 to 93.172203, 84.177673 nohead front lt 1
+set arrow from 93.172203, 84.177673 to 93.172203, 89.177673 nohead front lt 1
+set arrow from 93.172203, 89.177673 to 88.172203, 89.177673 nohead front lt 1
+set arrow from 88.172203, 89.177673 to 88.172203, 84.177673 nohead front lt 1
 set palette model RGB functions 1-gray, 1-gray, 1-gray
 set isosamples 100
 sigma_x = 10.508941
@@ -167,10 +167,10 @@ sigma_y = 10.508941
 rho = 0.000000
 
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) )* exp(-1.0/2.0 * (x**2 / sigma_x**2 + y**2 / sigma_y**2 - 2.0*rho*x*y/(sigma_x*sigma_y) ) ) with pm3d
-set arrow from -95.697105, 10.019985 to -90.697105, 10.019985 nohead front lt 1
-set arrow from -90.697105, 10.019985 to -90.697105, 15.019985 nohead front lt 1
-set arrow from -90.697105, 15.019985 to -95.697105, 15.019985 nohead front lt 1
-set arrow from -95.697105, 15.019985 to -95.697105, 10.019985 nohead front lt 1
+set arrow from 85.686310, 82.637711 to 90.686310, 82.637711 nohead front lt 1
+set arrow from 90.686310, 82.637711 to 90.686310, 87.637711 nohead front lt 1
+set arrow from 90.686310, 87.637711 to 85.686310, 87.637711 nohead front lt 1
+set arrow from 85.686310, 87.637711 to 85.686310, 82.637711 nohead front lt 1
 set palette model RGB functions 1-gray, 1-gray, 1-gray
 set isosamples 100
 sigma_x = 10.535913
@@ -178,10 +178,10 @@ sigma_y = 10.535913
 rho = 0.000000
 
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) )* exp(-1.0/2.0 * (x**2 / sigma_x**2 + y**2 / sigma_y**2 - 2.0*rho*x*y/(sigma_x*sigma_y) ) ) with pm3d
-set arrow from -87.496567, 23.139521 to -82.496567, 23.139521 nohead front lt 1
-set arrow from -82.496567, 23.139521 to -82.496567, 28.139521 nohead front lt 1
-set arrow from -82.496567, 28.139521 to -87.496567, 28.139521 nohead front lt 1
-set arrow from -87.496567, 28.139521 to -87.496567, 23.139521 nohead front lt 1
+set arrow from 80.402428, 81.389717 to 85.402428, 81.389717 nohead front lt 1
+set arrow from 85.402428, 81.389717 to 85.402428, 86.389717 nohead front lt 1
+set arrow from 85.402428, 86.389717 to 80.402428, 86.389717 nohead front lt 1
+set arrow from 80.402428, 86.389717 to 80.402428, 81.389717 nohead front lt 1
 set palette model RGB functions 1-gray, 1-gray, 1-gray
 set isosamples 100
 sigma_x = 10.560663
@@ -189,10 +189,10 @@ sigma_y = 10.560663
 rho = 0.000000
 
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) )* exp(-1.0/2.0 * (x**2 / sigma_x**2 + y**2 / sigma_y**2 - 2.0*rho*x*y/(sigma_x*sigma_y) ) ) with pm3d
-set arrow from -88.380829, 13.572369 to -83.380829, 13.572369 nohead front lt 1
-set arrow from -83.380829, 13.572369 to -83.380829, 18.572369 nohead front lt 1
-set arrow from -83.380829, 18.572369 to -88.380829, 18.572369 nohead front lt 1
-set arrow from -88.380829, 18.572369 to -88.380829, 13.572369 nohead front lt 1
+set arrow from 72.995079, 81.386421 to 77.995079, 81.386421 nohead front lt 1
+set arrow from 77.995079, 81.386421 to 77.995079, 86.386421 nohead front lt 1
+set arrow from 77.995079, 86.386421 to 72.995079, 86.386421 nohead front lt 1
+set arrow from 72.995079, 86.386421 to 72.995079, 81.386421 nohead front lt 1
 set palette model RGB functions 1-gray, 1-gray, 1-gray
 set isosamples 100
 sigma_x = 10.583485
@@ -200,10 +200,10 @@ sigma_y = 10.583485
 rho = 0.000000
 
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) )* exp(-1.0/2.0 * (x**2 / sigma_x**2 + y**2 / sigma_y**2 - 2.0*rho*x*y/(sigma_x*sigma_y) ) ) with pm3d
-set arrow from -89.362801, 20.813646 to -84.362801, 20.813646 nohead front lt 1
-set arrow from -84.362801, 20.813646 to -84.362801, 25.813646 nohead front lt 1
-set arrow from -84.362801, 25.813646 to -89.362801, 25.813646 nohead front lt 1
-set arrow from -89.362801, 25.813646 to -89.362801, 20.813646 nohead front lt 1
+set arrow from 72.588577, 81.308838 to 77.588577, 81.308838 nohead front lt 1
+set arrow from 77.588577, 81.308838 to 77.588577, 86.308838 nohead front lt 1
+set arrow from 77.588577, 86.308838 to 72.588577, 86.308838 nohead front lt 1
+set arrow from 72.588577, 86.308838 to 72.588577, 81.308838 nohead front lt 1
 set palette model RGB functions 1-gray, 1-gray, 1-gray
 set isosamples 100
 sigma_x = 10.604616
@@ -211,10 +211,10 @@ sigma_y = 10.604616
 rho = 0.000000
 
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) )* exp(-1.0/2.0 * (x**2 / sigma_x**2 + y**2 / sigma_y**2 - 2.0*rho*x*y/(sigma_x*sigma_y) ) ) with pm3d
-set arrow from -86.202850, 13.136059 to -81.202850, 13.136059 nohead front lt 1
-set arrow from -81.202850, 13.136059 to -81.202850, 18.136059 nohead front lt 1
-set arrow from -81.202850, 18.136059 to -86.202850, 18.136059 nohead front lt 1
-set arrow from -86.202850, 18.136059 to -86.202850, 13.136059 nohead front lt 1
+set arrow from 68.549973, 81.250366 to 73.549973, 81.250366 nohead front lt 1
+set arrow from 73.549973, 81.250366 to 73.549973, 86.250366 nohead front lt 1
+set arrow from 73.549973, 86.250366 to 68.549973, 86.250366 nohead front lt 1
+set arrow from 68.549973, 86.250366 to 68.549973, 81.250366 nohead front lt 1
 set palette model RGB functions 1-gray, 1-gray, 1-gray
 set isosamples 100
 sigma_x = 10.624257
@@ -222,10 +222,10 @@ sigma_y = 10.624257
 rho = 0.000000
 
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) )* exp(-1.0/2.0 * (x**2 / sigma_x**2 + y**2 / sigma_y**2 - 2.0*rho*x*y/(sigma_x*sigma_y) ) ) with pm3d
-set arrow from -88.765511, 8.130007 to -83.765511, 8.130007 nohead front lt 1
-set arrow from -83.765511, 8.130007 to -83.765511, 13.130007 nohead front lt 1
-set arrow from -83.765511, 13.130007 to -88.765511, 13.130007 nohead front lt 1
-set arrow from -88.765511, 13.130007 to -88.765511, 8.130007 nohead front lt 1
+set arrow from 65.801567, 80.335472 to 70.801567, 80.335472 nohead front lt 1
+set arrow from 70.801567, 80.335472 to 70.801567, 85.335472 nohead front lt 1
+set arrow from 70.801567, 85.335472 to 65.801567, 85.335472 nohead front lt 1
+set arrow from 65.801567, 85.335472 to 65.801567, 80.335472 nohead front lt 1
 set palette model RGB functions 1-gray, 1-gray, 1-gray
 set isosamples 100
 sigma_x = 10.642569
@@ -233,10 +233,10 @@ sigma_y = 10.642569
 rho = 0.000000
 
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) )* exp(-1.0/2.0 * (x**2 / sigma_x**2 + y**2 / sigma_y**2 - 2.0*rho*x*y/(sigma_x*sigma_y) ) ) with pm3d
-set arrow from -90.217804, 3.634537 to -85.217804, 3.634537 nohead front lt 1
-set arrow from -85.217804, 3.634537 to -85.217804, 8.634537 nohead front lt 1
-set arrow from -85.217804, 8.634537 to -90.217804, 8.634537 nohead front lt 1
-set arrow from -90.217804, 8.634537 to -90.217804, 3.634537 nohead front lt 1
+set arrow from 67.261734, 79.546448 to 72.261734, 79.546448 nohead front lt 1
+set arrow from 72.261734, 79.546448 to 72.261734, 84.546448 nohead front lt 1
+set arrow from 72.261734, 84.546448 to 67.261734, 84.546448 nohead front lt 1
+set arrow from 67.261734, 84.546448 to 67.261734, 79.546448 nohead front lt 1
 set palette model RGB functions 1-gray, 1-gray, 1-gray
 set isosamples 100
 sigma_x = 10.659683
@@ -244,10 +244,10 @@ sigma_y = 10.659683
 rho = 0.000000
 
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) )* exp(-1.0/2.0 * (x**2 / sigma_x**2 + y**2 / sigma_y**2 - 2.0*rho*x*y/(sigma_x*sigma_y) ) ) with pm3d
-set arrow from -75.040932, 14.021319 to -70.040932, 14.021319 nohead front lt 1
-set arrow from -70.040932, 14.021319 to -70.040932, 19.021319 nohead front lt 1
-set arrow from -70.040932, 19.021319 to -75.040932, 19.021319 nohead front lt 1
-set arrow from -75.040932, 19.021319 to -75.040932, 14.021319 nohead front lt 1
+set arrow from 63.374470, 80.480202 to 68.374470, 80.480202 nohead front lt 1
+set arrow from 68.374470, 80.480202 to 68.374470, 85.480202 nohead front lt 1
+set arrow from 68.374470, 85.480202 to 63.374470, 85.480202 nohead front lt 1
+set arrow from 63.374470, 85.480202 to 63.374470, 80.480202 nohead front lt 1
 set palette model RGB functions 1-gray, 1-gray, 1-gray
 set isosamples 100
 sigma_x = 10.675708
@@ -255,10 +255,10 @@ sigma_y = 10.675708
 rho = 0.000000
 
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) )* exp(-1.0/2.0 * (x**2 / sigma_x**2 + y**2 / sigma_y**2 - 2.0*rho*x*y/(sigma_x*sigma_y) ) ) with pm3d
-set arrow from -77.443924, 0.258343 to -72.443924, 0.258343 nohead front lt 1
-set arrow from -72.443924, 0.258343 to -72.443924, 5.258343 nohead front lt 1
-set arrow from -72.443924, 5.258343 to -77.443924, 5.258343 nohead front lt 1
-set arrow from -77.443924, 5.258343 to -77.443924, 0.258343 nohead front lt 1
+set arrow from 58.230900, 80.243729 to 63.230900, 80.243729 nohead front lt 1
+set arrow from 63.230900, 80.243729 to 63.230900, 85.243729 nohead front lt 1
+set arrow from 63.230900, 85.243729 to 58.230900, 85.243729 nohead front lt 1
+set arrow from 58.230900, 85.243729 to 58.230900, 80.243729 nohead front lt 1
 set palette model RGB functions 1-gray, 1-gray, 1-gray
 set isosamples 100
 sigma_x = 10.690732
@@ -266,10 +266,10 @@ sigma_y = 10.690732
 rho = 0.000000
 
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) )* exp(-1.0/2.0 * (x**2 / sigma_x**2 + y**2 / sigma_y**2 - 2.0*rho*x*y/(sigma_x*sigma_y) ) ) with pm3d
-set arrow from -75.670609, -11.720153 to -70.670609, -11.720153 nohead front lt 1
-set arrow from -70.670609, -11.720153 to -70.670609, -6.720153 nohead front lt 1
-set arrow from -70.670609, -6.720153 to -75.670609, -6.720153 nohead front lt 1
-set arrow from -75.670609, -6.720153 to -75.670609, -11.720153 nohead front lt 1
+set arrow from 56.224258, 79.163742 to 61.224258, 79.163742 nohead front lt 1
+set arrow from 61.224258, 79.163742 to 61.224258, 84.163742 nohead front lt 1
+set arrow from 61.224258, 84.163742 to 56.224258, 84.163742 nohead front lt 1
+set arrow from 56.224258, 84.163742 to 56.224258, 79.163742 nohead front lt 1
 set palette model RGB functions 1-gray, 1-gray, 1-gray
 set isosamples 100
 sigma_x = 10.704829
@@ -277,10 +277,10 @@ sigma_y = 10.704829
 rho = 0.000000
 
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) )* exp(-1.0/2.0 * (x**2 / sigma_x**2 + y**2 / sigma_y**2 - 2.0*rho*x*y/(sigma_x*sigma_y) ) ) with pm3d
-set arrow from -67.178932, -6.496733 to -62.178932, -6.496733 nohead front lt 1
-set arrow from -62.178932, -6.496733 to -62.178932, -1.496733 nohead front lt 1
-set arrow from -62.178932, -1.496733 to -67.178932, -1.496733 nohead front lt 1
-set arrow from -67.178932, -1.496733 to -67.178932, -6.496733 nohead front lt 1
+set arrow from 56.929779, 78.092201 to 61.929779, 78.092201 nohead front lt 1
+set arrow from 61.929779, 78.092201 to 61.929779, 83.092201 nohead front lt 1
+set arrow from 61.929779, 83.092201 to 56.929779, 83.092201 nohead front lt 1
+set arrow from 56.929779, 83.092201 to 56.929779, 78.092201 nohead front lt 1
 set palette model RGB functions 1-gray, 1-gray, 1-gray
 set isosamples 100
 sigma_x = 10.718063
@@ -288,10 +288,10 @@ sigma_y = 10.718063
 rho = 0.000000
 
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) )* exp(-1.0/2.0 * (x**2 / sigma_x**2 + y**2 / sigma_y**2 - 2.0*rho*x*y/(sigma_x*sigma_y) ) ) with pm3d
-set arrow from -73.910172, -19.503477 to -68.910172, -19.503477 nohead front lt 1
-set arrow from -68.910172, -19.503477 to -68.910172, -14.503477 nohead front lt 1
-set arrow from -68.910172, -14.503477 to -73.910172, -14.503477 nohead front lt 1
-set arrow from -73.910172, -14.503477 to -73.910172, -19.503477 nohead front lt 1
+set arrow from 58.123913, 81.637741 to 63.123913, 81.637741 nohead front lt 1
+set arrow from 63.123913, 81.637741 to 63.123913, 86.637741 nohead front lt 1
+set arrow from 63.123913, 86.637741 to 58.123913, 86.637741 nohead front lt 1
+set arrow from 58.123913, 86.637741 to 58.123913, 81.637741 nohead front lt 1
 set palette model RGB functions 1-gray, 1-gray, 1-gray
 set isosamples 100
 sigma_x = 10.730487
@@ -299,10 +299,10 @@ sigma_y = 10.730487
 rho = 0.000000
 
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) )* exp(-1.0/2.0 * (x**2 / sigma_x**2 + y**2 / sigma_y**2 - 2.0*rho*x*y/(sigma_x*sigma_y) ) ) with pm3d
-set arrow from -78.398888, -40.884926 to -73.398888, -40.884926 nohead front lt 1
-set arrow from -73.398888, -40.884926 to -73.398888, -35.884926 nohead front lt 1
-set arrow from -73.398888, -35.884926 to -78.398888, -35.884926 nohead front lt 1
-set arrow from -78.398888, -35.884926 to -78.398888, -40.884926 nohead front lt 1
+set arrow from 51.213627, 81.223289 to 56.213627, 81.223289 nohead front lt 1
+set arrow from 56.213627, 81.223289 to 56.213627, 86.223289 nohead front lt 1
+set arrow from 56.213627, 86.223289 to 51.213627, 86.223289 nohead front lt 1
+set arrow from 51.213627, 86.223289 to 51.213627, 81.223289 nohead front lt 1
 set palette model RGB functions 1-gray, 1-gray, 1-gray
 set isosamples 100
 sigma_x = 10.742146
@@ -310,10 +310,10 @@ sigma_y = 10.742146
 rho = 0.000000
 
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) )* exp(-1.0/2.0 * (x**2 / sigma_x**2 + y**2 / sigma_y**2 - 2.0*rho*x*y/(sigma_x*sigma_y) ) ) with pm3d
-set arrow from -75.026596, -50.478115 to -70.026596, -50.478115 nohead front lt 1
-set arrow from -70.026596, -50.478115 to -70.026596, -45.478115 nohead front lt 1
-set arrow from -70.026596, -45.478115 to -75.026596, -45.478115 nohead front lt 1
-set arrow from -75.026596, -45.478115 to -75.026596, -50.478115 nohead front lt 1
+set arrow from 50.127518, 84.553459 to 55.127518, 84.553459 nohead front lt 1
+set arrow from 55.127518, 84.553459 to 55.127518, 89.553459 nohead front lt 1
+set arrow from 55.127518, 89.553459 to 50.127518, 89.553459 nohead front lt 1
+set arrow from 50.127518, 89.553459 to 50.127518, 84.553459 nohead front lt 1
 set palette model RGB functions 1-gray, 1-gray, 1-gray
 set isosamples 100
 sigma_x = 10.753081
@@ -321,322 +321,14 @@ sigma_y = 10.753081
 rho = 0.000000
 
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) )* exp(-1.0/2.0 * (x**2 / sigma_x**2 + y**2 / sigma_y**2 - 2.0*rho*x*y/(sigma_x*sigma_y) ) ) with pm3d
-set arrow from -72.953377, -49.986000 to -67.953377, -49.986000 nohead front lt 1
-set arrow from -67.953377, -49.986000 to -67.953377, -44.986000 nohead front lt 1
-set arrow from -67.953377, -44.986000 to -72.953377, -44.986000 nohead front lt 1
-set arrow from -72.953377, -44.986000 to -72.953377, -49.986000 nohead front lt 1
+set arrow from 48.021511, 85.041595 to 53.021511, 85.041595 nohead front lt 1
+set arrow from 53.021511, 85.041595 to 53.021511, 90.041595 nohead front lt 1
+set arrow from 53.021511, 90.041595 to 48.021511, 90.041595 nohead front lt 1
+set arrow from 48.021511, 90.041595 to 48.021511, 85.041595 nohead front lt 1
 set palette model RGB functions 1-gray, 1-gray, 1-gray
 set isosamples 100
 sigma_x = 10.763331
 sigma_y = 10.763331
-rho = 0.000000
-
-splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) )* exp(-1.0/2.0 * (x**2 / sigma_x**2 + y**2 / sigma_y**2 - 2.0*rho*x*y/(sigma_x*sigma_y) ) ) with pm3d
-set arrow from -76.052307, -55.783455 to -71.052307, -55.783455 nohead front lt 1
-set arrow from -71.052307, -55.783455 to -71.052307, -50.783455 nohead front lt 1
-set arrow from -71.052307, -50.783455 to -76.052307, -50.783455 nohead front lt 1
-set arrow from -76.052307, -50.783455 to -76.052307, -55.783455 nohead front lt 1
-set palette model RGB functions 1-gray, 1-gray, 1-gray
-set isosamples 100
-sigma_x = 10.772929
-sigma_y = 10.772929
-rho = 0.000000
-
-splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) )* exp(-1.0/2.0 * (x**2 / sigma_x**2 + y**2 / sigma_y**2 - 2.0*rho*x*y/(sigma_x*sigma_y) ) ) with pm3d
-set arrow from -79.190796, -55.134777 to -74.190796, -55.134777 nohead front lt 1
-set arrow from -74.190796, -55.134777 to -74.190796, -50.134777 nohead front lt 1
-set arrow from -74.190796, -50.134777 to -79.190796, -50.134777 nohead front lt 1
-set arrow from -79.190796, -50.134777 to -79.190796, -55.134777 nohead front lt 1
-set palette model RGB functions 1-gray, 1-gray, 1-gray
-set isosamples 100
-sigma_x = 10.781908
-sigma_y = 10.781908
-rho = 0.000000
-
-splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) )* exp(-1.0/2.0 * (x**2 / sigma_x**2 + y**2 / sigma_y**2 - 2.0*rho*x*y/(sigma_x*sigma_y) ) ) with pm3d
-set arrow from -71.691544, -60.477409 to -66.691544, -60.477409 nohead front lt 1
-set arrow from -66.691544, -60.477409 to -66.691544, -55.477409 nohead front lt 1
-set arrow from -66.691544, -55.477409 to -71.691544, -55.477409 nohead front lt 1
-set arrow from -71.691544, -55.477409 to -71.691544, -60.477409 nohead front lt 1
-set palette model RGB functions 1-gray, 1-gray, 1-gray
-set isosamples 100
-sigma_x = 10.790298
-sigma_y = 10.790298
-rho = 0.000000
-
-splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) )* exp(-1.0/2.0 * (x**2 / sigma_x**2 + y**2 / sigma_y**2 - 2.0*rho*x*y/(sigma_x*sigma_y) ) ) with pm3d
-set arrow from -70.218605, -57.851391 to -65.218605, -57.851391 nohead front lt 1
-set arrow from -65.218605, -57.851391 to -65.218605, -52.851391 nohead front lt 1
-set arrow from -65.218605, -52.851391 to -70.218605, -52.851391 nohead front lt 1
-set arrow from -70.218605, -52.851391 to -70.218605, -57.851391 nohead front lt 1
-set palette model RGB functions 1-gray, 1-gray, 1-gray
-set isosamples 100
-sigma_x = 10.798127
-sigma_y = 10.798127
-rho = 0.000000
-
-splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) )* exp(-1.0/2.0 * (x**2 / sigma_x**2 + y**2 / sigma_y**2 - 2.0*rho*x*y/(sigma_x*sigma_y) ) ) with pm3d
-set arrow from -79.603554, -65.315491 to -74.603554, -65.315491 nohead front lt 1
-set arrow from -74.603554, -65.315491 to -74.603554, -60.315491 nohead front lt 1
-set arrow from -74.603554, -60.315491 to -79.603554, -60.315491 nohead front lt 1
-set arrow from -79.603554, -60.315491 to -79.603554, -65.315491 nohead front lt 1
-set palette model RGB functions 1-gray, 1-gray, 1-gray
-set isosamples 100
-sigma_x = 10.805427
-sigma_y = 10.805427
-rho = 0.000000
-
-splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) )* exp(-1.0/2.0 * (x**2 / sigma_x**2 + y**2 / sigma_y**2 - 2.0*rho*x*y/(sigma_x*sigma_y) ) ) with pm3d
-set arrow from -64.407242, -68.716545 to -59.407242, -68.716545 nohead front lt 1
-set arrow from -59.407242, -68.716545 to -59.407242, -63.716545 nohead front lt 1
-set arrow from -59.407242, -63.716545 to -64.407242, -63.716545 nohead front lt 1
-set arrow from -64.407242, -63.716545 to -64.407242, -68.716545 nohead front lt 1
-set palette model RGB functions 1-gray, 1-gray, 1-gray
-set isosamples 100
-sigma_x = 10.812222
-sigma_y = 10.812222
-rho = 0.000000
-
-splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) )* exp(-1.0/2.0 * (x**2 / sigma_x**2 + y**2 / sigma_y**2 - 2.0*rho*x*y/(sigma_x*sigma_y) ) ) with pm3d
-set arrow from -76.084015, -71.139160 to -71.084015, -71.139160 nohead front lt 1
-set arrow from -71.084015, -71.139160 to -71.084015, -66.139160 nohead front lt 1
-set arrow from -71.084015, -66.139160 to -76.084015, -66.139160 nohead front lt 1
-set arrow from -76.084015, -66.139160 to -76.084015, -71.139160 nohead front lt 1
-set palette model RGB functions 1-gray, 1-gray, 1-gray
-set isosamples 100
-sigma_x = 10.818541
-sigma_y = 10.818541
-rho = 0.000000
-
-splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) )* exp(-1.0/2.0 * (x**2 / sigma_x**2 + y**2 / sigma_y**2 - 2.0*rho*x*y/(sigma_x*sigma_y) ) ) with pm3d
-set arrow from -76.599190, -76.214241 to -71.599190, -76.214241 nohead front lt 1
-set arrow from -71.599190, -76.214241 to -71.599190, -71.214241 nohead front lt 1
-set arrow from -71.599190, -71.214241 to -76.599190, -71.214241 nohead front lt 1
-set arrow from -76.599190, -71.214241 to -76.599190, -76.214241 nohead front lt 1
-set palette model RGB functions 1-gray, 1-gray, 1-gray
-set isosamples 100
-sigma_x = 10.824409
-sigma_y = 10.824409
-rho = 0.000000
-
-splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) )* exp(-1.0/2.0 * (x**2 / sigma_x**2 + y**2 / sigma_y**2 - 2.0*rho*x*y/(sigma_x*sigma_y) ) ) with pm3d
-set arrow from -70.678635, -80.751648 to -65.678635, -80.751648 nohead front lt 1
-set arrow from -65.678635, -80.751648 to -65.678635, -75.751648 nohead front lt 1
-set arrow from -65.678635, -75.751648 to -70.678635, -75.751648 nohead front lt 1
-set arrow from -70.678635, -75.751648 to -70.678635, -80.751648 nohead front lt 1
-set palette model RGB functions 1-gray, 1-gray, 1-gray
-set isosamples 100
-sigma_x = 10.829851
-sigma_y = 10.829851
-rho = 0.000000
-
-splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) )* exp(-1.0/2.0 * (x**2 / sigma_x**2 + y**2 / sigma_y**2 - 2.0*rho*x*y/(sigma_x*sigma_y) ) ) with pm3d
-set arrow from -62.847237, -80.317619 to -57.847237, -80.317619 nohead front lt 1
-set arrow from -57.847237, -80.317619 to -57.847237, -75.317619 nohead front lt 1
-set arrow from -57.847237, -75.317619 to -62.847237, -75.317619 nohead front lt 1
-set arrow from -62.847237, -75.317619 to -62.847237, -80.317619 nohead front lt 1
-set palette model RGB functions 1-gray, 1-gray, 1-gray
-set isosamples 100
-sigma_x = 10.834894
-sigma_y = 10.834894
-rho = 0.000000
-
-splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) )* exp(-1.0/2.0 * (x**2 / sigma_x**2 + y**2 / sigma_y**2 - 2.0*rho*x*y/(sigma_x*sigma_y) ) ) with pm3d
-set arrow from -64.235313, -85.153763 to -59.235313, -85.153763 nohead front lt 1
-set arrow from -59.235313, -85.153763 to -59.235313, -80.153763 nohead front lt 1
-set arrow from -59.235313, -80.153763 to -64.235313, -80.153763 nohead front lt 1
-set arrow from -64.235313, -80.153763 to -64.235313, -85.153763 nohead front lt 1
-set palette model RGB functions 1-gray, 1-gray, 1-gray
-set isosamples 100
-sigma_x = 10.839561
-sigma_y = 10.839561
-rho = 0.000000
-
-splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) )* exp(-1.0/2.0 * (x**2 / sigma_x**2 + y**2 / sigma_y**2 - 2.0*rho*x*y/(sigma_x*sigma_y) ) ) with pm3d
-set arrow from -68.264900, -100.097298 to -63.264900, -100.097298 nohead front lt 1
-set arrow from -63.264900, -100.097298 to -63.264900, -95.097298 nohead front lt 1
-set arrow from -63.264900, -95.097298 to -68.264900, -95.097298 nohead front lt 1
-set arrow from -68.264900, -95.097298 to -68.264900, -100.097298 nohead front lt 1
-set palette model RGB functions 1-gray, 1-gray, 1-gray
-set isosamples 100
-sigma_x = 10.843873
-sigma_y = 10.843873
-rho = 0.000000
-
-splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) )* exp(-1.0/2.0 * (x**2 / sigma_x**2 + y**2 / sigma_y**2 - 2.0*rho*x*y/(sigma_x*sigma_y) ) ) with pm3d
-set arrow from -71.782761, -104.252655 to -66.782761, -104.252655 nohead front lt 1
-set arrow from -66.782761, -104.252655 to -66.782761, -99.252655 nohead front lt 1
-set arrow from -66.782761, -99.252655 to -71.782761, -99.252655 nohead front lt 1
-set arrow from -71.782761, -99.252655 to -71.782761, -104.252655 nohead front lt 1
-set palette model RGB functions 1-gray, 1-gray, 1-gray
-set isosamples 100
-sigma_x = 10.847855
-sigma_y = 10.847855
-rho = 0.000000
-
-splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) )* exp(-1.0/2.0 * (x**2 / sigma_x**2 + y**2 / sigma_y**2 - 2.0*rho*x*y/(sigma_x*sigma_y) ) ) with pm3d
-set arrow from -67.947327, -102.590370 to -62.947327, -102.590370 nohead front lt 1
-set arrow from -62.947327, -102.590370 to -62.947327, -97.590370 nohead front lt 1
-set arrow from -62.947327, -97.590370 to -67.947327, -97.590370 nohead front lt 1
-set arrow from -67.947327, -97.590370 to -67.947327, -102.590370 nohead front lt 1
-set palette model RGB functions 1-gray, 1-gray, 1-gray
-set isosamples 100
-sigma_x = 10.851527
-sigma_y = 10.851527
-rho = 0.000000
-
-splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) )* exp(-1.0/2.0 * (x**2 / sigma_x**2 + y**2 / sigma_y**2 - 2.0*rho*x*y/(sigma_x*sigma_y) ) ) with pm3d
-set arrow from -70.509735, -107.855682 to -65.509735, -107.855682 nohead front lt 1
-set arrow from -65.509735, -107.855682 to -65.509735, -102.855682 nohead front lt 1
-set arrow from -65.509735, -102.855682 to -70.509735, -102.855682 nohead front lt 1
-set arrow from -70.509735, -102.855682 to -70.509735, -107.855682 nohead front lt 1
-set palette model RGB functions 1-gray, 1-gray, 1-gray
-set isosamples 100
-sigma_x = 10.854911
-sigma_y = 10.854911
-rho = 0.000000
-
-splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) )* exp(-1.0/2.0 * (x**2 / sigma_x**2 + y**2 / sigma_y**2 - 2.0*rho*x*y/(sigma_x*sigma_y) ) ) with pm3d
-set arrow from -68.861473, -119.345932 to -63.861473, -119.345932 nohead front lt 1
-set arrow from -63.861473, -119.345932 to -63.861473, -114.345932 nohead front lt 1
-set arrow from -63.861473, -114.345932 to -68.861473, -114.345932 nohead front lt 1
-set arrow from -68.861473, -114.345932 to -68.861473, -119.345932 nohead front lt 1
-set palette model RGB functions 1-gray, 1-gray, 1-gray
-set isosamples 100
-sigma_x = 10.858026
-sigma_y = 10.858026
-rho = 0.000000
-
-splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) )* exp(-1.0/2.0 * (x**2 / sigma_x**2 + y**2 / sigma_y**2 - 2.0*rho*x*y/(sigma_x*sigma_y) ) ) with pm3d
-set arrow from -63.699383, -118.278366 to -58.699383, -118.278366 nohead front lt 1
-set arrow from -58.699383, -118.278366 to -58.699383, -113.278366 nohead front lt 1
-set arrow from -58.699383, -113.278366 to -63.699383, -113.278366 nohead front lt 1
-set arrow from -63.699383, -113.278366 to -63.699383, -118.278366 nohead front lt 1
-set palette model RGB functions 1-gray, 1-gray, 1-gray
-set isosamples 100
-sigma_x = 10.860889
-sigma_y = 10.860889
-rho = 0.000000
-
-splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) )* exp(-1.0/2.0 * (x**2 / sigma_x**2 + y**2 / sigma_y**2 - 2.0*rho*x*y/(sigma_x*sigma_y) ) ) with pm3d
-set arrow from -65.582855, -124.309456 to -60.582855, -124.309456 nohead front lt 1
-set arrow from -60.582855, -124.309456 to -60.582855, -119.309456 nohead front lt 1
-set arrow from -60.582855, -119.309456 to -65.582855, -119.309456 nohead front lt 1
-set arrow from -65.582855, -119.309456 to -65.582855, -124.309456 nohead front lt 1
-set palette model RGB functions 1-gray, 1-gray, 1-gray
-set isosamples 100
-sigma_x = 10.863521
-sigma_y = 10.863521
-rho = 0.000000
-
-splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) )* exp(-1.0/2.0 * (x**2 / sigma_x**2 + y**2 / sigma_y**2 - 2.0*rho*x*y/(sigma_x*sigma_y) ) ) with pm3d
-set arrow from -62.028313, -124.106903 to -57.028313, -124.106903 nohead front lt 1
-set arrow from -57.028313, -124.106903 to -57.028313, -119.106903 nohead front lt 1
-set arrow from -57.028313, -119.106903 to -62.028313, -119.106903 nohead front lt 1
-set arrow from -62.028313, -119.106903 to -62.028313, -124.106903 nohead front lt 1
-set palette model RGB functions 1-gray, 1-gray, 1-gray
-set isosamples 100
-sigma_x = 10.865935
-sigma_y = 10.865935
-rho = 0.000000
-
-splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) )* exp(-1.0/2.0 * (x**2 / sigma_x**2 + y**2 / sigma_y**2 - 2.0*rho*x*y/(sigma_x*sigma_y) ) ) with pm3d
-set arrow from -49.992836, -128.789780 to -44.992836, -128.789780 nohead front lt 1
-set arrow from -44.992836, -128.789780 to -44.992836, -123.789780 nohead front lt 1
-set arrow from -44.992836, -123.789780 to -49.992836, -123.789780 nohead front lt 1
-set arrow from -49.992836, -123.789780 to -49.992836, -128.789780 nohead front lt 1
-set palette model RGB functions 1-gray, 1-gray, 1-gray
-set isosamples 100
-sigma_x = 10.868151
-sigma_y = 10.868151
-rho = 0.000000
-
-splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) )* exp(-1.0/2.0 * (x**2 / sigma_x**2 + y**2 / sigma_y**2 - 2.0*rho*x*y/(sigma_x*sigma_y) ) ) with pm3d
-set arrow from -61.835655, -130.378189 to -56.835655, -130.378189 nohead front lt 1
-set arrow from -56.835655, -130.378189 to -56.835655, -125.378189 nohead front lt 1
-set arrow from -56.835655, -125.378189 to -61.835655, -125.378189 nohead front lt 1
-set arrow from -61.835655, -125.378189 to -61.835655, -130.378189 nohead front lt 1
-set palette model RGB functions 1-gray, 1-gray, 1-gray
-set isosamples 100
-sigma_x = 10.870180
-sigma_y = 10.870180
-rho = 0.000000
-
-splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) )* exp(-1.0/2.0 * (x**2 / sigma_x**2 + y**2 / sigma_y**2 - 2.0*rho*x*y/(sigma_x*sigma_y) ) ) with pm3d
-set arrow from -54.388313, -137.129837 to -49.388313, -137.129837 nohead front lt 1
-set arrow from -49.388313, -137.129837 to -49.388313, -132.129837 nohead front lt 1
-set arrow from -49.388313, -132.129837 to -54.388313, -132.129837 nohead front lt 1
-set arrow from -54.388313, -132.129837 to -54.388313, -137.129837 nohead front lt 1
-set palette model RGB functions 1-gray, 1-gray, 1-gray
-set isosamples 100
-sigma_x = 10.872040
-sigma_y = 10.872040
-rho = 0.000000
-
-splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) )* exp(-1.0/2.0 * (x**2 / sigma_x**2 + y**2 / sigma_y**2 - 2.0*rho*x*y/(sigma_x*sigma_y) ) ) with pm3d
-set arrow from -58.122143, -138.276672 to -53.122143, -138.276672 nohead front lt 1
-set arrow from -53.122143, -138.276672 to -53.122143, -133.276672 nohead front lt 1
-set arrow from -53.122143, -133.276672 to -58.122143, -133.276672 nohead front lt 1
-set arrow from -58.122143, -133.276672 to -58.122143, -138.276672 nohead front lt 1
-set palette model RGB functions 1-gray, 1-gray, 1-gray
-set isosamples 100
-sigma_x = 10.873741
-sigma_y = 10.873741
-rho = 0.000000
-
-splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) )* exp(-1.0/2.0 * (x**2 / sigma_x**2 + y**2 / sigma_y**2 - 2.0*rho*x*y/(sigma_x*sigma_y) ) ) with pm3d
-set arrow from -60.718452, -146.901474 to -55.718452, -146.901474 nohead front lt 1
-set arrow from -55.718452, -146.901474 to -55.718452, -141.901474 nohead front lt 1
-set arrow from -55.718452, -141.901474 to -60.718452, -141.901474 nohead front lt 1
-set arrow from -60.718452, -141.901474 to -60.718452, -146.901474 nohead front lt 1
-set palette model RGB functions 1-gray, 1-gray, 1-gray
-set isosamples 100
-sigma_x = 10.875297
-sigma_y = 10.875297
-rho = 0.000000
-
-splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) )* exp(-1.0/2.0 * (x**2 / sigma_x**2 + y**2 / sigma_y**2 - 2.0*rho*x*y/(sigma_x*sigma_y) ) ) with pm3d
-set arrow from -59.656002, -152.628876 to -54.656002, -152.628876 nohead front lt 1
-set arrow from -54.656002, -152.628876 to -54.656002, -147.628876 nohead front lt 1
-set arrow from -54.656002, -147.628876 to -59.656002, -147.628876 nohead front lt 1
-set arrow from -59.656002, -147.628876 to -59.656002, -152.628876 nohead front lt 1
-set palette model RGB functions 1-gray, 1-gray, 1-gray
-set isosamples 100
-sigma_x = 10.876719
-sigma_y = 10.876719
-rho = 0.000000
-
-splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) )* exp(-1.0/2.0 * (x**2 / sigma_x**2 + y**2 / sigma_y**2 - 2.0*rho*x*y/(sigma_x*sigma_y) ) ) with pm3d
-set arrow from -53.987221, -149.479156 to -48.987221, -149.479156 nohead front lt 1
-set arrow from -48.987221, -149.479156 to -48.987221, -144.479156 nohead front lt 1
-set arrow from -48.987221, -144.479156 to -53.987221, -144.479156 nohead front lt 1
-set arrow from -53.987221, -144.479156 to -53.987221, -149.479156 nohead front lt 1
-set palette model RGB functions 1-gray, 1-gray, 1-gray
-set isosamples 100
-sigma_x = 10.878016
-sigma_y = 10.878016
-rho = 0.000000
-
-splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) )* exp(-1.0/2.0 * (x**2 / sigma_x**2 + y**2 / sigma_y**2 - 2.0*rho*x*y/(sigma_x*sigma_y) ) ) with pm3d
-set arrow from -62.409027, -152.382919 to -57.409027, -152.382919 nohead front lt 1
-set arrow from -57.409027, -152.382919 to -57.409027, -147.382919 nohead front lt 1
-set arrow from -57.409027, -147.382919 to -62.409027, -147.382919 nohead front lt 1
-set arrow from -62.409027, -147.382919 to -62.409027, -152.382919 nohead front lt 1
-set palette model RGB functions 1-gray, 1-gray, 1-gray
-set isosamples 100
-sigma_x = 10.879202
-sigma_y = 10.879202
-rho = 0.000000
-
-splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) )* exp(-1.0/2.0 * (x**2 / sigma_x**2 + y**2 / sigma_y**2 - 2.0*rho*x*y/(sigma_x*sigma_y) ) ) with pm3d
-set arrow from -59.176872, -157.426529 to -54.176872, -157.426529 nohead front lt 1
-set arrow from -54.176872, -157.426529 to -54.176872, -152.426529 nohead front lt 1
-set arrow from -54.176872, -152.426529 to -59.176872, -152.426529 nohead front lt 1
-set arrow from -59.176872, -152.426529 to -59.176872, -157.426529 nohead front lt 1
-set palette model RGB functions 1-gray, 1-gray, 1-gray
-set isosamples 100
-sigma_x = 10.880282
-sigma_y = 10.880282
 rho = 0.000000
 
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) )* exp(-1.0/2.0 * (x**2 / sigma_x**2 + y**2 / sigma_y**2 - 2.0*rho*x*y/(sigma_x*sigma_y) ) ) with pm3d

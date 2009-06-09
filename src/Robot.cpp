@@ -256,10 +256,20 @@ void Robot::DoSniper() {
 
     int i = 0;
     while (i < env->otherTanks.size() && env->otherTanks.at(i).status.compare("dead") == 0) i++; 
-    if(env->otherTanks.size() == 0)
+    if(env->otherTanks.size() == 0) {
+        delete kf;
+        kf = new KalmenFilter(env);
+        kfCount = 0;
+        cout << "`=`=`=`=``=`=`=`=`=`=`=`=`=`=`=`=`RESET" << endl;
         return;
-    if(i >= env->otherTanks.size())
+    }
+    if(i >= env->otherTanks.size()) {
+        delete kf;
+        kf = new KalmenFilter(env);
+        kfCount = 0;
+        cout << "`=`=`=`=``=`=`=`=`=`=`=`=`=`=`=`=`RESET" << endl;
         i = env->otherTanks.size() - 1;
+    }
     themX = env->otherTanks.at(i).x;
     themY = env->otherTanks.at(i).y;
 
@@ -268,9 +278,9 @@ void Robot::DoSniper() {
 	themY = rslt[1];
 	if (++kfCount > NUM_OBSERVATIONS) {
 		kfCount = NUM_OBSERVATIONS+1;
-        int result8 = GetDistance(meX, meY, themX, themY)/PREDICTION_TIME/2;
+        float result8 = GetDistance(meX, meY, themX, themY)/PREDICTION_TIME;
         cout << "WHAT IS THIS NUMBER???? ::> " << result8 << endl;
-		float* rslt = kf->predict(3 + 9 * result8);
+		float* rslt = kf->predict(3+int(3*result8));
 		themX = rslt[0];
 		themY = rslt[1];
 	}
@@ -280,7 +290,7 @@ void Robot::DoSniper() {
 	yDiff = themY - meY;
 	float finalAngle = Wrap(atan2(yDiff,xDiff), PI*2);
 	float angleDiff = GetAngleDist(meTank->angle, finalAngle);
-    if(abs(angleDiff) < 0.05)
+    if(abs(angleDiff) < 0.1)
         bzfsComm->shoot(meTank->index);
 	//float angVel = (angleDiff/(2*PI));
 

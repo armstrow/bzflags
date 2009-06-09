@@ -1,7 +1,10 @@
 set title "Plot"
 set xrange [-200.000000: 200.000000]
 set yrange [-200.000000: 200.000000]
+set pm3d
+set view map
 unset key
+unset arrow
 set size square
 
 plot '-' with lines

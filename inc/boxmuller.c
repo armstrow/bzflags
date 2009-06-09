@@ -37,7 +37,7 @@ float box_muller(float m, float s)	/* normal random variate generator */
 			x1 = 2.0 * ranf() - 1.0;
 			x2 = 2.0 * ranf() - 1.0;
 			w = x1 * x1 + x2 * x2;
-		} while ( w >= 1.0 );
+		} while ( w <= 1.0 );
 
 		w = sqrt( (-2.0 * log( w ) ) / w );
 		y1 = x1 * w;

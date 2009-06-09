@@ -2,7 +2,7 @@
 #include <stdio.h>
 #define DELTA_T 0.5
 #define VARIANCE 5
-#define NEG_C -0.1
+#define NEG_C -0.8
 
 using namespace std;
 
@@ -30,12 +30,12 @@ KalmenFilter::KalmenFilter(EnvironmentData *env) {
 ////////////
 // SigmaX -- how wrong everything might be
 ////////////
-	float vals2[36] ={0.1, 0,   0,   0,   0,   0,
+	float vals2[36] ={0.1,   0,   0,   0,   0,   0,
 					  0,   0.1, 0,   0,   0,   0,
-					  0,   0,   25,  0,   0,   0,
-					  0,   0,   0,   0.1, 0,   0,
+					  0,   0,   0.3,  0,   0,   0,
+					  0,   0,   0,   0.1,   0,   0,
 					  0,   0,   0,   0,   0.1, 0,
-					  0,   0,   0,   0,   0,   25};      
+					  0,   0,   0,   0,   0,   0.3};      
 	xSize = 6, ySize = 6;
 	SigmaX.SetSize(xSize, ySize);
 	for (int i = 0; i < xSize; i++)
@@ -120,7 +120,7 @@ float* KalmenFilter::update(float ObsX, float ObsY) {
 	float* rtrn;
 	float tmp[2];
 	
-	gnuplotString += gw->DrawObserved(ObsX, ObsY);
+	//gnuplotString += gw->DrawObserved(ObsX, ObsY);
 
 //Z[k+1]
 	Matrix Z;
@@ -137,7 +137,7 @@ float* KalmenFilter::update(float ObsX, float ObsY) {
 	Mu = F * Mu + K * (Z - H * F * Mu);
 //SigmaK[t+1]
 	SigmaK = (I - (K * H)) * Temp;
-
+    
 	tmp[0] = Mu(0,0);
 	tmp[1] = Mu(3,0);
 	cout << "KALMAN::update: observed " << ObsX << "," << ObsY << endl;
@@ -166,13 +166,13 @@ float* KalmenFilter::predict(int numTimeSteps){
 	float ObsX = tmp[0];
 	float ObsY = tmp[1];
 	cout << "KALMEN::        predicted" << tmp[0] << "," << tmp[1] << endl;
-	gnuplotString += gw->DrawObserved(ObsX, ObsY);
-	gnuplotString += gw->DrawObserved(ObsX + 5, ObsY);
-	gnuplotString += gw->DrawObserved(ObsX + 5, ObsY + 5);
-	gnuplotString += gw->DrawObserved(ObsX, ObsY+5);
-	gnuplotString += gw->PrintAniData(0);
+	//gnuplotString += gw->DrawObserved(ObsX, ObsY);
+	//gnuplotString += gw->DrawObserved(ObsX + 5, ObsY);
+	//gnuplotString += gw->DrawObserved(ObsX + 5, ObsY + 5);
+	//gnuplotString += gw->DrawObserved(ObsX, ObsY+5);
+	//gnuplotString += gw->PrintAniData(0);
 	//gnuplotString += gw->DrawPredicted(tmp[0], tmp[1], 0.3);  	////////////////////////////////////////////////////////FIX THIS!!!!!!!!!!!!!!!!
-	gw->PrintState(gnuplotString, 800, "KalmenFilter.gpi");
+	//gw->PrintState(gnuplotString, 800, "KalmenFilter.gpi");
 	rtrn = tmp;
 	return rtrn;
 }

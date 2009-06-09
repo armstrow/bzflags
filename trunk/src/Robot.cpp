@@ -196,7 +196,7 @@ void Robot::DoCPConstXYAcc() {
 }
 //------------------------------------------------------
 void Robot::DoCPGauss() {
-    //http://www.boost.org/doc/libs/1_35_0/libs/math/doc/sf_and_dist/html/math_toolkit/dist/dist_ref/dists/normal_dist.html
+    
     float mean = 0;
     float stanDev = 1;
     float nextVal = box_muller(mean, stanDev);
@@ -242,7 +242,6 @@ float GetDistance(float startX, float startY, float endX, float endY) {
 void Robot::DoSniper() {
     gotoPoint = false;
     bzfsComm->speed(meTank->index, 0);
-    bzfsComm->shoot(meTank->index);
 
     float xDiff = 0;
     float yDiff = 0;
@@ -256,7 +255,11 @@ void Robot::DoSniper() {
     float themX, themY;
 
     int i = 0;
-    while (env->otherTanks.at(i).status.compare("dead") == 0) i++; 
+    while (i < env->otherTanks.size() && env->otherTanks.at(i).status.compare("dead") == 0) i++; 
+    if(env->otherTanks.size() == 0)
+        return;
+    if(i >= env->otherTanks.size())
+        i = env->otherTanks.size() - 1;
     themX = env->otherTanks.at(i).x;
     themY = env->otherTanks.at(i).y;
 
@@ -265,7 +268,9 @@ void Robot::DoSniper() {
 	themY = rslt[1];
 	if (++kfCount > NUM_OBSERVATIONS) {
 		kfCount = NUM_OBSERVATIONS+1;
-		float* rslt = kf->predict(int(GetDistance(meX, meY, themX, themY)/PREDICTION_TIME/20));
+        int result8 = GetDistance(meX, meY, themX, themY)/PREDICTION_TIME/2;
+        cout << "WHAT IS THIS NUMBER???? ::> " << result8 << endl;
+		float* rslt = kf->predict(3 + 9 * result8);
 		themX = rslt[0];
 		themY = rslt[1];
 	}
@@ -275,31 +280,23 @@ void Robot::DoSniper() {
 	yDiff = themY - meY;
 	float finalAngle = Wrap(atan2(yDiff,xDiff), PI*2);
 	float angleDiff = GetAngleDist(meTank->angle, finalAngle);
+    if(abs(angleDiff) < 0.05)
+        bzfsComm->shoot(meTank->index);
 	//float angVel = (angleDiff/(2*PI));
 
 	angleDiff /= PI;
     bool negDiff = angleDiff < 0;
     float newAngVel = 1;
-    if(abs(angleDiff) <= 0.05)
-        newAngVel = sqrt(abs(angleDiff));
-    else if(abs(angleDiff) <= 0.1)
-        newAngVel = sqrt(sqrt(abs(angleDiff)));
-    else if(abs(angleDiff) <= 0.2)
-        newAngVel = sqrt(sqrt(sqrt(abs(angleDiff))));
-    else if(abs(angleDiff) <= 0.3)
-        newAngVel= sqrt(sqrt(sqrt(sqrt(abs(angleDiff)))));//*0.9;
-    else
-        newAngVel = 1;
-    //}
+    newAngVel = sqrt(abs(angleDiff));
     if(negDiff && newAngVel > 0)// {
         newAngVel *= -1;
-        
+
    /*     newAngVel -= 0.1;
     } else {
         newAngVel += 0.2;
     }
     */
-	
+
 	bzfsComm->angvel(meTank->index, newAngVel);
 	//bzfsComm->shoot(meTank->index);
 }

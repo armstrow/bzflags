@@ -260,14 +260,21 @@ bool BZFSCommunicator::get_shots(vector<Shot> *AllShots) {
     v.clear();
     v=ReadArr();
     int i=0;
+    AllShots->clear();
     while(v.at(0)=="shot") {
         int tIndex = atoi(v.at(1).c_str());
-        if(AllShots->size() < tIndex + 1) {
+        //if(AllShots->size() < tIndex + 1) {
 	        Shot MyShot(v);
     	    AllShots->push_back(MyShot);
+        /*
         } else {
-            AllShots->at(tIndex).SetData(v);
+            if(AllShots->size() >= tIndex) {
+                Shot MyShot(v);
+                AllShots->push_back(MyShot);
+            } else
+                AllShots->at(tIndex).SetData(v);
         }
+        */
     	v.clear();
     	v = ReadArr();
 	    i++;

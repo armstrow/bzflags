@@ -5,7 +5,7 @@
 base
 position 30 0 0
 rotation 0
-size 30 30 0
+size 15 15 0
 color 1
 end
 
@@ -13,7 +13,7 @@ end
 base
 position -30 0 0
 rotation 0
-size 30 30 0
+size 15 15 0
 color 2
 end
 
@@ -21,7 +21,7 @@ end
 base
 position 0 30 0
 rotation 0
-size 30 30 0
+size 15 15 0
 color 3
 end
 
@@ -29,7 +29,7 @@ end
 base
 position 0 -30 0
 rotation 0
-size 30 30 0
+size 15 15 0
 color 4
 end
 

@@ -6,109 +6,109 @@ set view map
 unset key
 unset arrow
 set size square
-set arrow from -42.989437, 186.620361 to -37.989437, 186.620361 nohead front lt 1
-set arrow from -37.989437, 186.620361 to -37.989437, 191.620361 nohead front lt 1
-set arrow from -37.989437, 191.620361 to -42.989437, 191.620361 nohead front lt 1
-set arrow from -42.989437, 191.620361 to -42.989437, 186.620361 nohead front lt 1
-set arrow from -43.391537, 187.297104 to -38.391537, 187.297104 nohead front lt 1
-set arrow from -38.391537, 187.297104 to -38.391537, 192.297104 nohead front lt 1
-set arrow from -38.391537, 192.297104 to -43.391537, 192.297104 nohead front lt 1
-set arrow from -43.391537, 192.297104 to -43.391537, 187.297104 nohead front lt 1
-set arrow from -51.115974, 182.803635 to -46.115974, 182.803635 nohead front lt 1
-set arrow from -46.115974, 182.803635 to -46.115974, 187.803635 nohead front lt 1
-set arrow from -46.115974, 187.803635 to -51.115974, 187.803635 nohead front lt 1
-set arrow from -51.115974, 187.803635 to -51.115974, 182.803635 nohead front lt 1
-set arrow from -45.996342, 184.203766 to -40.996342, 184.203766 nohead front lt 1
-set arrow from -40.996342, 184.203766 to -40.996342, 189.203766 nohead front lt 1
-set arrow from -40.996342, 189.203766 to -45.996342, 189.203766 nohead front lt 1
-set arrow from -45.996342, 189.203766 to -45.996342, 184.203766 nohead front lt 1
-set arrow from -47.639351, 198.578308 to -42.639351, 198.578308 nohead front lt 1
-set arrow from -42.639351, 198.578308 to -42.639351, 203.578308 nohead front lt 1
-set arrow from -42.639351, 203.578308 to -47.639351, 203.578308 nohead front lt 1
-set arrow from -47.639351, 203.578308 to -47.639351, 198.578308 nohead front lt 1
-set arrow from -45.529606, 200.874069 to -40.529606, 200.874069 nohead front lt 1
-set arrow from -40.529606, 200.874069 to -40.529606, 205.874069 nohead front lt 1
-set arrow from -40.529606, 205.874069 to -45.529606, 205.874069 nohead front lt 1
-set arrow from -45.529606, 205.874069 to -45.529606, 200.874069 nohead front lt 1
-set arrow from -45.570827, 197.120361 to -40.570827, 197.120361 nohead front lt 1
-set arrow from -40.570827, 197.120361 to -40.570827, 202.120361 nohead front lt 1
-set arrow from -40.570827, 202.120361 to -45.570827, 202.120361 nohead front lt 1
-set arrow from -45.570827, 202.120361 to -45.570827, 197.120361 nohead front lt 1
-set arrow from -50.042698, 191.408005 to -45.042698, 191.408005 nohead front lt 1
-set arrow from -45.042698, 191.408005 to -45.042698, 196.408005 nohead front lt 1
-set arrow from -45.042698, 196.408005 to -50.042698, 196.408005 nohead front lt 1
-set arrow from -50.042698, 196.408005 to -50.042698, 191.408005 nohead front lt 1
-set arrow from -38.436260, 202.135376 to -33.436260, 202.135376 nohead front lt 1
-set arrow from -33.436260, 202.135376 to -33.436260, 207.135376 nohead front lt 1
-set arrow from -33.436260, 207.135376 to -38.436260, 207.135376 nohead front lt 1
-set arrow from -38.436260, 207.135376 to -38.436260, 202.135376 nohead front lt 1
-set arrow from -44.822315, 202.206100 to -39.822315, 202.206100 nohead front lt 1
-set arrow from -39.822315, 202.206100 to -39.822315, 207.206100 nohead front lt 1
-set arrow from -39.822315, 207.206100 to -44.822315, 207.206100 nohead front lt 1
-set arrow from -44.822315, 207.206100 to -44.822315, 202.206100 nohead front lt 1
-set arrow from -40.931522, 204.337280 to -35.931522, 204.337280 nohead front lt 1
-set arrow from -35.931522, 204.337280 to -35.931522, 209.337280 nohead front lt 1
-set arrow from -35.931522, 209.337280 to -40.931522, 209.337280 nohead front lt 1
-set arrow from -40.931522, 209.337280 to -40.931522, 204.337280 nohead front lt 1
+set arrow from -102.505089, 101.810066 to -97.505089, 101.810066 nohead front lt 1
+set arrow from -97.505089, 101.810066 to -97.505089, 106.810066 nohead front lt 1
+set arrow from -97.505089, 106.810066 to -102.505089, 106.810066 nohead front lt 1
+set arrow from -102.505089, 106.810066 to -102.505089, 101.810066 nohead front lt 1
+set arrow from -147.564392, 145.406570 to -142.564392, 145.406570 nohead front lt 1
+set arrow from -142.564392, 145.406570 to -142.564392, 150.406570 nohead front lt 1
+set arrow from -142.564392, 150.406570 to -147.564392, 150.406570 nohead front lt 1
+set arrow from -147.564392, 150.406570 to -147.564392, 145.406570 nohead front lt 1
+set arrow from -172.090073, 169.608902 to -167.090073, 169.608902 nohead front lt 1
+set arrow from -167.090073, 169.608902 to -167.090073, 174.608902 nohead front lt 1
+set arrow from -167.090073, 174.608902 to -172.090073, 174.608902 nohead front lt 1
+set arrow from -172.090073, 174.608902 to -172.090073, 169.608902 nohead front lt 1
+set arrow from -182.281479, 180.020782 to -177.281479, 180.020782 nohead front lt 1
+set arrow from -177.281479, 180.020782 to -177.281479, 185.020782 nohead front lt 1
+set arrow from -177.281479, 185.020782 to -182.281479, 185.020782 nohead front lt 1
+set arrow from -182.281479, 185.020782 to -182.281479, 180.020782 nohead front lt 1
+set arrow from -192.176468, 187.640091 to -187.176468, 187.640091 nohead front lt 1
+set arrow from -187.176468, 187.640091 to -187.176468, 192.640091 nohead front lt 1
+set arrow from -187.176468, 192.640091 to -192.176468, 192.640091 nohead front lt 1
+set arrow from -192.176468, 192.640091 to -192.176468, 187.640091 nohead front lt 1
+set arrow from -195.881012, 192.539474 to -190.881012, 192.539474 nohead front lt 1
+set arrow from -190.881012, 192.539474 to -190.881012, 197.539474 nohead front lt 1
+set arrow from -190.881012, 197.539474 to -195.881012, 197.539474 nohead front lt 1
+set arrow from -195.881012, 197.539474 to -195.881012, 192.539474 nohead front lt 1
+set arrow from -198.549850, 196.005615 to -193.549850, 196.005615 nohead front lt 1
+set arrow from -193.549850, 196.005615 to -193.549850, 201.005615 nohead front lt 1
+set arrow from -193.549850, 201.005615 to -198.549850, 201.005615 nohead front lt 1
+set arrow from -198.549850, 201.005615 to -198.549850, 196.005615 nohead front lt 1
+set arrow from -200.168579, 196.999115 to -195.168579, 196.999115 nohead front lt 1
+set arrow from -195.168579, 196.999115 to -195.168579, 201.999115 nohead front lt 1
+set arrow from -195.168579, 201.999115 to -200.168579, 201.999115 nohead front lt 1
+set arrow from -200.168579, 201.999115 to -200.168579, 196.999115 nohead front lt 1
+set arrow from -204.437057, 197.655853 to -199.437057, 197.655853 nohead front lt 1
+set arrow from -199.437057, 197.655853 to -199.437057, 202.655853 nohead front lt 1
+set arrow from -199.437057, 202.655853 to -204.437057, 202.655853 nohead front lt 1
+set arrow from -204.437057, 202.655853 to -204.437057, 197.655853 nohead front lt 1
+set arrow from -202.613312, 199.821640 to -197.613312, 199.821640 nohead front lt 1
+set arrow from -197.613312, 199.821640 to -197.613312, 204.821640 nohead front lt 1
+set arrow from -197.613312, 204.821640 to -202.613312, 204.821640 nohead front lt 1
+set arrow from -202.613312, 204.821640 to -202.613312, 199.821640 nohead front lt 1
+set arrow from -200.334671, 195.702194 to -195.334671, 195.702194 nohead front lt 1
+set arrow from -195.334671, 195.702194 to -195.334671, 200.702194 nohead front lt 1
+set arrow from -195.334671, 200.702194 to -200.334671, 200.702194 nohead front lt 1
+set arrow from -200.334671, 200.702194 to -200.334671, 195.702194 nohead front lt 1
 set palette model RGB functions 1-gray, 1-gray, 1-gray
 set isosamples 100
-sigma_x = 10.002169
-sigma_y = 10.002169
+sigma_x = 4.411500
+sigma_y = 4.411500
 rho = 0.000000
 
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) )* exp(-1.0/2.0 * (x**2 / sigma_x**2 + y**2 / sigma_y**2 - 2.0*rho*x*y/(sigma_x*sigma_y) ) ) with pm3d
-set arrow from -50.495605, 193.879471 to -45.495605, 193.879471 nohead front lt 1
-set arrow from -45.495605, 193.879471 to -45.495605, 198.879471 nohead front lt 1
-set arrow from -45.495605, 198.879471 to -50.495605, 198.879471 nohead front lt 1
-set arrow from -50.495605, 198.879471 to -50.495605, 193.879471 nohead front lt 1
+set arrow from -201.331909, 196.182602 to -196.331909, 196.182602 nohead front lt 1
+set arrow from -196.331909, 196.182602 to -196.331909, 201.182602 nohead front lt 1
+set arrow from -196.331909, 201.182602 to -201.331909, 201.182602 nohead front lt 1
+set arrow from -201.331909, 201.182602 to -201.331909, 196.182602 nohead front lt 1
 set palette model RGB functions 1-gray, 1-gray, 1-gray
 set isosamples 100
-sigma_x = 10.082927
-sigma_y = 10.082927
+sigma_x = 4.436052
+sigma_y = 4.436052
 rho = 0.000000
 
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) )* exp(-1.0/2.0 * (x**2 / sigma_x**2 + y**2 / sigma_y**2 - 2.0*rho*x*y/(sigma_x*sigma_y) ) ) with pm3d
-set arrow from -41.790306, 195.426346 to -36.790306, 195.426346 nohead front lt 1
-set arrow from -36.790306, 195.426346 to -36.790306, 200.426346 nohead front lt 1
-set arrow from -36.790306, 200.426346 to -41.790306, 200.426346 nohead front lt 1
-set arrow from -41.790306, 200.426346 to -41.790306, 195.426346 nohead front lt 1
+set arrow from -203.633850, 194.961227 to -198.633850, 194.961227 nohead front lt 1
+set arrow from -198.633850, 194.961227 to -198.633850, 199.961227 nohead front lt 1
+set arrow from -198.633850, 199.961227 to -203.633850, 199.961227 nohead front lt 1
+set arrow from -203.633850, 199.961227 to -203.633850, 194.961227 nohead front lt 1
 set palette model RGB functions 1-gray, 1-gray, 1-gray
 set isosamples 100
-sigma_x = 10.154868
-sigma_y = 10.154868
+sigma_x = 4.456680
+sigma_y = 4.456680
 rho = 0.000000
 
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) )* exp(-1.0/2.0 * (x**2 / sigma_x**2 + y**2 / sigma_y**2 - 2.0*rho*x*y/(sigma_x*sigma_y) ) ) with pm3d
-set arrow from -54.534519, 198.725906 to -49.534519, 198.725906 nohead front lt 1
-set arrow from -49.534519, 198.725906 to -49.534519, 203.725906 nohead front lt 1
-set arrow from -49.534519, 203.725906 to -54.534519, 203.725906 nohead front lt 1
-set arrow from -54.534519, 203.725906 to -54.534519, 198.725906 nohead front lt 1
+set arrow from -203.249664, 196.355545 to -198.249664, 196.355545 nohead front lt 1
+set arrow from -198.249664, 196.355545 to -198.249664, 201.355545 nohead front lt 1
+set arrow from -198.249664, 201.355545 to -203.249664, 201.355545 nohead front lt 1
+set arrow from -203.249664, 201.355545 to -203.249664, 196.355545 nohead front lt 1
 set palette model RGB functions 1-gray, 1-gray, 1-gray
 set isosamples 100
-sigma_x = 10.218757
-sigma_y = 10.218757
+sigma_x = 4.474116
+sigma_y = 4.474116
 rho = 0.000000
 
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) )* exp(-1.0/2.0 * (x**2 / sigma_x**2 + y**2 / sigma_y**2 - 2.0*rho*x*y/(sigma_x*sigma_y) ) ) with pm3d
-set arrow from -45.634331, 193.231720 to -40.634331, 193.231720 nohead front lt 1
-set arrow from -40.634331, 193.231720 to -40.634331, 198.231720 nohead front lt 1
-set arrow from -40.634331, 198.231720 to -45.634331, 198.231720 nohead front lt 1
-set arrow from -45.634331, 198.231720 to -45.634331, 193.231720 nohead front lt 1
+set arrow from -200.961853, 196.571487 to -195.961853, 196.571487 nohead front lt 1
+set arrow from -195.961853, 196.571487 to -195.961853, 201.571487 nohead front lt 1
+set arrow from -195.961853, 201.571487 to -200.961853, 201.571487 nohead front lt 1
+set arrow from -200.961853, 201.571487 to -200.961853, 196.571487 nohead front lt 1
 set palette model RGB functions 1-gray, 1-gray, 1-gray
 set isosamples 100
-sigma_x = 10.275453
-sigma_y = 10.275453
+sigma_x = 4.488986
+sigma_y = 4.488986
 rho = 0.000000
 
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) )* exp(-1.0/2.0 * (x**2 / sigma_x**2 + y**2 / sigma_y**2 - 2.0*rho*x*y/(sigma_x*sigma_y) ) ) with pm3d
-set arrow from -57.015949, 193.361237 to -52.015949, 193.361237 nohead front lt 1
-set arrow from -52.015949, 193.361237 to -52.015949, 198.361237 nohead front lt 1
-set arrow from -52.015949, 198.361237 to -57.015949, 198.361237 nohead front lt 1
-set arrow from -57.015949, 198.361237 to -57.015949, 193.361237 nohead front lt 1
+set arrow from -201.730240, 195.133728 to -196.730240, 195.133728 nohead front lt 1
+set arrow from -196.730240, 195.133728 to -196.730240, 200.133728 nohead front lt 1
+set arrow from -196.730240, 200.133728 to -201.730240, 200.133728 nohead front lt 1
+set arrow from -201.730240, 200.133728 to -201.730240, 195.133728 nohead front lt 1
 set palette model RGB functions 1-gray, 1-gray, 1-gray
 set isosamples 100
-sigma_x = 10.325821
-sigma_y = 10.325821
+sigma_x = 4.501805
+sigma_y = 4.501805
 rho = 0.000000
 
 splot 1.0/(2.0 * pi * sigma_x * sigma_y * sqrt(1 - rho**2) )* exp(-1.0/2.0 * (x**2 / sigma_x**2 + y**2 / sigma_y**2 - 2.0*rho*x*y/(sigma_x*sigma_y) ) ) with pm3d

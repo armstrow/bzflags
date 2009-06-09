@@ -1,7 +1,7 @@
 #include "KalmenFilter.h"
 #include <stdio.h>
 #define DELTA_T .1
-#define VARIANCE 5
+#define VARIANCE 3
 #define NEG_C 0.0
 
 using namespace std;
@@ -30,10 +30,10 @@ KalmenFilter::KalmenFilter(EnvironmentData *env) {
 ////////////
 // SigmaX -- how wrong everything might be
 ////////////
-	float vals2[36] ={5, 0,   0,   0,   0,   0,
+	float vals2[36] ={3, 0,   0,   0,   0,   0,
 					  0,   5, 0,   0,   0,   0,
 					  0,   0,   1,  0,   0,   0,
-					  0,   0,   0,   5, 0,   0,
+					  0,   0,   0,   3, 0,   0,
 					  0,   0,   0,   0,   5, 0,
 					  0,   0,   0,   0,   0,   1};      
 	xSize = 6, ySize = 6;
@@ -120,7 +120,6 @@ float* KalmenFilter::update(float ObsX, float ObsY) {
 	float* rtrn;
 	float tmp[2];
 	
-	gnuplotString += gw->DrawObserved(ObsX, ObsY);
 
 //Z[k+1]
 	Matrix Z;
@@ -143,6 +142,9 @@ float* KalmenFilter::update(float ObsX, float ObsY) {
     
 	tmp[0] = Mu(0,0);
 	tmp[1] = Mu(3,0);
+
+	gnuplotString += gw->DrawObserved(tmp[0], tmp[1]);
+
 	cout << "KALMAN::update: observed " << ObsX << "," << ObsY << endl;
 	cout << "KALMAN::        predicted" << tmp[0] << "," << tmp[1] << endl;
 

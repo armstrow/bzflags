@@ -19,7 +19,7 @@
 #define TARGET_COLOR "green"
 #define SLEEP_AMT 100
 
-#define NUM_OBSERVATIONS 10
+#define NUM_OBSERVATIONS 0
 #define PREDICTION_TIME 100
 
 using namespace std;
@@ -271,6 +271,9 @@ void Robot::DoSniper() {
         kfCount = 0;
         cout << "`=`=`=`=``=`=`=`=`=`=`=`=`=`=`=`=`RESET" << endl;
         i = env->otherTanks.size() - 1;
+        themX = env->otherTanks.at(i).x;
+        themY = env->otherTanks.at(i).y;
+        kf->setInitialTankPos(themX, themY);
     }
     themX = env->otherTanks.at(i).x;
     themY = env->otherTanks.at(i).y;
@@ -283,7 +286,7 @@ void Robot::DoSniper() {
 		kfCount = NUM_OBSERVATIONS+1;
         result8 = GetDistance(meX, meY, themX, themY)/PREDICTION_TIME;
         cout << "WHAT IS THIS NUMBER???? ::> " << result8 << endl;
-		float* rslt = kf->predict(3+int(3*result8));
+		float* rslt = kf->predict(3+int(1.5*result8));//(3+int(3*result8));
 		themX = rslt[0];
 		themY = rslt[1];
 	}
@@ -294,9 +297,9 @@ void Robot::DoSniper() {
 	float finalAngle = Wrap(atan2(yDiff,xDiff), PI*2);
 	float angleDiff = GetAngleDist(meTank->angle, finalAngle);
 
-    float accuracyRequirement = sqrt(0.08*(1/result8))/2.0;
+    float accuracyRequirement = sqrt(0.04*(1/result8))/2.0;
     cout << "ACC REQ: " << accuracyRequirement << endl;
-    if(abs(angleDiff) < accuracyRequirement)
+    if(kfCount > NUM_OBSERVATIONS && abs(angleDiff) < accuracyRequirement)
         bzfsComm->shoot(meTank->index);
 	//float angVel = (angleDiff/(2*PI));
 
@@ -304,7 +307,7 @@ void Robot::DoSniper() {
     bool negDiff = angleDiff < 0;
     float newAngVel = 1;
 
-    if(abs(angleDiff) > 0.09)
+    if(abs(angleDiff) > 0.05)
         newAngVel = 1;
     else
         newAngVel = sqrt(abs(angleDiff));

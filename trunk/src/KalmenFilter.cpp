@@ -8,7 +8,7 @@ using namespace std;
 
 KalmenFilter::KalmenFilter(EnvironmentData *env) {
 	this->gw = new GnuplotWriter(env);
-	gnuplotString = "";
+	//gnuplotString = "";
 
 //Initialize constant matrices
 
@@ -30,12 +30,12 @@ KalmenFilter::KalmenFilter(EnvironmentData *env) {
 ////////////
 // SigmaX -- how wrong everything might be
 ////////////
-	float vals2[36] ={3, 0,   0,   0,   0,   0,
-					  0,   5, 0,   0,   0,   0,
-					  0,   0,   1,  0,   0,   0,
-					  0,   0,   0,   3, 0,   0,
-					  0,   0,   0,   0,   5, 0,
-					  0,   0,   0,   0,   0,   1};      
+	float vals2[36] ={2, 0,   0,   0,   0,   0,
+					  0,   3.5, 0,   0,   0,   0,
+					  0,   0,   4,  0,   0,   0,
+					  0,   0,   0,   2, 0,   0,
+					  0,   0,   0,   0,   3.5, 0,
+					  0,   0,   0,   0,   0,   4};      
 	xSize = 6, ySize = 6;
 	SigmaX.SetSize(xSize, ySize);
 	for (int i = 0; i < xSize; i++)
@@ -96,10 +96,10 @@ KalmenFilter::KalmenFilter(EnvironmentData *env) {
 			Mu(i, j) = valsM[(i*ySize)+j];
 
 // SigmaK
-	float valsK[36] ={25,  0,   0,   0,   0,   0,
+	float valsK[36] ={100,  0,   0,   0,   0,   0,
 					  0,   0.1, 0,   0,   0,   0,
 					  0,   0,   0.1, 0,   0,   0,
-					  0,   0,   0,   25,  0,   0,
+					  0,   0,   0,   100,  0,   0,
 					  0,   0,   0,   0,   0.1, 0,
 					  0,   0,   0,   0,   0,   0.1};      
 	xSize = 6, ySize = 6;
@@ -114,6 +114,11 @@ KalmenFilter::KalmenFilter(EnvironmentData *env) {
 	K = (Temp * (Ht * !((H * (Temp * Ht)) + SigmaZ)));
 //SigmaK + 1
 	SigmaK = (I - (K * H)) * Temp;
+}
+
+void KalmenFilter::setInitialTankPos(float X, float Y) {
+    Mu(0,0) = X;
+    Mu(3,0) = Y;
 }
 
 float* KalmenFilter::update(float ObsX, float ObsY) {
@@ -143,7 +148,7 @@ float* KalmenFilter::update(float ObsX, float ObsY) {
 	tmp[0] = Mu(0,0);
 	tmp[1] = Mu(3,0);
 
-	gnuplotString += gw->DrawObserved(tmp[0], tmp[1]);
+	//gnuplotString += gw->DrawObserved(tmp[0], tmp[1]);
 
 	cout << "KALMAN::update: observed " << ObsX << "," << ObsY << endl;
 	cout << "KALMAN::        predicted" << tmp[0] << "," << tmp[1] << endl;
@@ -164,12 +169,12 @@ float* KalmenFilter::predict(int numTimeSteps){
 	float ObsX = tmp[0];
 	float ObsY = tmp[1];
 	cout << "KALMEN::        predicted" << tmp[0] << "," << tmp[1] << endl;
-	//gnuplotString += gw->DrawObserved(ObsX, ObsY);
-	//gnuplotString += gw->DrawObserved(ObsX + 5, ObsY);
-	//gnuplotString += gw->DrawObserved(ObsX + 5, ObsY + 5);
-	//gnuplotString += gw->DrawObserved(ObsX, ObsY+5);
-	//gnuplotString += gw->PrintAniData(0);
-	//gnuplotString += gw->DrawPredicted(tmp[0], tmp[1], 0.3);  	////////////////////////////////////////////////////////FIX THIS!!!!!!!!!!!!!!!!
+	////gnuplotString += gw->DrawObserved(ObsX, ObsY);
+	////gnuplotString += gw->DrawObserved(ObsX + 5, ObsY);
+	////gnuplotString += gw->DrawObserved(ObsX + 5, ObsY + 5);
+	////gnuplotString += gw->DrawObserved(ObsX, ObsY+5);
+	////gnuplotString += gw->PrintAniData(0);
+	////gnuplotString += gw->DrawPredicted(tmp[0], tmp[1], 0.3);  	////////////////////////////////////////////////////////FIX THIS!!!!!!!!!!!!!!!!
 	   
     //get how much we trust the position in the x direction
     float sigmaX = SigmaK(0,0);
@@ -182,9 +187,9 @@ float* KalmenFilter::predict(int numTimeSteps){
     char buff[1000];
     sprintf(buff, "KalmenFilter%d.gpi", rand());
 
-    gnuplotString += gw->DrawPredicted(sigmaX, sigmaY, rho);
+    //gnuplotString += gw->DrawPredicted(sigmaX, sigmaY, rho);
     
-    gw->PrintState(gnuplotString, 800, buff);
+    //gw->PrintState(//gnuplotString, 800, buff);
 	rtrn = tmp;
 	return rtrn;
 }

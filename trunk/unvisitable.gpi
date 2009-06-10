@@ -1,6 +1,6 @@
 set title "Plot"
-set xrange [-400.000000: 400.000000]
-set yrange [-400.000000: 400.000000]
+set xrange [-200.000000: 200.000000]
+set yrange [-200.000000: 200.000000]
 set pm3d
 set view map
 unset key

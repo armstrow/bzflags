@@ -43,6 +43,7 @@ class KalmenFilter {
 		KalmenFilter(EnvironmentData *env);
 		float* update(float ObsX, float ObsY);
 		float* predict(int numTimeSteps);
+        void setInitialTankPos(float X, float Y);
 	
 	private:
 };

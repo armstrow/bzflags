@@ -36,7 +36,7 @@ void RobotController::InitRobots() {
         cout << i << "   -------------------------------" << endl;
         MyTank *currTank = &env.myTanks.at(i);
         Robot *currBot = new Robot(currTank, &bzfsComm, &env);
-        currBot->SwitchTo(SNIPER);//CP_CONST_XY_VEL);
+        currBot->SwitchTo(CP_WILD);//CP_CONST_XY_VEL);
         robotList.push_back(currBot);
         cout << "add bot #" << i << endl;
     }
@@ -89,10 +89,10 @@ void RobotController::ControlRobots() {
     for(int i = 0; i < robotList.size(); i++) {
         cout << i << "  ---------------------------------------------------" << endl;
         Robot *currRobot = robotList.at(i);
-		////////////////////////////////////////////////////////////////////////////////////////////Temporarily removed for Kalmen Testing        
-		/*float meX = currRobot->meTank->pos[0];
+		float meX = currRobot->meTank->pos[0];
         float meY = currRobot->meTank->pos[1];
         float dist = sqrt((meX - otherX)*(meX - otherX) + (meY - otherY)*(meY - otherY));
+        /*
         if(enemyTanksDead)
             currRobot->SwitchTo(TRAVEL);
         else if(dist < switchDist && !enemyTanksDead) {
@@ -105,8 +105,9 @@ void RobotController::ControlRobots() {
                 currRobot->SwitchTo(SNIPER);
             }
         }
-        if((i % 2 == 0) || (i % 2 == 1 && loopCount > 100))*/
-            currRobot->Update();
+        */
+        //if((i % 2 == 0) || (i % 2 == 1 && loopCount > 100))
+        currRobot->Update();
     }
 }
 //------------------------------------------------------

@@ -15,6 +15,7 @@
 #define SNIPER "sniper"
 #define DECOY "decoy"
 #define TRAVEL "travel"
+#define MOVE_SNIPER "move_sniper"
 
 #define CP_DUCK "clayPidgeonDuck"
 #define CP_CONST_XY_VEL "clayPidgeonConstXYVel"
@@ -30,6 +31,7 @@ class Robot {
      *  +--------------+ */
 
     public:
+        string currEnemyCallSign;
         bool gotoPoint;
         float gotoX;
         float gotoY;
@@ -70,6 +72,8 @@ class Robot {
 	
 
     private: 
+        int GetCallSignIndex(string callSign);
+        string GetClosestCallSign();
         float PDController(float goalAngle, float currAngle, float currAngVel);
         void SetNextPathNodeField(float *xForce, float *yForce);
         void UpdateCurrGoal();
@@ -83,6 +87,7 @@ class Robot {
 
         void DoTravel();
         void DoSniper();
+        void DoMoveSniper();
         void DoDecoy();
         void DoCPDuck();
         void DoCPConstXYVel();

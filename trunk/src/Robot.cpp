@@ -44,6 +44,7 @@ Robot::Robot(MyTank *meTank, BZFSCommunicator *bzfsComm, EnvironmentData *env): 
     this->gotoX = 0;
     this->gotoY = 0;
     this->actionType = "BOGUSNESS";
+    this->currEnemyCallSign = "NONE";
 
     DiscretizeWorld();
 
@@ -142,6 +143,8 @@ void Robot::Update() {
         DoTravel();
     else if(this->actionType.compare(DECOY) == 0)
         DoDecoy();
+    else if(this->actionType.compare(MOVE_SNIPER) == 0)
+        DoMoveSniper();
     else if(this->actionType.compare(SNIPER) == 0)
         DoSniper();
     else if(this->actionType.compare(CP_DUCK) == 0)
@@ -240,7 +243,132 @@ float GetDistance(float startX, float startY, float endX, float endY) {
             (startY - endY)*(startY - endY) );
     return dist;
 }
+string Robot::GetClosestCallSign() {
+    string callSign = "NONE";
+    int closest = -1;
+    float meX = meTank->pos[0];
+    float meY = meTank->pos[1];
+    float dist = 99999;
+    for(int i = 0; i < env->otherTanks.size(); i++) {
+        if(i > env->otherTanks.size())
+            break;
+        OtherTank currTank = env->otherTanks.at(i);
+        if(currTank.status != "normal")
+            continue;
+        float tempDist = GetDistance(meX, meY, currTank.x, currTank.y);
+        if(tempDist < dist) {
+            closest = i;
+            dist = tempDist;
+        }
+    }
+    if(closest != -1)
+        callSign = env->otherTanks.at(closest).callsign;
+    return callSign;
+}
+int Robot::GetCallSignIndex(string callSign) {
+    int result = -1;
+    for(int i = 0; i < env->otherTanks.size(); i++) {
+        if(env->otherTanks.at(i).callsign.compare(callSign) == 0) {
+            result = i;
+            break;
+        }
+    }
+    return result;
+}
+void Robot::DoMoveSniper() {
+    gotoPoint = false;
+    bzfsComm->speed(meTank->index, 1);
 
+    float xDiff = 0;
+    float yDiff = 0;
+    float meX = meTank->pos[0];
+    float meY = meTank->pos[1];
+	float* myRslt = myKF->update(meX, meY);
+	meX = myRslt[0];
+	meY = myRslt[1];
+
+    float themX, themY;
+    int i = 0;
+    if(currEnemyCallSign == "NONE") {
+        currEnemyCallSign = GetClosestCallSign();
+        cout << "CURR ENEMY CALL SIGN: " << currEnemyCallSign << endl;
+        if(currEnemyCallSign != "NONE") {
+            kf = new KalmenFilter(env);
+            kfCount = 0;
+            cout << "`=`=`=`=``=`=`=`=`=`=`=`=`=`=`=`=`RESET" << endl;
+            i = GetCallSignIndex(currEnemyCallSign);
+            themX = env->otherTanks.at(i).x;
+            themY = env->otherTanks.at(i).y;
+            kf->setInitialTankPos(themX, themY);
+        } else {
+            return; //no more enemies to kill -- wait for new orders
+        }
+    } else {
+        i = GetCallSignIndex(currEnemyCallSign);
+    }
+    themX = env->otherTanks.at(i).x;
+    themY = env->otherTanks.at(i).y;
+
+	float* rslt = kf->update(themX, themY);
+	themX = rslt[0];
+	themY = rslt[1];
+    float result8;
+	if (++kfCount > NUM_OBSERVATIONS) {
+		kfCount = NUM_OBSERVATIONS+1;
+        result8 = GetDistance(meX, meY, themX, themY)/PREDICTION_TIME;
+        cout << "WHAT IS THIS NUMBER???? ::> " << result8 << endl;
+		float* rslt = kf->predict(3+int(1.5*result8));//(3+int(3*result8));
+		themX = rslt[0];
+		themY = rslt[1];
+	}
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	xDiff = themX - meX;
+	yDiff = themY - meY;
+	float finalAngle = Wrap(atan2(yDiff,xDiff), PI*2);
+	float angleDiff = GetAngleDist(meTank->angle, finalAngle);
+
+    float accuracyRequirement = sqrt(0.04*(1/result8))/2.0;
+    cout << "ACC REQ: " << accuracyRequirement << endl;
+    if(kfCount > NUM_OBSERVATIONS && abs(angleDiff) < accuracyRequirement)
+        bzfsComm->shoot(meTank->index);
+
+
+    float dist = GetDistance(meX, meY, themX, themY);
+
+
+    angleDiff /= PI;
+    bool negDiff = angleDiff < 0;
+    float newAngVel;
+    if(abs(angleDiff) > 0.048)
+        newAngVel = 1;
+    else
+        newAngVel = sqrt(abs(angleDiff));
+    if(negDiff)
+        newAngVel *= -1;
+
+    float newSpeed;
+    if(angleDiff < 0.15)
+        newSpeed = 1;
+    else
+        newSpeed = 1 - sqrt(abs(angleDiff));
+
+    /*
+    float slowDownPoint = 20;
+    float speedMultiplier = 1;
+    if(dist <= slowDownPoint) {
+        speedMultiplier = (dist/slowDownPoint)*(dist/slowDownPoint);
+    }
+    newSpeed *= speedMultiplier;
+    */
+
+    float stopDist = 40;
+    if(dist <= stopDist)
+        newSpeed = 0;
+
+    bzfsComm->speed(meTank->index, newSpeed);
+    bzfsComm->angvel(meTank->index, newAngVel);
+}
 void Robot::DoSniper() {
     gotoPoint = false;
     bzfsComm->speed(meTank->index, 0);

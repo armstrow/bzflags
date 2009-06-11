@@ -374,7 +374,7 @@ class Command(object):
 
     def __init__(self, index, speed, angvel, shoot):
         self.index = index
-        self.speed = 0.0 #speed
+        self.speed = speed
         self.angvel = angvel
         self.shoot = shoot
 
@@ -430,7 +430,7 @@ try:
             best_dist = 2 * float(constants['worldsize'])
             for enemy in enemies:
                 if enemy.status != 'normal':
-                    break
+                    continue
                 dist = math.sqrt((enemy.x - bot.x)**2 + (enemy.y - bot.y)**2)
                 if dist < best_dist:
                     best_dist = dist

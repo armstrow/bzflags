@@ -62,9 +62,9 @@ string AStarAlg::DoSearch(Position startNode, Position endNode, vector<Position>
 
     string s = "";
 
-    cout << "        A*: endNode: ";
+    //cout << "        A*: endNode: ";
     endNode.ToString();
-    cout << endl;
+    //cout << endl;
 
     /*
     s += gw->PrintNode(map->at(pos->row).at(pos->col), GREEN);
@@ -74,20 +74,20 @@ string AStarAlg::DoSearch(Position startNode, Position endNode, vector<Position>
 
     int nodesPopped = 0;
     while (pos->row != endNode.row || pos->col != endNode.col) {
-        //cout << "A*: in main loop (beginning)" << endl;
+        ////cout << "A*: in main loop (beginning)" << endl;
         //endNode.ToString();
-        //cout << endl;
+        ////cout << endl;
         s += EnqueueNeighbors(pos, endNode);
         if (q.empty()) {
-            //cout << "Error, goal not found in BFS" << endl;
+            ////cout << "Error, goal not found in BFS" << endl;
             return s;
         }
         Position *tmp = q.top();
         while (map->at(tmp->row).at(tmp->col)->visited == true) {
-            //cout << "      A*: in inner main loop" << endl;
+            ////cout << "      A*: in inner main loop" << endl;
             q.pop();
             tmp = q.top();
-            //cout << "      A*: tmp: " << tmp->row << ", " << tmp->col << endl; 
+            ////cout << "      A*: tmp: " << tmp->row << ", " << tmp->col << endl; 
         }
         map->at(tmp->row).at(tmp->col)->visited = true;
         //s += gw->PrintLine(map->at(pos->row).at(pos->col), map->at(tmp->row).at(tmp->col), ORANGE);
@@ -95,16 +95,16 @@ string AStarAlg::DoSearch(Position startNode, Position endNode, vector<Position>
         pos = tmp;
         q.pop();
         nodesPopped++;
-       // //cout << "checking node at: " << pos->row << "," << pos->col << endl;
+       // ////cout << "checking node at: " << pos->row << "," << pos->col << endl;
     }
-    //cout << "              NODES POPPED: " << nodesPopped << endl;
+    ////cout << "              NODES POPPED: " << nodesPopped << endl;
 
     Position *lastPos = pos;
     float pathCost = 0;
     int pathLength = 0;
 
     while(lastPos->col != startNode.col || lastPos->row != startNode.row) {
-        //cout << "in loop" << endl;
+        ////cout << "in loop" << endl;
         s += gw->PrintLine(map->at(lastPos->row).at(lastPos->col), map->at(lastPos->from->row).at(lastPos->from->col), GREEN);
         Position tmpPos = *lastPos;
         finalPath->push_back(tmpPos);
@@ -112,10 +112,10 @@ string AStarAlg::DoSearch(Position startNode, Position endNode, vector<Position>
         lastPos = lastPos->from;
         pathLength++;
     }
-    //cout << "              PATH COST  : " << pathCost << endl;
-    //cout << "              PATH LENGTH: " << pathLength << endl;
+    ////cout << "              PATH COST  : " << pathCost << endl;
+    ////cout << "              PATH LENGTH: " << pathLength << endl;
 
-    //cout << "Goal found!!!" << endNode.row << "," << endNode.col << endl;
+    ////cout << "Goal found!!!" << endNode.row << "," << endNode.col << endl;
     char buffer[100];
     sprintf(buffer, "AStar%ld.gpi", (long int)syscall(224));
     s += gw->PrintAniData(0);
@@ -192,7 +192,7 @@ float AStarAlg::GetHeuristic(int row, int col, Position endNode) {
             float radius = nodeSize * TANK_PENALTY_SIZE;
             float offBy = (radius - dist < 0) ? 0 : radius - dist;
             tankValues += offBy * TANK_PENALTY_FAC;
-            //if (offBy > 0) cout << "Tank Penalty Added!!!!!!!" << offBy << endl;
+            //if (offBy > 0) //cout << "Tank Penalty Added!!!!!!!" << offBy << endl;
         }
 
         //check the walls
@@ -214,7 +214,7 @@ float AStarAlg::GetHeuristic(int row, int col, Position endNode) {
             float radius = GetRealDistance(pos, corner) * OBST_PENALTY_SIZE;
             float offBy = (radius - dist < 0) ? 0 : radius - dist;
             wallValues += offBy * OBST_PENALTY_FAC;
-            //if (offBy > 0) cout << "Obstacle Penalty Added!!!!!!!" << offBy << endl;
+            //if (offBy > 0) //cout << "Obstacle Penalty Added!!!!!!!" << offBy << endl;
         }
         /*
         */
@@ -248,7 +248,7 @@ string AStarAlg::EnqueueNeighbors(Position* p, Position endNode) {
 string AStarAlg::EnQ(int row, int col, Position* from, Position endNode) {
     string s = ""; 
     //bounds check
-    //cout << "Enqueing: " << row << "," << col << endl;
+    ////cout << "Enqueing: " << row << "," << col << endl;
     if (row >= map->size() || col >= map->size() || row < 0 || col < 0)
         return s;
     if (map->at(row).at(col)->visitable) {        
@@ -260,9 +260,9 @@ string AStarAlg::EnQ(int row, int col, Position* from, Position endNode) {
         float dist = sqrt( (x - fromX)*(x - fromX) +
                 (y - fromY)*(y - fromY) ) + from->distSoFar;
         Position *n = new Position(row, col, dist + GetHeuristic(row, col, endNode), dist, from);
-        //cout << "Enqueued Node: (" << row << "," << col << "):" << n.heuristic << " = " << dist << " + " << GetHeuristic (row, col, endNode) << endl;
+        ////cout << "Enqueued Node: (" << row << "," << col << "):" << n.heuristic << " = " << dist << " + " << GetHeuristic (row, col, endNode) << endl;
         q.push(n);
-        //cout << "Enqueued Node: (" << row << "," << col << "):" << n.heuristic << " = " << dist << " + " << GetHeuristic (row, col, endNode) << endl;
+        ////cout << "Enqueued Node: (" << row << "," << col << "):" << n.heuristic << " = " << dist << " + " << GetHeuristic (row, col, endNode) << endl;
         s += gw->PrintNode(map->at(row).at(col), BROWN);
         s += gw->PrintLine(map->at(from->row).at(from->col), map->at(row).at(col), BLACK);
         ////s += gw->PrintAniData(DELAY);

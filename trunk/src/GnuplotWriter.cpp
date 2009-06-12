@@ -62,7 +62,7 @@ string GnuplotWriter::PrintLine(Node* current, Node* neighbor, int color) {
 }
 
 string GnuplotWriter::PrintNode(Node* n, int color) {
-	 //cout << "Printing Node: (" << n->x << "," << n->y << "): " << n->length << endl;
+	 ////cout << "Printing Node: (" << n->x << "," << n->y << "): " << n->length << endl;
     string s =	PrintLine(n->x, n->y, n->x + n->length, n->y, color);
     s += PrintLine(n->x+n->length, n->y, n->x+n->length, n->y+n->length, color);
     s += PrintLine(n->x+n->length, n->y+n->length, n->x, n->y+n->length, color);

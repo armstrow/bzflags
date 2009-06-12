@@ -17,13 +17,17 @@ void *MakeDecoy(void *args);
 bool canEnter = true;
 
 //------------------------------------------------------
-RobotController::RobotController(string server, int port) {
+RobotController::RobotController(string server, int port, int robotNum, string robotStartType) {
     decoy = -1;
     loopCount = 0;
+    this->robotNum = robotNum;
+    this->robotStartType = robotStartType;
 	if (bzfsComm.Connect(server, port) == 0) {
         cout << "INITING ENV!" << endl;
 		InitEnvironment();
-	}
+	} else {
+        cout << "there was a problem connec ting to the bzrobots server" << endl;
+    }
 }
 //------------------------------------------------------
 void RobotController::PlayGame() {
@@ -32,14 +36,13 @@ void RobotController::PlayGame() {
 }
 //------------------------------------------------------
 void RobotController::InitRobots() {
-    for(int i = 0; i < env.myTanks.size(); i++) {
-        cout << i << "   -------------------------------" << endl;
-        MyTank *currTank = &env.myTanks.at(i);
-        Robot *currBot = new Robot(currTank, &bzfsComm, &env);
-        currBot->SwitchTo(CP_WILD);//CP_CONST_XY_VEL);
-        robotList.push_back(currBot);
-        cout << "add bot #" << i << endl;
-    }
+    cout << "Initing robots" << endl;
+    cout << "ENV SIZE: " << env.myTanks.size();
+    MyTank *currTank = &env.myTanks.at(0);
+    Robot *currBot = new Robot(currTank, &bzfsComm, &env);
+    currBot->SwitchTo(robotStartType);//CP_CONST_XY_VEL);
+    robotList.push_back(currBot);
+    cout << "add bot #" << robotNum << endl;
 }
 //------------------------------------------------------
 void RobotController::LoopAction() {
@@ -89,9 +92,9 @@ void RobotController::ControlRobots() {
     for(int i = 0; i < robotList.size(); i++) {
         cout << i << "  ---------------------------------------------------" << endl;
         Robot *currRobot = robotList.at(i);
-		float meX = currRobot->meTank->pos[0];
-        float meY = currRobot->meTank->pos[1];
-        float dist = sqrt((meX - otherX)*(meX - otherX) + (meY - otherY)*(meY - otherY));
+		//float meX = currRobot->meTank->pos[0];
+        //float meY = currRobot->meTank->pos[1];
+        //float dist = sqrt((meX - otherX)*(meX - otherX) + (meY - otherY)*(meY - otherY));
         /*
         if(enemyTanksDead)
             currRobot->SwitchTo(TRAVEL);

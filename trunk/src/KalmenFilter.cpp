@@ -7,7 +7,7 @@
 using namespace std;
 
 KalmenFilter::KalmenFilter(EnvironmentData *env) {
-	this->gw = new GnuplotWriter(env);
+	//this->gw = new GnuplotWriter(env);
 	//gnuplotString = "";
 
 //Initialize constant matrices
@@ -136,12 +136,12 @@ float* KalmenFilter::update(float ObsX, float ObsY) {
 	Temp = ((F * SigmaK) * Ft) + SigmaX;
 //K[t+1]
 	K = (Temp * (Ht * !((H * (Temp * Ht)) + SigmaZ)));
-    cout << "KALMAN::update: K: " << K << endl;
+    //cout << "KALMAN::update: K: " << K << endl;
 //Mu[t+1]
-	cout << Mu << endl;
-    cout << "KALMAN::update: K-term: " << K * (Z - H * F * Mu) << endl;
+	//cout << Mu << endl;
+    //cout << "KALMAN::update: K-term: " << K * (Z - H * F * Mu) << endl;
 	Mu = F * Mu + K * (Z - H * F * Mu);
-    cout << "KALMAN::update: F: " << F << endl;
+    //cout << "KALMAN::update: F: " << F << endl;
 //SigmaK[t+1]
 	SigmaK = (I - (K * H)) * Temp;
     
@@ -150,8 +150,8 @@ float* KalmenFilter::update(float ObsX, float ObsY) {
 
 	//gnuplotString += gw->DrawObserved(tmp[0], tmp[1]);
 
-	cout << "KALMAN::update: observed " << ObsX << "," << ObsY << endl;
-	cout << "KALMAN::        predicted" << tmp[0] << "," << tmp[1] << endl;
+	//cout << "KALMAN::update: observed " << ObsX << "," << ObsY << endl;
+	//cout << "KALMAN::        predicted" << tmp[0] << "," << tmp[1] << endl;
 
 	rtrn = tmp;
 	return rtrn;
@@ -168,7 +168,7 @@ float* KalmenFilter::predict(int numTimeSteps){
 	tmp[1] = NuMu(3,0);
 	float ObsX = tmp[0];
 	float ObsY = tmp[1];
-	cout << "KALMEN::        predicted" << tmp[0] << "," << tmp[1] << endl;
+	//cout << "KALMEN::        predicted" << tmp[0] << "," << tmp[1] << endl;
 	////gnuplotString += gw->DrawObserved(ObsX, ObsY);
 	////gnuplotString += gw->DrawObserved(ObsX + 5, ObsY);
 	////gnuplotString += gw->DrawObserved(ObsX + 5, ObsY + 5);
@@ -177,15 +177,15 @@ float* KalmenFilter::predict(int numTimeSteps){
 	////gnuplotString += gw->DrawPredicted(tmp[0], tmp[1], 0.3);  	////////////////////////////////////////////////////////FIX THIS!!!!!!!!!!!!!!!!
 	   
     //get how much we trust the position in the x direction
-    float sigmaX = SigmaK(0,0);
+    //float sigmaX = SigmaK(0,0);
     //get how much we trust the position in the y direction
-    float sigmaY = SigmaK(3, 3);
+    //float sigmaY = SigmaK(3, 3);
     //get how much we need to stretch the oval along the slope (the correlation btwn sigmaX and Y)
-    float rho = (SigmaK(0, 3)/sigmaX)/sigmaY;
+    //float rho = (SigmaK(0, 3)/sigmaX)/sigmaY;
     //float rho = ???//not sure where to get this one from, maybe from SigmaK, but the x and y velocities?
-    string randStr = "";
-    char buff[1000];
-    sprintf(buff, "KalmenFilter%d.gpi", rand());
+    //string randStr = "";
+    //char buff[1000];
+    //sprintf(buff, "KalmenFilter%d.gpi", rand());
 
     //gnuplotString += gw->DrawPredicted(sigmaX, sigmaY, rho);
     

@@ -46,23 +46,26 @@ Robot::Robot(MyTank *meTank, BZFSCommunicator *bzfsComm, EnvironmentData *env): 
     this->actionType = "BOGUSNESS";
     this->currEnemyCallSign = "NONE";
 
-    DiscretizeWorld();
+    bzfsComm->speed(meTank->index, 1);
 
-    SetCurrGoalToEnemyBase();
+    //DiscretizeWorld();
 
-    Position startNode = GetStartNode();
-    Position endNode = GetEndNode();
+    //SetCurrGoalToEnemyBase();
 
-    cout << "   endNode for A*: ";
-    endNode.ToString();
-    cout << endl;
+    //Position startNode = GetStartNode();
+    //Position endNode = GetEndNode();
+
+    //cout << "   endNode for A*: ";
+    //endNode.ToString();
+    //cout << endl;
 
     //float answer = box_muller(0.5, 0.5);
 
+    /*
     alg = new AStarAlg(&WorldNodes, &gpw, true, env);
     alg->DoSearch(startNode, endNode, &forwardsPath);
 
-    cout << "FINISHED INITIAL SEARCH!!! " << meTank->index << ",  path size: " << forwardsPath.size() << endl;
+    //cout << "FINISHED INITIAL SEARCH!!! " << meTank->index << ",  path size: " << forwardsPath.size() << endl;
 
     for(int i = forwardsPath.size() - 1; i >= 0; i--) {
         backPath.push_back(forwardsPath.at(i));
@@ -82,6 +85,7 @@ Robot::Robot(MyTank *meTank, BZFSCommunicator *bzfsComm, EnvironmentData *env): 
         forwardsPath.pop_back();
         forwardsPath.pop_back();
     }
+    */
 
     currentPath = &forwardsPath;
 	WildCounter = 0;
@@ -94,9 +98,9 @@ void Robot::DiscretizeWorld() {
     int NodeSize = NODE_SIZE;
 
     worldSize = bzfsComm->worldSize;
-    //cout << "world size: " << worldSize << endl;
+    ////cout << "world size: " << worldSize << endl;
     if ((int)worldSize % (int)NodeSize != 0) {
-        //cout << "NODE_SIZE does not divide evenly" << endl;
+        ////cout << "NODE_SIZE does not divide evenly" << endl;
         exit(0);
     }
     worldSize = worldSize / 2;
@@ -110,7 +114,7 @@ void Robot::DiscretizeWorld() {
         }
         WorldNodes.push_back(tmp);
     }
-    //cout << "Created WorldNodes size: " << WorldNodes.size() << endl;
+    ////cout << "Created WorldNodes size: " << WorldNodes.size() << endl;
 }
 //------------------------------------------------------
 bool Robot::IsVisitable(Node* n) {
@@ -176,7 +180,7 @@ float Robot::PDController(float goalAngle, float angleDiff, float currAngVel) {
     else
         newSpeed = 1 - sqrt(abs(angleDiff));
 
-    //cout << "PDC  angleDiff: " << angleDiff << ", " << "newSpeed: " << newSpeed << ", newAngVel " << newAngVel << endl;
+    ////cout << "PDC  angleDiff: " << angleDiff << ", " << "newSpeed: " << newSpeed << ", newAngVel " << newAngVel << endl;
 
     bzfsComm->speed(meTank->index, newSpeed);
     bzfsComm->angvel(meTank->index, newAngVel);
@@ -230,7 +234,7 @@ void Robot::DoTravel() {
 
     GenerateField(meX, meY, &xForce, &yForce, bzfsComm->myColor, hasFlag);
 
-    //cout << "DONE GENERating field" << endl;
+    ////cout << "DONE GENERating field" << endl;
 
     float finalAngle = Wrap(atan2(yForce,xForce), PI*2);//good
     float angleDiff = GetAngleDist(meTank->angle, finalAngle);//not good
@@ -275,9 +279,17 @@ int Robot::GetCallSignIndex(string callSign) {
     }
     return result;
 }
+string Robot::GetCurrEnemyStatus(string callSign) {
+    if(currEnemyCallSign == "NONE")
+        return "dead";
+    for(int i = 0; i < env->otherTanks.size(); i++) {
+        if(env->otherTanks.at(i).callsign.compare(callSign) == 0)
+            return env->otherTanks.at(i).status;
+    }
+    return "dead";
+}
 void Robot::DoMoveSniper() {
     gotoPoint = false;
-    bzfsComm->speed(meTank->index, 1);
 
     float xDiff = 0;
     float yDiff = 0;
@@ -289,13 +301,16 @@ void Robot::DoMoveSniper() {
 
     float themX, themY;
     int i = 0;
-    if(currEnemyCallSign == "NONE") {
+
+    if(currEnemyCallSign == "NONE" || GetCurrEnemyStatus(currEnemyCallSign).compare("normal") != 0) {
+        cout << "GETTING NEW CLOSEST CALL SIGN!!!" << endl;
         currEnemyCallSign = GetClosestCallSign();
-        cout << "CURR ENEMY CALL SIGN: " << currEnemyCallSign << endl;
+        cout << "   NEW CALL SIGN: " << currEnemyCallSign << endl;
+        //cout << "CURR ENEMY CALL SIGN: " << currEnemyCallSign << endl;
         if(currEnemyCallSign != "NONE") {
             kf = new KalmenFilter(env);
             kfCount = 0;
-            cout << "`=`=`=`=``=`=`=`=`=`=`=`=`=`=`=`=`RESET" << endl;
+            //cout << "`=`=`=`=``=`=`=`=`=`=`=`=`=`=`=`=`RESET" << endl;
             i = GetCallSignIndex(currEnemyCallSign);
             themX = env->otherTanks.at(i).x;
             themY = env->otherTanks.at(i).y;
@@ -306,6 +321,15 @@ void Robot::DoMoveSniper() {
     } else {
         i = GetCallSignIndex(currEnemyCallSign);
     }
+
+    if(i > env->otherTanks.size() - 1){
+        if(env->otherTanks.size() > 0)
+            currEnemyCallSign = "NONE";
+        else {
+            return;
+        }
+    }
+        
     themX = env->otherTanks.at(i).x;
     themY = env->otherTanks.at(i).y;
 
@@ -316,7 +340,7 @@ void Robot::DoMoveSniper() {
 	if (++kfCount > NUM_OBSERVATIONS) {
 		kfCount = NUM_OBSERVATIONS+1;
         result8 = GetDistance(meX, meY, themX, themY)/PREDICTION_TIME;
-        cout << "WHAT IS THIS NUMBER???? ::> " << result8 << endl;
+        //cout << "WHAT IS THIS NUMBER???? ::> " << result8 << endl;
 		float* rslt = kf->predict(3+int(1.5*result8));//(3+int(3*result8));
 		themX = rslt[0];
 		themY = rslt[1];
@@ -328,10 +352,12 @@ void Robot::DoMoveSniper() {
 	float finalAngle = Wrap(atan2(yDiff,xDiff), PI*2);
 	float angleDiff = GetAngleDist(meTank->angle, finalAngle);
 
-    float accuracyRequirement = sqrt(0.04*(1/result8))/2.0;
-    cout << "ACC REQ: " << accuracyRequirement << endl;
-    if(kfCount > NUM_OBSERVATIONS && abs(angleDiff) < accuracyRequirement)
+    float accuracyRequirement = sqrt(0.1*(1/result8))/2.0;
+    //cout << "ACC REQ: " << accuracyRequirement << endl;
+    if(kfCount > NUM_OBSERVATIONS && abs(angleDiff) < accuracyRequirement) {
         bzfsComm->shoot(meTank->index);
+        bzfsComm->shoot(meTank->index);
+    }
 
 
     float dist = GetDistance(meX, meY, themX, themY);
@@ -351,7 +377,7 @@ void Robot::DoMoveSniper() {
     if(angleDiff < 0.15)
         newSpeed = 1;
     else
-        newSpeed = 1 - sqrt(abs(angleDiff));
+        newSpeed = (1 - sqrt(abs(angleDiff)) > 0.5) ? 1 - sqrt(abs(angleDiff)) : 0.5;
 
     /*
     float slowDownPoint = 20;
@@ -361,10 +387,12 @@ void Robot::DoMoveSniper() {
     }
     newSpeed *= speedMultiplier;
     */
-
+    
+    /*
     float stopDist = 40;
     if(dist <= stopDist)
         newSpeed = 0;
+    */
 
     bzfsComm->speed(meTank->index, newSpeed);
     bzfsComm->angvel(meTank->index, newAngVel);
@@ -390,14 +418,14 @@ void Robot::DoSniper() {
         delete kf;
         kf = new KalmenFilter(env);
         kfCount = 0;
-        cout << "`=`=`=`=``=`=`=`=`=`=`=`=`=`=`=`=`RESET" << endl;
+        //cout << "`=`=`=`=``=`=`=`=`=`=`=`=`=`=`=`=`RESET" << endl;
         return;
     }
     if(i >= env->otherTanks.size()) {
         delete kf;
         kf = new KalmenFilter(env);
         kfCount = 0;
-        cout << "`=`=`=`=``=`=`=`=`=`=`=`=`=`=`=`=`RESET" << endl;
+        //cout << "`=`=`=`=``=`=`=`=`=`=`=`=`=`=`=`=`RESET" << endl;
         i = env->otherTanks.size() - 1;
         themX = env->otherTanks.at(i).x;
         themY = env->otherTanks.at(i).y;
@@ -413,7 +441,7 @@ void Robot::DoSniper() {
 	if (++kfCount > NUM_OBSERVATIONS) {
 		kfCount = NUM_OBSERVATIONS+1;
         result8 = GetDistance(meX, meY, themX, themY)/PREDICTION_TIME;
-        cout << "WHAT IS THIS NUMBER???? ::> " << result8 << endl;
+        //cout << "WHAT IS THIS NUMBER???? ::> " << result8 << endl;
 		float* rslt = kf->predict(3+int(1.5*result8));//(3+int(3*result8));
 		themX = rslt[0];
 		themY = rslt[1];
@@ -426,7 +454,7 @@ void Robot::DoSniper() {
 	float angleDiff = GetAngleDist(meTank->angle, finalAngle);
 
     float accuracyRequirement = sqrt(0.04*(1/result8))/2.0;
-    cout << "ACC REQ: " << accuracyRequirement << endl;
+    //cout << "ACC REQ: " << accuracyRequirement << endl;
     if(kfCount > NUM_OBSERVATIONS && abs(angleDiff) < accuracyRequirement)
         bzfsComm->shoot(meTank->index);
 	//float angVel = (angleDiff/(2*PI));
@@ -451,7 +479,7 @@ void Robot::DoSniper() {
     }
     */
 
-    cout << "NEW ANGVEL: " << newAngVel << endl;
+    //cout << "NEW ANGVEL: " << newAngVel << endl;
 	bzfsComm->angvel(meTank->index, newAngVel);
 	//bzfsComm->shoot(meTank->index);
 }
@@ -480,9 +508,9 @@ void Robot::DoDecoy() {
 }
 //------------------------------------------------------
 void Robot::SwitchTo(string type) {
-    cout << "switching types from" << this->actionType << "to " << type << endl;
+    //cout << "switching types from" << this->actionType << "to " << type << endl;
     actionType = type;
-    cout << "actiontype is now: " << this->actionType << endl;
+    //cout << "actiontype is now: " << this->actionType << endl;
 }
 //------------------------------------------------------
 void Robot::GuardBase(double aggression) {
@@ -530,7 +558,7 @@ void Robot::SetNextPathNodeField(float *forceX, float *forceY) {
         //done!
         bzfsComm->speed(meTank->index, 0);
         bzfsComm->angvel(meTank->index, 0);
-        cout << "DONE FOLLOWING PATH!" << endl;
+        //cout << "DONE FOLLOWING PATH!" << endl;
         return;
     }
 
@@ -610,8 +638,8 @@ void Robot::SetEnemyField(float *forceX, float *forceY) {
 void Robot::UpdateCurrGoal() {
     bool hasFlag = (meTank->flag != "none");
 
-    //cout << "ACTION TYPE: " << actionType << endl;
-    //cout << "HAS FLAG:    " << (hasFlag ? "YES" : "NO") << endl;
+    ////cout << "ACTION TYPE: " << actionType << endl;
+    ////cout << "HAS FLAG:    " << (hasFlag ? "YES" : "NO") << endl;
     SetCurrGoalToEnemyBase();
     if(actionType == TRAVEL && hasFlag) {
         SetCurrGoalToMyBase();
@@ -647,7 +675,7 @@ void Robot::SetCurrGoalToEnemyBase() {
 //------------------------------------------------------
 void Robot::SetCurrGoalToMyBase() {
     currentPath = &backPath;
-    cout << "GOAL SET TO BACK PATH (setcurrgoaltomybase)" << endl;
+    //cout << "GOAL SET TO BACK PATH (setcurrgoaltomybase)" << endl;
 }
 //------------------------------------------------------
 void Robot::SetEnemyBaseField(float *forceX, float *forceY) {
@@ -734,7 +762,7 @@ void Robot::SetObstaclesField(float *forceX, float *forceY) {
     float OBST_ALPHA = -1000;
     for(int i = 0; i < env->obstacles.size(); i++) {
         Obstacle currObst = env->obstacles.at(i);
-        //cout << "obstacle # corners: " << currObst.corners.size() << endl;
+        ////cout << "obstacle # corners: " << currObst.corners.size() << endl;
         float centerX;// = GetCenterX(currObst.corners, 0);
         float centerY;// = GetCenterY(currObst.corners, 0);
         SetCenterXY(currObst.corners, &centerX, &centerY);
@@ -755,7 +783,7 @@ void Robot::SetObstaclesField(float *forceX, float *forceY) {
 }
 //------------------------------------------------------
 void Robot::SetPotentialFieldVals(float *xField, float *yField, float meX, float meY, float goalX, float goalY, bool attract, float radius, float spread, float alpha) {
-    //cout << "meX:\t" << meX << ", meY:\t" << meY << ", goalX:\t" << goalX << ", goalY:\t" << goalY << endl;
+    ////cout << "meX:\t" << meX << ", meY:\t" << meY << ", goalX:\t" << goalX << ", goalY:\t" << goalY << endl;
 
     float dist = sqrt( (meX - goalX)*(meX - goalX) +
                        (meY - goalY)*(meY - goalY) );
@@ -824,10 +852,10 @@ float Robot::GetAngleDist(float me, float goal) {
         result = clockwise;
         if(result > 0)
             result *= -1;
-        //cout << "clockwise!" << endl;;
+        ////cout << "clockwise!" << endl;;
     } else {
         result = abs(counterClockwise);
-        //cout << "             counterclockwise!" << endl;
+        ////cout << "             counterclockwise!" << endl;
     }
 
     return result;

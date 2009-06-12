@@ -23,6 +23,9 @@ class RobotController {
         int loopCount;
 
     public:
+        int robotNum;
+        string robotStartType;
+
         BZFSCommunicator bzfsComm;
         EnvironmentData env;
 
@@ -33,7 +36,7 @@ class RobotController {
 
 
     public:
-        RobotController(string server, int port);
+        RobotController(string server, int port, int robotNum, string robotStartType);
         void PlayGame();
 
 	    //Information Requests

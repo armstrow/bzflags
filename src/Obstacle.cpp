@@ -24,15 +24,15 @@ using namespace std;
 Obstacle::Obstacle(vector<string> data) {
     if(data.at(0) != "obstacle")
         throw "Invalid data for Obstacle";
-    /*cout << "\nreading obstacle";
-        cout << " (X: " << data.at(1);
-        cout << ", Y: " << data.at(2) << ")";
-        cout << " (X: " << data.at(3);
-        cout << ", Y: " << data.at(4) << ")";
-        cout << " (X: " << data.at(5);
-        cout << ", Y: " << data.at(6) << ")";
-        cout << " (X: " << data.at(7);
-        cout << ", Y: " << data.at(8) << ")";*/
+    /*//cout << "\nreading obstacle";
+        //cout << " (X: " << data.at(1);
+        //cout << ", Y: " << data.at(2) << ")";
+        //cout << " (X: " << data.at(3);
+        //cout << ", Y: " << data.at(4) << ")";
+        //cout << " (X: " << data.at(5);
+        //cout << ", Y: " << data.at(6) << ")";
+        //cout << " (X: " << data.at(7);
+        //cout << ", Y: " << data.at(8) << ")";*/
     int index = 1;
     while(index < data.size()) {
         Point corner;

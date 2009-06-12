@@ -47,7 +47,7 @@ string DepthFirstAlg::DoSearch(Position startNode, Position endNode) {
     while (currPos->row != endNode.row || currPos->col != endNode.col) {
         s += EnqueueNeighbors(currPos);
         if (q.empty()) {
-            cout << "Error, goal not found in DFS" << endl;
+            //cout << "Error, goal not found in DFS" << endl;
             return s;
         }
         Position *tmp = q.top();
@@ -56,20 +56,20 @@ string DepthFirstAlg::DoSearch(Position startNode, Position endNode) {
         currPos = tmp;
         q.pop();
         nodesPopped++;
-        //cout << "checking node at: " << currPos->row << "," << currPos->col << endl;
+        ////cout << "checking node at: " << currPos->row << "," << currPos->col << endl;
     }
-    cout << "              NODES POPPED: " << nodesPopped << endl;
+    //cout << "              NODES POPPED: " << nodesPopped << endl;
 
 
     Position *lastPos = currPos;
     int pathLength = 0;
     while(lastPos->col != startNode.col || lastPos->row != startNode.row) {
-        cout << "in loop" << endl;
+        //cout << "in loop" << endl;
         s += gw->PrintLine(map->at(lastPos->row).at(lastPos->col), map->at(lastPos->from->row).at(lastPos->from->col), GREEN);
         lastPos = lastPos->from;
         pathLength++;
     }
-    cout << "              PATH LENGTH: " << pathLength << endl;
+    //cout << "              PATH LENGTH: " << pathLength << endl;
     /*
     */
 

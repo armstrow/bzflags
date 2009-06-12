@@ -37,6 +37,8 @@ bool DEBUG = false;
 string SERVER;
 string STR_PORT;
 int PORT;
+int ROBOT_NUM = 0;
+string ROBOT_TYPE = "SNIPER";
 RobotController* controller;
 vector<vector<Node*> > *WorldNodes;
 
@@ -98,17 +100,20 @@ int main(int argc, char** argv) {
 
 	//KalmenFilter kf;
 
-    controller = new RobotController(SERVER, PORT);
-    DiscretizeWorld(NodeS); 
+    cout << "robot num: " << ROBOT_NUM << endl;
+    cout << "robot type: " << ROBOT_TYPE << endl;
+
+    controller = new RobotController(SERVER, PORT, ROBOT_NUM, ROBOT_TYPE);
+    //DiscretizeWorld(NodeS); 
     
     //GnuplotTest();
 
     /* Searches */
-    cout << "Running search algorithms" << endl;
-    Position startNode = GetStartNode();
-    Position endNode = GetEndNode();
-    string s = "";
-    GnuplotWriter* gw = new GnuplotWriter(&controller->env);
+    //cout << "Running search algorithms" << endl;
+    //Position startNode = GetStartNode();
+    //Position endNode = GetEndNode();
+    //string s = "";
+    //GnuplotWriter* gw = new GnuplotWriter(&controller->env);
     
     //AStarAlg* alg;
     //alg = new BreadthFirstAlg(WorldNodes, gw); //BT--DONE
@@ -400,19 +405,16 @@ void RotateDegrees(MyTank *tank, int index, float originalAngle, float amount, b
 }
 //------------------------------------------------------
 bool ParseArgs(int argc, char** argv) {
-    if(argc < 3)// || argc > 4)
+    if(argc < 5)// || argc > 4)
         return false;
-    
+   
+    DEBUG = true;
+
     string currArg = "";
-    for(int i = 1; i < argc; i++) {
-        currArg = argv[i];
-        if(currArg != "-d" && SERVER == "")
-            SERVER = currArg;
-        else if(currArg != "-d" && STR_PORT == "")
-            STR_PORT = currArg;
-        else if(currArg == "-d")
-            DEBUG = true;
-    }
+    SERVER = argv[1];
+    STR_PORT = argv[2];
+    ROBOT_NUM = atoi(argv[3]);
+    ROBOT_TYPE = argv[4];
     
     if(!IsNum(STR_PORT)) {
         cout << "ERROR:" << endl

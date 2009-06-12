@@ -72,6 +72,7 @@ class Robot {
 	
 
     private: 
+        string GetCurrEnemyStatus(string callSign);
         int GetCallSignIndex(string callSign);
         string GetClosestCallSign();
         float PDController(float goalAngle, float currAngle, float currAngVel);

@@ -43,18 +43,18 @@ int BZFSCommunicator::Connect(string server, int port) {
     ConnectToBZFS(); 
     int shook = HandShake();
     if (shook == 1)
-	    cout << "Unable to shake hands with bzrobots.\n";
+	    //cout << "Unable to shake hands with bzrobots.\n";
     else
-	    cout << "Handshake successfull!\n";
+	    //cout << "Handshake successfull!\n";
     return shook;
 }
 //------------------------------------------------------
 vector <string> BZFSCommunicator::SendMessage(string message, bool resultIsList) {
-    cout << "    --> SendMessage: message= " << message << endl;
+    //cout << "    --> SendMessage: message= " << message << endl;
 	SendLine(message.c_str());
 	char Reply[BUFFER_SIZE];
 	ReadAck();
-    cout << "--------READING ARR NOW" << endl;
+    //cout << "--------READING ARR NOW" << endl;
     if(resultIsList)
 	    return ReadAllArr();
     else
@@ -72,7 +72,7 @@ vector <string> BZFSCommunicator::SendMessage(string message, bool resultIsList)
  * +--------------------------------+  */
 // Read line into vector
 vector <string> BZFSCommunicator::ReadAllArr() {
-    cout << "    --> ReadArr" << endl;
+    //cout << "    --> ReadArr" << endl;
 	char str[BUFFER_SIZE];
 	char *LineText=str;
 	ReadLine(LineText);
@@ -80,7 +80,7 @@ vector <string> BZFSCommunicator::ReadAllArr() {
     vector<string> result;
 	if(strlen(LineText)!=0) {
 //		if(debug) 
-		cout << LineText << endl;
+		//cout << LineText << endl;
 	}
     currLine = LineText;
     result.push_back(currLine);
@@ -92,17 +92,17 @@ vector <string> BZFSCommunicator::ReadAllArr() {
         result.push_back(currLine);
         hadBegin = (currLine == "begin") ? true : hadBegin;
 //		if(debug) 
-		cout << "    --> ReadArr:whileLoop:LineText-->" << LineText << "<--" << endl;
+		//cout << "    --> ReadArr:whileLoop:LineText-->" << LineText << "<--" << endl;
         if(hadBegin && currLine.find("end") != -1)
             break;
 	}
 	//vector<string> result = SplitString(LineText);
-    cout << "        result: " << result.at(0) << endl;
-    cout << "    <-- ReadArr " << endl;
+    //cout << "        result: " << result.at(0) << endl;
+    //cout << "    <-- ReadArr " << endl;
     return result;   
 }
 vector <string> BZFSCommunicator::ReadArr() {
-    cout << "    --> ReadArr" << endl;
+    //cout << "    --> ReadArr" << endl;
 	char str[BUFFER_SIZE];
 	char *LineText=str;
 	ReadLine(LineText);
@@ -110,7 +110,7 @@ vector <string> BZFSCommunicator::ReadArr() {
     //vector<string> result;
 	if(strlen(LineText)!=0) {
 //		if(debug) 
-		cout << LineText << endl;
+		//cout << LineText << endl;
 	}
     currLine = LineText;
     //result.push_back(currLine);
@@ -122,22 +122,22 @@ vector <string> BZFSCommunicator::ReadArr() {
         //result.push_back(currLine);
         hadBegin = (currLine == "begin") ? true : hadBegin;
 //		if(debug) 
-		cout << "    --> ReadArr:whileLoop:LineText-->" << LineText << "<--" << endl;
+		//cout << "    --> ReadArr:whileLoop:LineText-->" << LineText << "<--" << endl;
         if(hadBegin && currLine.find("end") != -1)
             break;
 	}
 	vector<string> result = SplitString(LineText);
-    cout << "        result: " << result.at(0) << endl;
-    cout << "    <-- ReadArr " << endl;
+    //cout << "        result: " << result.at(0) << endl;
+    //cout << "    <-- ReadArr " << endl;
     return result;
 }
 // Read Acknowledgement
 void BZFSCommunicator::ReadAck() {
-    cout << "    --> ReadAck" << endl;
+    //cout << "    --> ReadAck" << endl;
 	vector <string> v=ReadArr();
 	if(v.at(0).find("ack") == -1) {
-		cout << "Did not receive ack! Exit!" << endl;
-        cout << "    recv'd: " << v.at(0) << endl;
+		//cout << "Did not receive ack! Exit!" << endl;
+        //cout << "    recv'd: " << v.at(0) << endl;
 		exit(1);
 	}
 }
@@ -160,14 +160,14 @@ vector <string> BZFSCommunicator::SplitString(string str) {
 
 // Send line to server
 int BZFSCommunicator::SendLine(const char *LineText) {
-    cout << "    --> SendLine: LineText= " << LineText << endl;
+    //cout << "    --> SendLine: LineText= " << LineText << endl;
 	int Length=(int)strlen(LineText);
 	char Command[BUFFER_SIZE];
 	strcpy(Command, LineText);
 	Command[Length]='\n';
 	Command[Length+1]='\0';
 	//if(debug) 
-	cout << Command;
+	//cout << Command;
 	if (send(s, Command, Length+1, 0) >= 0) {
 		return 0;
 	}
@@ -179,11 +179,11 @@ int BZFSCommunicator::SendLine(const char *LineText) {
 // Read line back from server
 int BZFSCommunicator::ReadReply(char *Reply)
 {
-    cout << "    --> ReadReply" << endl;
+    //cout << "    --> ReadReply" << endl;
 	char acReadBuffer[BUFFER_SIZE];
-    cout << "            -- before recv'ed" << endl;
+    //cout << "            -- before recv'ed" << endl;
 	int nNewBytes = recv(s, acReadBuffer, BUFFER_SIZE, 0);
-    cout << "            -- just recv'ed" << endl;
+    //cout << "            -- just recv'ed" << endl;
 	if (nNewBytes < 0) {
 		return -1;
 	}
@@ -202,7 +202,7 @@ int BZFSCommunicator::ReadReply(char *Reply)
 
 // Only read one line of text from ReplyBuffer
 void BZFSCommunicator::ReadLine(char *LineText) {
-    cout << "    --> ReadLine" << endl;
+    //cout << "    --> ReadLine" << endl;
 	memset(LineText, '\0', BUFFER_SIZE);
 	// Only read more from server when done with current ReplyBuffer
 	if(strlen(replyBuffer)==0) {
@@ -213,7 +213,7 @@ void BZFSCommunicator::ReadLine(char *LineText) {
 	int i=0;
 	bool done=false;
 	while(!done) {
-        cout << "            -- in loop" << endl;
+        //cout << "            -- in loop" << endl;
 		for(i=lineFeedPos+1; (i<BUFFER_SIZE && replyBuffer[i]); i++) {
 			if(replyBuffer[i]=='\n') {
 				LineText[i-lineFeedPos-1+start]=replyBuffer[i-1];
@@ -226,7 +226,7 @@ void BZFSCommunicator::ReadLine(char *LineText) {
 			LineText[i-lineFeedPos-1+start]=replyBuffer[i-1];
 		}
 		if(!done) {
-            cout << "            -- in if(!done)" << endl;
+            //cout << "            -- in if(!done)" << endl;
 			start = (int)strlen(LineText);
 			ResetReplyBuffer();	
 			char *Reply;
@@ -234,7 +234,7 @@ void BZFSCommunicator::ReadLine(char *LineText) {
 			ReadReply(Reply);
 		}
 		else {
-            cout << "            -- else {" << endl;
+            //cout << "            -- else {" << endl;
 			if(replyBuffer[i]=='\0') {
 				done=true;
 				start=0;
@@ -242,7 +242,7 @@ void BZFSCommunicator::ReadLine(char *LineText) {
 			}
 		}
 	}
-	cout << "            LineText= " << LineText;
+	//cout << "            LineText= " << LineText;
 }
 
 // Reset the ReplyBuffer
@@ -258,7 +258,7 @@ int BZFSCommunicator::HandShake() {
 	LineText=str;
 	ReadLine(LineText);
 	//if(debug) 
-	cout << LineText << endl;
+	//cout << LineText << endl;
 	if (!strcmp(LineText, "bzrobots 1")) {
 		const char * Command="agent 1";
 		int temp=SendLine(Command);
@@ -285,32 +285,32 @@ void BZFSCommunicator::ResolveDomain(string server) {
         server = GetIPFromDomain(server);
 
         //if debug?
-        cout << "    domain (" << this->host << ") resolved to (" << server << ")" << endl;
+        //cout << "    domain (" << this->host << ") resolved to (" << server << ")" << endl;
     }
     ipAddress = server;
 }
 //------------------------------------------------------
 void BZFSCommunicator::ConnectToBZFS() {
-    cout << "    connecting to bzrobots at " << this->host << "[" << this->ipAddress << "]:" << this->port << "..." << endl;
+    //cout << "    connecting to bzrobots at " << this->host << "[" << this->ipAddress << "]:" << this->port << "..." << endl;
     
     memset(&connection, 0, sizeof(connection));
     connection.sin_family = AF_INET;
     connection.sin_port = htons(port);
     
     if(!inet_aton(ipAddress.c_str(), &connection.sin_addr)) {
-        cout << "inet conversion error\nCould not connect to server" << endl;
+        //cout << "inet conversion error\nCould not connect to server" << endl;
     }
     s = socket(PF_INET, SOCK_STREAM, 0);
 
     if(!s) {
-        cout << "socket creation error" << endl;
+        //cout << "socket creation error" << endl;
     }
 
     if(connect(s, (const struct sockaddr *)&connection, sizeof(connection)) < 0) {
-        cout << "socket connection error" << endl;
+        //cout << "socket connection error" << endl;
     }
 
-    cout << "    connected!" << endl;
+    //cout << "    connected!" << endl;
 }
 //------------------------------------------------------
 bool BZFSCommunicator::IsIPAddress(string server) {

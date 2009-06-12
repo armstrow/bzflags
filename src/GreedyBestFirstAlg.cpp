@@ -58,7 +58,7 @@ string GreedyBestFirstAlg::DoSearch(Position startNode, Position endNode) {
     while (currPos->row != endNode.row || currPos->col != endNode.col) {
         s += EnqueueNeighbors(currPos, endNode);
         if (q.empty()) {
-            cout << "Error, goal not found in BFS" << endl;
+            //cout << "Error, goal not found in BFS" << endl;
             return s;
         }
         Position *tmp = q.top();
@@ -67,24 +67,24 @@ string GreedyBestFirstAlg::DoSearch(Position startNode, Position endNode) {
         currPos = tmp;
         q.pop();
         nodesPopped++;
-        cout << "checking node at: " << currPos->row << "," << currPos->col << endl;
+        //cout << "checking node at: " << currPos->row << "," << currPos->col << endl;
     }
-    cout << "              NODES POPPED: " << nodesPopped << endl;
+    //cout << "              NODES POPPED: " << nodesPopped << endl;
     
     Position *lastPos = currPos;
     float pathCost = 0;
     int pathLength = 0;
     while(lastPos->col != startNode.col || lastPos->row != startNode.row) {
-        cout << "in loop" << endl;
+        //cout << "in loop" << endl;
         s += gw->PrintLine(map->at(lastPos->row).at(lastPos->col), map->at(lastPos->from->row).at(lastPos->from->col), GREEN);
         pathCost += lastPos->heuristic;
         lastPos = lastPos->from;
         pathLength++;
     }
-    cout << "              PATH COST  : " << pathCost << endl;
-    cout << "              PATH LENGTH: " << pathLength << endl;
+    //cout << "              PATH COST  : " << pathCost << endl;
+    //cout << "              PATH LENGTH: " << pathLength << endl;
 
-    cout << "Goal found!!!" << endNode.row << "," << endNode.col << endl;
+    //cout << "Goal found!!!" << endNode.row << "," << endNode.col << endl;
     s += gw->PrintAniData(0);
     return s;
     /*
@@ -138,7 +138,7 @@ float GreedyBestFirstAlg::GetHeuristic(int row, int col, Position endNode) {
                                (corner.col - pos.col)*(corner.col - pos.col) ) * OBST_PENALTY_SIZE;
             float offBy = (radius - dist < 0) ? 0 : radius - dist;
             wallValues += offBy * OBST_PENALTY_FAC;
-            //if (offBy > 0) cout << "Obstacle Penalty Added!!!!!!!" << offBy << endl;
+            //if (offBy > 0) //cout << "Obstacle Penalty Added!!!!!!!" << offBy << endl;
             //wallValues += dist;
         }
     }

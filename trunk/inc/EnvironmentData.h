@@ -51,19 +51,19 @@ class EnvironmentData {
     public:
         EnvironmentData();
         vector<Obstacle> getObstacles() {
-        		pthread_mutex_lock(&obstacles_lock);
+        		//pthread_mutex_lock(&obstacles_lock);
         		vector<Obstacle> obst;
                 for(int i = 0; i < obstacles.size(); i++) {
                     Obstacle newObst = obstacles.at(i);
                     obst.push_back(newObst);
                 }
-        		pthread_mutex_unlock(&obstacles_lock);
+        		//pthread_mutex_unlock(&obstacles_lock);
         		return obst;
         };
         vector<OtherTank> getOtherTanks() {
-        	   pthread_mutex_lock(&otherTanks_lock);
+        	    //pthread_mutex_lock(&otherTanks_lock);
         		vector<OtherTank> ot = otherTanks;
-        		pthread_mutex_unlock(&otherTanks_lock);
+        		//pthread_mutex_unlock(&otherTanks_lock);
         		return ot;
         	};
         

@@ -47,7 +47,7 @@ class Robot {
         float prevDecoyX;
 
     private:
-	bool isDecoy;
+    	bool isDecoy;
         EnvironmentData *env;
         GnuplotWriter gpw;
         AStarAlg *alg;

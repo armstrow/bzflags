@@ -32,6 +32,7 @@ RobotController::RobotController(string server, int port, int robotNum, string r
 //------------------------------------------------------
 void RobotController::PlayGame() {
     InitRobots();
+    cout << "LOOPING ACTION!" << endl;
     LoopAction();
 }
 //------------------------------------------------------
@@ -49,7 +50,9 @@ void RobotController::InitRobots() {
 //------------------------------------------------------
 void RobotController::LoopAction() {
     while(1 == 1) {
+        cout << "UPDATING ENVIRONMENT" << endl;
         UpdateEnvironment();
+        cout << "controlling robot(s)" << endl;
         ControlRobots();
         loopCount++;
     }
@@ -66,9 +69,13 @@ void RobotController::InitEnvironment() {
 }
 //------------------------------------------------------
 void RobotController::UpdateEnvironment() {
+    cout << "getting shots" << endl;
     bzfsComm.get_shots(&env.shots);
+    cout << "getting other tanks" << endl;
     bzfsComm.get_othertanks(&env.otherTanks);
+    cout << "getting my tanks" << endl;
     bzfsComm.get_mytanks(&env.myTanks);
+    cout << "getting flags" << endl;
     bzfsComm.get_flags(&env.flags);
 }
 //------------------------------------------------------
@@ -94,23 +101,16 @@ void RobotController::ControlRobots() {
     for(int i = 0; i < robotList.size(); i++) {
         cout << i << "  ---------------------------------------------------" << endl;
         Robot *currRobot = robotList.at(i);
-		//float meX = currRobot->meTank->pos[0];
-        //float meY = currRobot->meTank->pos[1];
-        //float dist = sqrt((meX - otherX)*(meX - otherX) + (meY - otherY)*(meY - otherY));
-        /*
+		float meX = currRobot->meTank->pos[0];
+        float meY = currRobot->meTank->pos[1];
+        float dist = sqrt((meX - otherX)*(meX - otherX) + (meY - otherY)*(meY - otherY));
+        
         if(enemyTanksDead)
             currRobot->SwitchTo(TRAVEL);
         else if(dist < switchDist && !enemyTanksDead) {
             switchDist = 350;
-            cout << "SHOULD HAVE SWITCHED!! dist: " << dist << endl;
-            if (decoy == -1 || decoy == i) {
-                currRobot->SwitchTo(DECOY);
-                decoy = i;
-            } else {
-                currRobot->SwitchTo(SNIPER);
-            }
         }
-        */
+        
         //if((i % 2 == 0) || (i % 2 == 1 && loopCount > 100))
         currRobot->Update();
     }

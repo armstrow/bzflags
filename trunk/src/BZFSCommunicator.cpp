@@ -409,7 +409,7 @@ vector <string> BZFSCommunicator::ReadArr() {
 void BZFSCommunicator::ReadAck() {
 	vector <string> v=ReadArr();
 	if(v.at(0)!="ack") {
-		//////cout << "Did not receive ack! Exit!" << endl;
+		cout << "Did not receive ack! Exit!" << endl;
 		exit(1);
 	}
 }

@@ -37,7 +37,7 @@ AStarAlg::AStarAlg(vector<vector<Node *> > *map, GnuplotWriter* writer, bool pen
     this->map = map;
     this->penalize = penalized;
     this->env = env;
-    this->gw = new GnuplotWriter(env);
+    //this->gw = new GnuplotWriter(env);
 }
 //------------------------------------------------------
 string AStarAlg::DoSearch(Position startNode, Position endNode) {
@@ -63,7 +63,7 @@ string AStarAlg::DoSearch(Position startNode, Position endNode, vector<Position>
     string s = "";
 
     //cout << "        A*: endNode: ";
-    endNode.ToString();
+    //endNode.ToString();
     //cout << endl;
 
     /*
@@ -105,7 +105,7 @@ string AStarAlg::DoSearch(Position startNode, Position endNode, vector<Position>
 
     while(lastPos->col != startNode.col || lastPos->row != startNode.row) {
         ////cout << "in loop" << endl;
-        s += gw->PrintLine(map->at(lastPos->row).at(lastPos->col), map->at(lastPos->from->row).at(lastPos->from->col), GREEN);
+        //s += gw->PrintLine(map->at(lastPos->row).at(lastPos->col), map->at(lastPos->from->row).at(lastPos->from->col), GREEN);
         Position tmpPos = *lastPos;
         finalPath->push_back(tmpPos);
         pathCost += lastPos->heuristic;
@@ -116,10 +116,10 @@ string AStarAlg::DoSearch(Position startNode, Position endNode, vector<Position>
     ////cout << "              PATH LENGTH: " << pathLength << endl;
 
     ////cout << "Goal found!!!" << endNode.row << "," << endNode.col << endl;
-    char buffer[100];
-    sprintf(buffer, "AStar%ld.gpi", (long int)syscall(224));
-    s += gw->PrintAniData(0);
-    gw->PrintState(s, 800, buffer);
+    //char buffer[100];
+    //sprintf(buffer, "AStar%ld.gpi", (long int)syscall(224));
+    //s += gw->PrintAniData(0);
+    //gw->PrintState(s, 800, buffer);
     return s;
 }
 //------------------------------------------------------

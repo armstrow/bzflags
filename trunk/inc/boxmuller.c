@@ -10,11 +10,12 @@
 
 #include <math.h>
 #include <cstdlib>
+#include <iostream>
 
 float ranf();
 
 float ranf() {
-    int randNum = rand();
+    float randNum = rand();
     float result = randNum / RAND_MAX;
     return result;
 }/* ranf() is uniform in 0..1 */
@@ -34,6 +35,7 @@ float box_muller(float m, float s)	/* normal random variate generator */
 	else
 	{
 		do {
+ 
 			x1 = 2.0 * ranf() - 1.0;
 			x2 = 2.0 * ranf() - 1.0;
 			w = x1 * x1 + x2 * x2;

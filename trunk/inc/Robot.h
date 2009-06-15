@@ -55,7 +55,7 @@ class Robot {
 		KalmenFilter * kf;
 		KalmenFilter * myKF;
 		int kfCount;
-
+	float meX, meY;
 
     /*  +--------------+
      *  |  FUNCTIONS   |

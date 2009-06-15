@@ -38,11 +38,13 @@ void RobotController::PlayGame() {
 void RobotController::InitRobots() {
     cout << "Initing robots" << endl;
     cout << "ENV SIZE: " << env.myTanks.size();
-    MyTank *currTank = &env.myTanks.at(0);
-    Robot *currBot = new Robot(currTank, &bzfsComm, &env);
-    currBot->SwitchTo(robotStartType);//CP_CONST_XY_VEL);
-    robotList.push_back(currBot);
-    cout << "add bot #" << robotNum << endl;
+	for (int i = 0; i < env.myTanks.size(); i++) {
+		MyTank *currTank = &env.myTanks.at(i);
+		Robot *currBot = new Robot(currTank, &bzfsComm, &env, robotStartType);
+		currBot->SwitchTo(robotStartType);//CP_CONST_XY_VEL);
+		robotList.push_back(currBot);
+		cout << "add bot #" << robotNum << endl;
+	}
 }
 //------------------------------------------------------
 void RobotController::LoopAction() {

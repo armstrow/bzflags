@@ -15,7 +15,7 @@
 #include <iostream>
 
 #define DECOY_DISTANCE 100
-#define NODE_SIZE 10 
+#define NODE_SIZE 20 
 #define TARGET_COLOR "green"
 #define SLEEP_AMT 100
 
@@ -36,36 +36,50 @@ float sleepCount = 0;
 
 
 //------------------------------------------------------
-Robot::Robot(MyTank *meTank, BZFSCommunicator *bzfsComm, EnvironmentData *env): gpw(env) {
+Robot::Robot(MyTank *meTank, BZFSCommunicator *bzfsComm, EnvironmentData *env, string robotStartType): gpw(env) {
     this->meTank = meTank;
     this->bzfsComm = bzfsComm;
     this->env = env;
     this->gotoPoint = false;
     this->gotoX = 0;
     this->gotoY = 0;
-    this->actionType = "BOGUSNESS";
+    this->actionType = robotStartType;
     this->currEnemyCallSign = "NONE";
+	cout << "New robot: " << this->actionType << endl;
+    //bzfsComm->speed(meTank->index, 1);
+	bool penalize = true;
+    if(this->actionType.compare(TRAVEL) == 0) {
+		SetCurrGoalToEnemyBase();
+	}
+	else if (this->actionType.compare(DECOY) == 0){
+		currGoal.x = -40;
+		currGoal.y = 0;
+		penalize = false;
+    }
+	else {
+		WildCounter = 0;
+		kf = new KalmenFilter(env);
+		myKF = new KalmenFilter(env);
+		kfCount = 0;
+	}
+	DiscretizeWorld();
 
-    bzfsComm->speed(meTank->index, 1);
+  	//
+	
+    Position startNode = GetStartNode();
+    Position endNode = GetEndNode();
 
-    //DiscretizeWorld();
-
-    //SetCurrGoalToEnemyBase();
-
-    //Position startNode = GetStartNode();
-    //Position endNode = GetEndNode();
-
-    //cout << "   endNode for A*: ";
-    //endNode.ToString();
-    //cout << endl;
+    cout << "   endNode for A*: ";
+    endNode.ToString();
+    cout << endl;
 
     //float answer = box_muller(0.5, 0.5);
 
-    /*
-    alg = new AStarAlg(&WorldNodes, &gpw, true, env);
+    
+    alg = new AStarAlg(&WorldNodes, &gpw, penalize, env);
     alg->DoSearch(startNode, endNode, &forwardsPath);
 
-    //cout << "FINISHED INITIAL SEARCH!!! " << meTank->index << ",  path size: " << forwardsPath.size() << endl;
+    cout << "FINISHED INITIAL SEARCH!!! " << meTank->index << ",  path size: " << forwardsPath.size() << endl;
 
     for(int i = forwardsPath.size() - 1; i >= 0; i--) {
         backPath.push_back(forwardsPath.at(i));
@@ -85,8 +99,8 @@ Robot::Robot(MyTank *meTank, BZFSCommunicator *bzfsComm, EnvironmentData *env): 
         forwardsPath.pop_back();
         forwardsPath.pop_back();
     }
-    */
-
+	cout << "Done with A*" << endl;
+    
     currentPath = &forwardsPath;
 	WildCounter = 0;
 	kf = new KalmenFilter(env);
@@ -147,7 +161,7 @@ void Robot::Update() {
         DoTravel();
     else if(this->actionType.compare(DECOY) == 0)
         DoDecoy();
-    else if(this->actionType.compare(MOVE_SNIPER) == 0)
+    else if(this->actionType.compare(MOVE_SNIPER) == 0) 
         DoMoveSniper();
     else if(this->actionType.compare(SNIPER) == 0)
         DoSniper();
@@ -228,9 +242,14 @@ void Robot::DoTravel() {
     float yForce = 0;
     float meX = meTank->pos[0];
     float meY = meTank->pos[1];
-    bool hasFlag = (meTank->flag != "none");
+	float* myRslt = myKF->update(meX, meY);
+	meX = myRslt[0];
+	meY = myRslt[1];
+	bool hasFlag = (meTank->flag != "none");
     if(hasFlag)
         SetCurrGoalToMyBase();
+    bzfsComm->shoot(meTank->index);
+    bzfsComm->shoot(meTank->index);
 
     GenerateField(meX, meY, &xForce, &yForce, bzfsComm->myColor, hasFlag);
 
@@ -487,7 +506,32 @@ void Robot::DoSniper() {
 void Robot::DoDecoy() {
     int speed = 1;
 
-    //keep him perpindicular to the base
+	//for qualifier
+    gotoPoint = false;
+    float xForce = 0;
+    float yForce = 0;
+    float meX = meTank->pos[0];
+    float meY = meTank->pos[1];
+	float* myRslt = myKF->update(meX, meY);
+	meX = myRslt[0];
+	meY = myRslt[1];
+    bool hasFlag = (meTank->flag != "none");
+	
+	if (GetDistance(currGoal.x, currGoal.y, meX, meY) < 100) {
+		cout << "SWITCHING TO SNIPER!!!!!!!!!!!!!!" << endl;
+		SwitchTo(MOVE_SNIPER);
+	}
+
+    GenerateField(meX, meY, &xForce, &yForce, bzfsComm->myColor, hasFlag);
+
+    ////cout << "DONE GENERating field" << endl;
+
+    float finalAngle = Wrap(atan2(yForce,xForce), PI*2);//good
+    float angleDiff = GetAngleDist(meTank->angle, finalAngle);//not good
+    float currAngVel = meTank->angvel;
+    PDController(finalAngle, angleDiff, currAngVel);
+
+/*    //keep him perpindicular to the base
     float angleDiff = GetAngleDist(meTank->angle, PI*.5);
     float angVel = (angleDiff/(2*PI));
     if(abs(angleDiff) >= 0.1) {
@@ -503,7 +547,7 @@ void Robot::DoDecoy() {
     else if(meY > 200)
         bzfsComm->speed(meTank->index, -1);
 
-    /*
+  
     */
 }
 //------------------------------------------------------
@@ -537,6 +581,8 @@ void Robot::GenerateField(float x, float y, float *outX, float *outY, string col
     float yForce;
 
     SetNextPathNodeField(&xForce, &yForce);
+	SetEnemyFlagField(&xForce, &yForce);
+	SetMyFlagField(&xForce, &yForce);
     /*
     if(!haveFlag) {
         //SetEnemyBaseField(&xForce, &yForce);
@@ -591,6 +637,7 @@ void Robot::SetNextPathNodeField(float *forceX, float *forceY) {
 }
 //------------------------------------------------------
 Position Robot::GetEndNode() {
+	cout << "getting node " << currGoal.x << currGoal.y << endl;
     return GetNode(currGoal.x, currGoal.y);
 }
 //------------------------------------------------------
@@ -726,6 +773,31 @@ void Robot::SetEnemyFlagField(float *forceX, float *forceY) {
 
         *forceX += tempXForce;
         *forceY += tempYForce;
+    }
+}
+
+//------------------------------------------------------
+void Robot::SetMyFlagField(float *forceX, float *forceY) {
+    //iterate enemyflags
+    float FLAG_RADIUS = 5;
+    float FLAG_SPREAD = 10;
+    float FLAG_ALPHA = 100;
+
+    for(int i = 0; i < env->flags.size(); i++) {
+        Flag *currFlag = &env->flags.at(i);
+
+        if(currFlag->color == bzfsComm->myColor) {
+		    float tempXForce = 0;
+		    float tempYForce = 0;
+
+		    float flagX = currFlag->pos[0];
+		    float flagY = currFlag->pos[1];
+
+		    SetPotentialFieldVals(&tempXForce, &tempYForce, meTank->pos[0], meTank->pos[1], flagX, flagY, true, FLAG_RADIUS, FLAG_SPREAD, FLAG_ALPHA);
+
+		    *forceX += tempXForce;
+		    *forceY += tempYForce;
+		}
     }
 }
 //------------------------------------------------------

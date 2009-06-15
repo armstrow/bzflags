@@ -62,7 +62,7 @@ class Robot {
      *  +--------------+ */
 
     public:
-        Robot(MyTank *meTank, BZFSCommunicator *bzfsComm, EnvironmentData *env);
+        Robot(MyTank *meTank, BZFSCommunicator *bzfsComm, EnvironmentData *env, string robotStartType);
         void GuardBase(double aggression);
         void AttackOthers(double aggression);
         void GetFlag(double agression);
@@ -85,6 +85,7 @@ class Robot {
         Position GetNode(float x, float y);
         bool IsVisitable(Node* n);
         void DiscretizeWorld();
+		void SetMyFlagField(float *forceX, float *forceY);
 
         void DoTravel();
         void DoSniper();

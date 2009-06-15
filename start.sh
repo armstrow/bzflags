@@ -1,43 +1,31 @@
 #!/bin/sh
 
-python ./sync.py localhost 6000 &
+python ./sync.py localhost 3000 &
 
-firstpart='\'cd; cd bzflags; ./bin/robotter'
+firstpart='\'./bin/robotter'
 host=nunchucks
-secondpart='0 "move_sniper"\''
+secondpart='0 "move_sniper"'\'
+
+
+echo $firstpart $host 3008 $secondpart
+
+first="$echo $firstpart $host 3008 $secondpart"#!/bin/sh
 
 
 
+gnome-terminal -x ./bin/robotter localhost 6208 0 "travel" &
+gnome-terminal -x ./bin/robotter localhost 6309 1 "travel" &
+#gnome-terminal -x ./bin/robotter localhost 3010 2 "decoy" &
+#gnome-terminal -x ./bin/robotter localhost 3011 3 "decoy" &
+#gnome-terminal -x ./bin/robotter localhost 3012 4 "decoy" &
+#gnome-terminal -x ./bin/robotter localhost 1013 5 "decoy" &
+#gnome-terminal -x ./bin/robotter localhost 1014 6 "travel" &
+#gnome-terminal -x ./bin/robotter localhost 1015 7 "travel" &
+#gnome-terminal -x ./bin/robotter localhost 1016 8 "decoy" &
+#gnome-terminal -x ./bin/robotter localhost 1017 9 "decoy" &
 
-first="$echo $firstpart $host 6008 $secondpart"
-gnome-terminal -x ssh pike $first &
 
-second="$echo $firstpart $host 6009 $secondpart"
-gnome-terminal -x ssh pike $second &
 
-third="$echo $firstpart $host 6010 $secondpart"
-gnome-terminal -x ssh pike $third &
-
-fourth="$echo $firstpart $host 6011 $secondpart"
-gnome-terminal -x ssh pike $fourth &
-
-fifth="$echo $firstpart $host 6012 $secondpart"
-gnome-terminal -x ssh pike $fifth &
-
-sixth="$echo $firstpart $host 6013 $secondpart"
-gnome-terminal -x ssh pike $sixth &
-
-seventh="$echo $firstpart $host 6014 $secondpart"
-gnome-terminal -x ssh pike $seventh &
-
-eigth="$echo $firstpart $host 6015 $secondpart"
-gnome-terminal -x ssh pike $eigth &
-
-ninth="$echo $firstpart $host 6016 $secondpart"
-gnome-terminal -x ssh pike $ninth &
-
-tenth="$echo $firstpart $host 6017 $secondpart"
-gnome-terminal -x ssh pike $tenth &
-
+python ./sync.py localhost 6100
 
 

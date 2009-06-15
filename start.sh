@@ -1,59 +1,68 @@
 #!/bin/sh
 
 bin=./bin/robotter
-host=pike
+host=localhost
 num=0
-type=decoy
+type=move_sniper
 
-port=3008
+
+port=7008
+type=move_sniper
+gnome-terminal -x $bin $host $port $num $type &
+
+sleep 1
+
+port=7009
+type=move_sniper
+gnome-terminal -x $bin $host $port $num $type &
+
+sleep 1
+
+port=7010
+type=move_sniper
+gnome-terminal -x $bin $host $port $num $type &
+
+sleep 1
+
+port=7011
+type=move_sniper
+gnome-terminal -x $bin $host $port $num $type &
+
+sleep 1
+
+port=7012
+type=move_sniper
+gnome-terminal -x $bin $host $port $num $type &
+
+sleep 2
+
+port=7013
+type=sniper
+gnome-terminal -x $bin $host $port $num $type &
+
+sleep 2
+
+port=7014
+type=sniper
+gnome-terminal -x $bin $host $port $num $type &
+
+sleep 1
+
+port=7015
+type=move_sniper
+gnome-terminal -x $bin $host $port $num $type &
+
+sleep 1
+
+port=7016
 type=travel
 gnome-terminal -x $bin $host $port $num $type &
 
+sleep 1
 
-#port=6009
-#type=decoy
-#gnome-terminal -x $bin $host $port $num $type &
+port=7017
+type=travel
+gnome-terminal -x $bin $host $port $num $type &
 
-
-#port=6010
-#type=move_sniper
-#gnome-terminal -x $bin $host $port $num $type &
-
-
-#port=6011
-#type=move_sniper
-#gnome-terminal -x $bin $host $port $num $type &
-
-
-#port=6012
-#type=move_sniper
-#gnome-terminal -x $bin $host $port $num $type &
-
-
-#port=6013
-#type=move_sniper
-#gnome-terminal -x $bin $host $port $num $type &
-
-#port=6014
-#type=move_sniper
-#gnome-terminal -x $bin $host $port $num $type &
-
-
-#port=6015
-#type=move_sniper
-#gnome-terminal -x $bin $host $port $num $type &
-
-
-#port=6016
-#type=move_sniper
-#gnome-terminal -x $bin $host $port $num $type &
-
-
-#port=6017
-#type=move_sniper
-#gnome-terminal -x $bin $host $port $num $type &
-
-
-python ./sync.py localhost 3000
 
 

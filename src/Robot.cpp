@@ -16,7 +16,7 @@
 
 #define DECOY_DISTANCE 100
 #define NODE_SIZE 20 
-#define TARGET_COLOR "green"
+#define TARGET_COLOR "red"
 #define SLEEP_AMT 100
 
 #define NUM_OBSERVATIONS 0
@@ -37,6 +37,7 @@ float sleepCount = 0;
 
 //------------------------------------------------------
 Robot::Robot(MyTank *meTank, BZFSCommunicator *bzfsComm, EnvironmentData *env, string robotStartType): gpw(env) {
+    this->startedDecoy = false;
     this->meTank = meTank;
     this->bzfsComm = bzfsComm;
     this->env = env;
@@ -61,6 +62,7 @@ Robot::Robot(MyTank *meTank, BZFSCommunicator *bzfsComm, EnvironmentData *env, s
 		kf = new KalmenFilter(env);
 		myKF = new KalmenFilter(env);
 		kfCount = 0;
+        return;
 	}
 	DiscretizeWorld();
 
@@ -172,7 +174,7 @@ void Robot::Update() {
 	meY = myRslt[1];
     if(this->actionType.compare(TRAVEL) == 0)
         DoTravel();
-    else if(this->actionType.compare(DECOY) == 0)
+    else if(this->actionType.compare(DECOY) == 0 || this->actionType.compare(DECOY2) == 0)
         DoDecoy();
     else if(this->actionType.compare(MOVE_SNIPER) == 0) 
         DoMoveSniper();
@@ -294,7 +296,7 @@ void Robot::DoTravel() {
         newSpeed = 1 - sqrt(abs(angleDiff));
 	float dist = GetDistance(meX, meY, currGoal.x, currGoal.y);
 	if (dist < 50)
-		newSpeed = newSpeed * .5;
+		newSpeed = newSpeed * .3;
 
     ////cout << "PDC  angleDiff: " << angleDiff << ", " << "newSpeed: " << newSpeed << ", newAngVel " << newAngVel << endl;
 
@@ -455,26 +457,36 @@ void Robot::DoSniper() {
 	//TODO: Add Prediction of my position.
 
     float themX, themY;
-
     int i = 0;
-    while (i < env->otherTanks.size() && env->otherTanks.at(i).status.compare("dead") == 0) i++; 
-    if(env->otherTanks.size() == 0) {
-        delete kf;
-        kf = new KalmenFilter(env);
-        kfCount = 0;
-        //cout << "`=`=`=`=``=`=`=`=`=`=`=`=`=`=`=`=`RESET" << endl;
-        return;
+
+    if(currEnemyCallSign == "NONE" || GetCurrEnemyStatus(currEnemyCallSign).compare("normal") != 0) {
+        cout << "GETTING NEW CLOSEST CALL SIGN!!!" << endl;
+        currEnemyCallSign = GetClosestCallSign();
+        cout << "   NEW CALL SIGN: " << currEnemyCallSign << endl;
+        //cout << "CURR ENEMY CALL SIGN: " << currEnemyCallSign << endl;
+        if(currEnemyCallSign != "NONE") {
+            kf = new KalmenFilter(env);
+            kfCount = 0;
+            //cout << "`=`=`=`=``=`=`=`=`=`=`=`=`=`=`=`=`RESET" << endl;
+            i = GetCallSignIndex(currEnemyCallSign);
+            themX = env->otherTanks.at(i).x;
+            themY = env->otherTanks.at(i).y;
+            kf->setInitialTankPos(themX, themY);
+        } else {
+            return; //no more enemies to kill -- wait for new orders
+        }
+    } else {
+        i = GetCallSignIndex(currEnemyCallSign);
     }
-    if(i >= env->otherTanks.size()) {
-        delete kf;
-        kf = new KalmenFilter(env);
-        kfCount = 0;
-        //cout << "`=`=`=`=``=`=`=`=`=`=`=`=`=`=`=`=`RESET" << endl;
-        i = env->otherTanks.size() - 1;
-        themX = env->otherTanks.at(i).x;
-        themY = env->otherTanks.at(i).y;
-        kf->setInitialTankPos(themX, themY);
+
+    if(i > env->otherTanks.size() - 1){
+        if(env->otherTanks.size() > 0)
+            currEnemyCallSign = "NONE";
+        else {
+            return;
+        }
     }
+        
     themX = env->otherTanks.at(i).x;
     themY = env->otherTanks.at(i).y;
 
@@ -539,9 +551,12 @@ void Robot::DoDecoy() {
     bool hasFlag = (meTank->flag != "none");
 	
     float distance = GetDistance(currGoal.x, currGoal.y, meX, meY);
-	if (distance < 100) {
+	if (distance < 500) {
 		cout << "SWITCHING TO SNIPER!!!!!!!!!!!!!!" << endl;
-		SwitchTo(MOVE_SNIPER);
+        //if(this->actionType.compare(DECOY) == 0)
+    		//SwitchTo(MOVE_SNIPER);
+        //else
+            SwitchTo(SNIPER);
 	} else {
         cout << "DECOY: DIST TO TARGET: " << distance << endl;
     }
@@ -554,6 +569,11 @@ void Robot::DoDecoy() {
     float angleDiff = GetAngleDist(meTank->angle, finalAngle);//not good
     float currAngVel = meTank->angvel;
     PDController(finalAngle, angleDiff, currAngVel);
+    if(!startedDecoy) {
+        bzfsComm->speed(meTank->index, 0);
+        if(abs(angleDiff) < 0.1)
+            startedDecoy = true;
+    }
 
 /*    //keep him perpindicular to the base
     float angleDiff = GetAngleDist(meTank->angle, PI*.5);

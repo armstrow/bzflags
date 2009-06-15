@@ -79,7 +79,7 @@ string AStarAlg::DoSearch(Position startNode, Position endNode, vector<Position>
         ////cout << endl;
         s += EnqueueNeighbors(pos, endNode);
         if (q.empty()) {
-            ////cout << "Error, goal not found in BFS" << endl;
+            cout << "Error, goal not found in BFS" << endl;
             return s;
         }
         Position *tmp = q.top();
@@ -95,9 +95,9 @@ string AStarAlg::DoSearch(Position startNode, Position endNode, vector<Position>
         pos = tmp;
         q.pop();
         nodesPopped++;
-       // ////cout << "checking node at: " << pos->row << "," << pos->col << endl;
+       	cout << "checking node at: " << pos->row << "," << pos->col << endl;
     }
-    ////cout << "              NODES POPPED: " << nodesPopped << endl;
+    cout << "              NODES POPPED: " << nodesPopped << endl;
 
     Position *lastPos = pos;
     float pathCost = 0;

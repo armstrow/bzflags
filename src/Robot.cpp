@@ -69,10 +69,18 @@ Robot::Robot(MyTank *meTank, BZFSCommunicator *bzfsComm, EnvironmentData *env, s
     Position startNode = GetStartNode();
     Position endNode = GetEndNode();
 
+    DiscretizeWorld();
     cout << "   endNode for A*: ";
     endNode.ToString();
     cout << endl;
 
+    SetCurrGoalToEnemyBase();
+
+    //cout << "   endNode for A*: ";
+    //endNode.ToString();
+    //cout << endl;
+
+    WildCounter = 0;
     //float answer = box_muller(0.5, 0.5);
 
     
@@ -103,6 +111,7 @@ Robot::Robot(MyTank *meTank, BZFSCommunicator *bzfsComm, EnvironmentData *env, s
     
     currentPath = &forwardsPath;
 	WildCounter = 0;
+
 	kf = new KalmenFilter(env);
 	myKF = new KalmenFilter(env);
 	kfCount = 0;
@@ -517,10 +526,13 @@ void Robot::DoDecoy() {
 	meY = myRslt[1];
     bool hasFlag = (meTank->flag != "none");
 	
-	if (GetDistance(currGoal.x, currGoal.y, meX, meY) < 100) {
+    float distance = GetDistance(currGoal.x, currGoal.y, meX, meY);
+	if (distance < 100) {
 		cout << "SWITCHING TO SNIPER!!!!!!!!!!!!!!" << endl;
 		SwitchTo(MOVE_SNIPER);
-	}
+	} else {
+        cout << "DECOY: DIST TO TARGET: " << distance << endl;
+    }
 
     GenerateField(meX, meY, &xForce, &yForce, bzfsComm->myColor, hasFlag);
 
@@ -553,8 +565,40 @@ void Robot::DoDecoy() {
 //------------------------------------------------------
 void Robot::SwitchTo(string type) {
     //cout << "switching types from" << this->actionType << "to " << type << endl;
+    string prevActionType = actionType;
     actionType = type;
-    //cout << "actiontype is now: " << this->actionType << endl;
+
+    if(prevActionType.compare(type) != 0 && type.compare(TRAVEL) == 0) {
+            Position startNode = GetStartNode();
+            Position endNode = GetEndNode();
+
+            alg = new AStarAlg(&WorldNodes, &gpw, true, env);
+            alg->DoSearch(startNode, endNode, &forwardsPath);
+
+            //cout << "FINISHED INITIAL SEARCH!!! " << meTank->index << ",  path size: " << forwardsPath.size() << endl;
+
+            for(int i = forwardsPath.size() - 1; i >= 0; i--) {
+                    backPath.push_back(forwardsPath.at(i));
+            }
+
+            if(backPath.size() > 4) {
+                    backPath.pop_back();
+                    backPath.pop_back();
+                    backPath.pop_back();
+                    backPath.pop_back();
+            }
+
+            //give the tank some room to get started with
+            if(forwardsPath.size() > 4) {
+                    forwardsPath.pop_back();
+                    forwardsPath.pop_back();
+                    forwardsPath.pop_back();
+                    forwardsPath.pop_back();
+            }
+
+            currentPath = &forwardsPath;
+    }
+    cout << "actiontype is now: " << this->actionType << endl;
 }
 //------------------------------------------------------
 void Robot::GuardBase(double aggression) {

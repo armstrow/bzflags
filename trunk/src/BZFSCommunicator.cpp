@@ -250,6 +250,9 @@ bool BZFSCommunicator::get_flags(vector<Flag> *AllFlags) {
 }
 
 bool BZFSCommunicator::get_shots(vector<Shot> *AllShots) {
+    AllShots->clear();
+    return true;
+    /*
     // Request a list of shots.
     SendLine("shots");
     ReadAck();
@@ -262,11 +265,10 @@ bool BZFSCommunicator::get_shots(vector<Shot> *AllShots) {
     int i=0;
     AllShots->clear();
     while(v.at(0)=="shot") {
-        int tIndex = atoi(v.at(1).c_str());
+        //int tIndex = atoi(v.at(1).c_str());
         //if(AllShots->size() < tIndex + 1) {
 	        Shot MyShot(v);
     	    AllShots->push_back(MyShot);
-        /*
         } else {
             if(AllShots->size() >= tIndex) {
                 Shot MyShot(v);
@@ -274,7 +276,6 @@ bool BZFSCommunicator::get_shots(vector<Shot> *AllShots) {
             } else
                 AllShots->at(tIndex).SetData(v);
         }
-        */
     	v.clear();
     	v = ReadArr();
 	    i++;
@@ -283,6 +284,7 @@ bool BZFSCommunicator::get_shots(vector<Shot> *AllShots) {
     return false;
     }
     return true;
+    */
 }
 
 bool BZFSCommunicator::get_mytanks(vector<MyTank> *AllMyTanks) {
@@ -365,7 +367,7 @@ bool BZFSCommunicator::get_constants(vector <Constant> *AllConstants) {
     while(v.at(0)=="constant") {
         Constant MyConstant(v);
         if(MyConstant.name == "team")
-            this->myColor = MyConstant.value;
+            this->myColor = "green";//MyConstant.value;
         else if(MyConstant.name == "worldsize")
             this->worldSize = atof(MyConstant.value.c_str());
         cout << "CONST COLOR: " << myColor << endl;

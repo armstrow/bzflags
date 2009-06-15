@@ -83,6 +83,8 @@ string AStarAlg::DoSearch(Position startNode, Position endNode, vector<Position>
             return s;
         }
         Position *tmp = q.top();
+        if(tmp == NULL)
+            break;
         while (map->at(tmp->row).at(tmp->col)->visited == true) {
             ////cout << "      A*: in inner main loop" << endl;
             q.pop();
@@ -248,9 +250,8 @@ string AStarAlg::EnqueueNeighbors(Position* p, Position endNode) {
 string AStarAlg::EnQ(int row, int col, Position* from, Position endNode) {
     string s = ""; 
     //bounds check
-    //cout << "Enqueing: " << row << "," << col << endl;
-	//cout << "max size: " << map->size() << "," << map->at(row).size() << endl;
-    if (row >= map->size() || row < 0 || col >= map->at(row).size() || col < 0)
+    ////cout << "Enqueing: " << row << "," << col << endl;
+    if (row >= map->size() || row < 0 || col >= map->at(row).size() || row < 0 || col < 0)
         return s;
     if (map->at(row).at(col)->visitable) {        
         float ns = map->at(row).at(col)->length / 2;

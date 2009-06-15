@@ -14,6 +14,7 @@
 
 #define SNIPER "sniper"
 #define DECOY "decoy"
+#define DECOY2 "decoy2"
 #define TRAVEL "travel"
 #define MOVE_SNIPER "move_sniper"
 
@@ -31,6 +32,7 @@ class Robot {
      *  +--------------+ */
 
     public:
+        bool startedDecoy;
         string currEnemyCallSign;
         bool gotoPoint;
         float gotoX;

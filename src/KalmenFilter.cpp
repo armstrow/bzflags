@@ -144,6 +144,7 @@ float* KalmenFilter::update(float ObsX, float ObsY) {
     //cout << "KALMAN::update: F: " << F << endl;
 //SigmaK[t+1]
 	SigmaK = (I - (K * H)) * Temp;
+	//cout << SigmaK << endl;
     
 	tmp[0] = Mu(0,0);
 	tmp[1] = Mu(3,0);

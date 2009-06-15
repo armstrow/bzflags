@@ -4,7 +4,7 @@ python ./sync.py localhost 6000 &
 
 firstpart='\'cd; cd bzflags; ./bin/robotter'
 host=nunchucks
-secondpart='0 "move_sniper"\''
+secondpart='0 "move_sniper"\' '
 
 
 

@@ -22,9 +22,9 @@
 #define DELAY   0.1
 
 #define TANK_PENALTY_SIZE 2
-#define OBST_PENALTY_SIZE 1.1
+#define OBST_PENALTY_SIZE 5
 #define TANK_PENALTY_FAC 5
-#define OBST_PENALTY_FAC 1
+#define OBST_PENALTY_FAC 10
 
 
 /* +--------------------------------+
@@ -95,7 +95,7 @@ string AStarAlg::DoSearch(Position startNode, Position endNode, vector<Position>
         pos = tmp;
         q.pop();
         nodesPopped++;
-       	cout << "checking node at: " << pos->row << "," << pos->col << endl;
+       	//cout << "checking node at: " << pos->row << "," << pos->col << endl;
     }
     cout << "              NODES POPPED: " << nodesPopped << endl;
 
@@ -248,8 +248,9 @@ string AStarAlg::EnqueueNeighbors(Position* p, Position endNode) {
 string AStarAlg::EnQ(int row, int col, Position* from, Position endNode) {
     string s = ""; 
     //bounds check
-    ////cout << "Enqueing: " << row << "," << col << endl;
-    if (row >= map->size() || col >= map->size() || row < 0 || col < 0)
+    //cout << "Enqueing: " << row << "," << col << endl;
+	//cout << "max size: " << map->size() << "," << map->at(row).size() << endl;
+    if (row >= map->size() || row < 0 || col >= map->at(row).size() || col < 0)
         return s;
     if (map->at(row).at(col)->visitable) {        
         float ns = map->at(row).at(col)->length / 2;

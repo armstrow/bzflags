@@ -7,13 +7,13 @@ gnome-terminal -x ~cs470s/bzflag/src/bzrobots/bzrobots -team green -solo 14 -p 6
 
 
 gnome-terminal -x ~cs470s/bzflag/src/bzrobots/bzrobots -team red -solo 1 -p 6008 -posnoise 3 badguys00@mek.com &
-gnome-terminal -x ~cs470s/bzflag/src/bzrobots/bzrobots -team red -solo 1 -p 6009 -posnoise 3 badguys01@mek.com &
-gnome-terminal -x ~cs470s/bzflag/src/bzrobots/bzrobots -team red -solo 1 -p 6010 -posnoise 3 badguys02@mek.com &
-gnome-terminal -x ~cs470s/bzflag/src/bzrobots/bzrobots -team red -solo 1 -p 6011 -posnoise 3 badguys03@mek.com &
-gnome-terminal -x ~cs470s/bzflag/src/bzrobots/bzrobots -team red -solo 1 -p 6012 -posnoise 3 badguys04@mek.com &
-gnome-terminal -x ~cs470s/bzflag/src/bzrobots/bzrobots -team red -solo 1 -p 6013 -posnoise 3 badguys05@mek.com &
-gnome-terminal -x ~cs470s/bzflag/src/bzrobots/bzrobots -team red -solo 1 -p 6014 -posnoise 3 badguys06@mek.com &
-gnome-terminal -x ~cs470s/bzflag/src/bzrobots/bzrobots -team red -solo 1 -p 6015 -posnoise 3 badguys07@mek.com &
-gnome-terminal -x ~cs470s/bzflag/src/bzrobots/bzrobots -team red -solo 1 -p 6016 -posnoise 3 badguys08@mek.com &
-gnome-terminal -x ~cs470s/bzflag/src/bzrobots/bzrobots -team red -solo 1 -p 6017 -posnoise 3 badguys09@mek.com &
+#gnome-terminal -x ~cs470s/bzflag/src/bzrobots/bzrobots -team red -solo 1 -p 6009 -posnoise 3 badguys01@mek.com &
+#gnome-terminal -x ~cs470s/bzflag/src/bzrobots/bzrobots -team red -solo 1 -p 6010 -posnoise 3 badguys02@mek.com &
+#gnome-terminal -x ~cs470s/bzflag/src/bzrobots/bzrobots -team red -solo 1 -p 6011 -posnoise 3 badguys03@mek.com &
+#gnome-terminal -x ~cs470s/bzflag/src/bzrobots/bzrobots -team red -solo 1 -p 6012 -posnoise 3 badguys04@mek.com &
+#gnome-terminal -x ~cs470s/bzflag/src/bzrobots/bzrobots -team red -solo 1 -p 6013 -posnoise 3 badguys05@mek.com &
+#gnome-terminal -x ~cs470s/bzflag/src/bzrobots/bzrobots -team red -solo 1 -p 6014 -posnoise 3 badguys06@mek.com &
+#gnome-terminal -x ~cs470s/bzflag/src/bzrobots/bzrobots -team red -solo 1 -p 6015 -posnoise 3 badguys07@mek.com &
+#gnome-terminal -x ~cs470s/bzflag/src/bzrobots/bzrobots -team red -solo 1 -p 6016 -posnoise 3 badguys08@mek.com &
+#gnome-terminal -x ~cs470s/bzflag/src/bzrobots/bzrobots -team red -solo 1 -p 6017 -posnoise 3 badguys09@mek.com &
 
